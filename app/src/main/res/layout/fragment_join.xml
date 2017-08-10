@@ -8,7 +8,7 @@
 
 
     <EditText
-        android:id="@+id/activity_register_shop_address"
+        android:id="@+id/joinId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -31,7 +31,7 @@
         android:layout_marginTop="76dp"/>
 
     <com.jx372.test.font.RobotoTextView
-        android:id="@+id/activity_register_shop_submit"
+        android:id="@+id/joinCheck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/selector_expandable_shop"
