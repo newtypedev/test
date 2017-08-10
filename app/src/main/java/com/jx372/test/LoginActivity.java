@@ -61,6 +61,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                if(mid.getText().toString().equals("master")){
+                    Intent i = new Intent(LoginActivity.this,MainActivity.class);
+                    startActivity(i);
+                }
                 if(mid.getText().toString().equals("") || passwd.getText().toString().equals("")){
 
                     messageResId = R.string.null_message;

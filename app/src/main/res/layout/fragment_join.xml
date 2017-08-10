@@ -5,6 +5,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+
+
     <EditText
         android:id="@+id/activity_register_shop_address"
         android:layout_width="match_parent"
@@ -20,13 +22,13 @@
         android:ems="10"
         android:hint="Id"
         android:inputType="textNoSuggestions"
+        android:singleLine="true"
         android:textColor="@color/material_lime_700"
         android:textColorHint="@color/material_lime_700"
         android:textSize="20sp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="66dp"
-        android:layout_marginTop="153dp"/>
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="76dp"/>
 
     <com.jx372.test.font.RobotoTextView
         android:id="@+id/activity_register_shop_submit"
@@ -40,15 +42,15 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:paddingStart="8dp"
-        android:text="SUBMIT"
+        android:text="CHECK"
         android:textColor="@android:color/white"
         android:textSize="14sp"
         app:typeface="robotoMedium"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="123dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="108dp"/>
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="63dp"
+        android:layout_below="@+id/activity_register_shop_address"
+        android:layout_alignEnd="@+id/activity_register_shop_address"/>
 
 </RelativeLayout>
