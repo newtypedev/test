@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="copyright">Sale Force Automation</string>
+    <string name="message">"하루하루를 어떻게 보내는가에 따라 우리의 인생이 결정된다"</string>
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="btn_text_login">Login</string>
+<string name = "null_message">아이디와 비밀번호를 입력하세요</string>
+    <string name="message_re">아이디와 비밀번호가 일치하지 않습니다</string>
+
     <string name="app_name">SalesForceAutomation</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
