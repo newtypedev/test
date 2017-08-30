@@ -38,8 +38,9 @@ public class LoginActivity extends AppCompatActivity {
 
 
         // start splash
-        Intent intent = new Intent(this,SplashActivity.class);
+        Intent intent = new Intent(this,SplashScreensActivity.class);
         startActivity(intent);
+
 
 
       //  setTheme(R.style.AppTheme); // 투명화 되돌리기
@@ -61,9 +62,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(mid.getText().toString().equals("master")){
+                if(mid.getText().toString().equals("demo")){
+                    User user = User.get();
+                    user.setId(mid.getText()+"");
+
                     Intent i = new Intent(LoginActivity.this,MainActivity.class);
                     startActivity(i);
+
                 }
                 if(mid.getText().toString().equals("") || passwd.getText().toString().equals("")){
 
@@ -76,19 +81,24 @@ public class LoginActivity extends AppCompatActivity {
                 map.put("id",mid.getText().toString());
                 map.put("passwd",passwd.getText().toString());
 
-                Call<ResponseBody> comment2 = apiService.getPost(map);
+                Call<ResponseBody> comment2 = apiService.getPostAuth(map);
                 comment2.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         try {
 
                             String json =  response.body().string();
+                            Log.v("loginjson",json);
                             JSONObject jsonbody = new JSONObject(json);
 
 
                             if(jsonbody.getString("result").equals("success")){
+                                User user = User.get();
+                                user.setId(mid.getText()+"");
+
                                 Intent i = new Intent(LoginActivity.this,MainActivity.class);
                                 startActivity(i);
+
                             }
                             else{
                                 messageResId2 = R.string.message_re;
@@ -106,14 +116,21 @@ public class LoginActivity extends AppCompatActivity {
 
                         } catch (IOException e) {
                             e.printStackTrace();
+                            Toast.makeText(LoginActivity.this,"IOException!!",Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Toast.makeText(LoginActivity.this,"JSONException!!",Toast.LENGTH_SHORT).show();
+                        }
+                        catch(NullPointerException e){
+                            e.printStackTrace();
+                            Toast.makeText(LoginActivity.this,"JSONException!!",Toast.LENGTH_SHORT).show();
                         }
 
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(LoginActivity.this,"서버와 연결이 되지 않습니다",Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -128,5 +145,12 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
     }
 }

@@ -12,6 +12,7 @@
         android:layout_margin="8dp" >
 
         <ImageView
+
             android:id="@+id/fragment_social_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -39,7 +40,7 @@
                 android:layout_marginBottom="32dp"
                 android:background="@android:color/transparent"
                 android:gravity="center"
-                android:text="Fragment\nExample"
+                android:text="FragmentExample"
                 android:textColor="@android:color/white"
                 android:textSize="24sp"
                 app:typeface="robotoLight" />

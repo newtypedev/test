@@ -1,0 +1,119 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <LinearLayout
+        android:visibility="visible"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+        <TextView
+            android:text="매출액"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/saleedit"
+            android:layout_weight="2"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:visibility="gone"
+            android:text="MODIFY"
+            android:id="@+id/salemodify"
+            android:onClick="mOnclick"
+            android:layout_weight="1"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="39dp">
+
+        <EditText
+            android:id="@+id/newitem"
+            android:layout_width="0px"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"/>
+
+
+        <com.jx372.test.font.RobotoTextView
+            android:onClick="mOnclick"
+            android:layout_gravity="right"
+            android:id="@+id/add"
+            android:layout_width="0dip"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/joinCheck"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/selector_expandable_shop"
+            android:gravity="center"
+            android:minHeight="36dp"
+            android:minWidth="64dp"
+            android:paddingEnd="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingStart="8dp"
+            android:text="ADD"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"/>
+
+
+        <com.jx372.test.font.RobotoTextView
+            android:onClick="mOnclick"
+            android:layout_gravity="right"
+            android:id="@+id/delete"
+            android:layout_width="0dip"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/joinCheck"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/selector_expandable_shop"
+            android:gravity="center"
+            android:minHeight="36dp"
+            android:minWidth="64dp"
+            android:paddingEnd="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingStart="8dp"
+            android:text="DELETE"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"/>
+
+
+
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/weeklist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="48dp"></ListView>
+
+
+</RelativeLayout>

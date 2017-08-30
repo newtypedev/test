@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:orientation="vertical"
+              android:background="#ffffff"
+              android:paddingTop="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <LinearLayout
+        android:paddingTop="20dp"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_weight="1"
+            android:text="아이디"/>
+
+        <EditText
+            android:id="@+id/joinId"
+            android:layout_width="0dip"
+            android:layout_height="30dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="3"
+            android:background="@drawable/bg_edit_join"
+            android:cursorVisible="true"
+            android:drawableBottom="@android:color/transparent"
+            android:ems="10"
+            android:inputType="textNoSuggestions"
+            android:textColor="@color/black"
+            android:textColorHint="@color/main_color_grey_500"
+            android:hint=" Id"
+            android:textSize="15dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"/>
+
+        <com.jx372.test.font.RobotoTextView
+            android:id="@+id/joinCheck"
+            android:layout_width="0dip"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_expandable_shop"
+            android:gravity="center"
+            android:minHeight="36dp"
+            android:minWidth="64dp"
+            android:paddingEnd="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingStart="8dp"
+            android:text="CHECK"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:typeface="robotoMedium"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:paddingTop="20dp"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_weight="1"
+            android:text="비밀번호"/>
+
+        <EditText
+            android:hint=" Password"
+            android:id="@+id/joinPasswd"
+            android:layout_width="0dip"
+            android:layout_height="30dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="3"
+            android:background="@drawable/bg_edit_join"
+            android:cursorVisible="true"
+            android:drawableBottom="@android:color/transparent"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:textColor="@color/black"
+            android:textColorHint="@color/main_color_grey_500"
+            android:textSize="15dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"/>
+
+        <TextView
+            android:visibility="invisible"
+            android:layout_width="0dip"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="36dp"
+            android:minWidth="64dp"
+            android:paddingEnd="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingStart="8dp"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"/>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:paddingTop="3dp"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:visibility="invisible"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_weight="1"
+            android:text="비밀번호확인"/>
+
+        <EditText
+            android:hint=" Password Check"
+            android:id="@+id/joinPasswd2"
+            android:layout_width="0dip"
+            android:layout_height="30dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="3"
+            android:background="@drawable/bg_edit_join"
+            android:cursorVisible="true"
+            android:drawableBottom="@android:color/transparent"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:textColor="@color/black"
+            android:textColorHint="@color/main_color_grey_500"
+            android:textSize="15dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"/>
+
+        <TextView
+            android:visibility="invisible"
+            android:layout_width="0dip"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="36dp"
+            android:minWidth="64dp"
+            android:paddingEnd="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingStart="8dp"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:paddingTop="20dp"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_weight="1"
+            android:text="이름"/>
+
+        <EditText
+            android:hint=" Name"
+            android:id="@+id/joinName"
+            android:layout_width="0dip"
+            android:layout_height="30dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="3"
+            android:background="@drawable/bg_edit_join"
+            android:cursorVisible="true"
+            android:drawableBottom="@android:color/transparent"
+            android:ems="10"
+            android:inputType="textNoSuggestions"
+            android:textColor="@color/black"
+            android:textColorHint="@color/main_color_grey_500"
+            android:textSize="15dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"/>
+
+        <TextView
+            android:visibility="invisible"
+            android:layout_width="0dip"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="36dp"
+            android:minWidth="64dp"
+            android:paddingEnd="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingStart="8dp"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"/>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:paddingTop="20dp"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_weight="1"
+            android:text="소속"/>
+
+        <Spinner
+            android:id="@+id/myspinner"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="3"
+            android:ems="10"
+            android:inputType="textNoSuggestions"
+            android:textColor="@color/black"
+            android:textColorHint="@color/material_lime_700"
+            android:textSize="20sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"/>
+
+        <TextView
+            android:visibility="invisible"
+            android:layout_width="0dip"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="36dp"
+            android:minWidth="64dp"
+            android:paddingEnd="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingStart="8dp"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"/>
+
+
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:paddingTop="20dp"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_weight="1"
+            android:text="직급"/>
+
+        <Spinner
+            android:id="@+id/myspinner2"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="3"
+            android:ems="10"
+            android:inputType="textNoSuggestions"
+            android:textColor="@color/black"
+            android:textColorHint="@color/material_lime_700"
+            android:textSize="20sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"/>
+
+        <TextView
+            android:visibility="invisible"
+            android:layout_width="0dip"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="36dp"
+            android:minWidth="64dp"
+            android:paddingEnd="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingStart="8dp"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"/>
+
+
+    </LinearLayout>
+
+
+
+    <com.jx372.test.font.RobotoTextView
+        android:layout_gravity="right"
+        android:id="@+id/joinSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/joinCheck"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/selector_expandable_shop"
+        android:gravity="center"
+        android:minHeight="36dp"
+        android:minWidth="64dp"
+        android:paddingEnd="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingStart="8dp"
+        android:text="SUBMIT"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        app:typeface="robotoMedium"/>
+
+</LinearLayout>
