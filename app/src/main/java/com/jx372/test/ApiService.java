@@ -57,4 +57,20 @@ public interface ApiService {
     @POST("sfa/m/week/delete")
     Call<ResponseBody> getPostWeekDelete(@FieldMap Map<String, String> week);
 
+    @FormUrlEncoded
+    @POST("sfa/m/date/select")
+    Call<ResponseBody> getPostDaySelect(@FieldMap Map<String, String> day);
+
+    @FormUrlEncoded
+    @POST("sfa/m/date/insert")
+    Call<ResponseBody> getPostDayInsert(@FieldMap Map<String, String> day);
+
+    @FormUrlEncoded
+    @POST("sfa/m/date/update")
+    Call<ResponseBody> getPostDayUpdate(@FieldMap Map<String, String> day);
+
+    @FormUrlEncoded
+    @POST("sfa/m/date/delete")
+    Call<ResponseBody> getPostDayDelete(@FieldMap Map<String, String> day);
+
 }

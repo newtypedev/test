@@ -39,7 +39,7 @@ import retrofit2.Retrofit;
 
 public class WeekPlanActivity extends AppCompatActivity {
 
-    DayItems mDayItems;
+    WeekItems mWeekItems;
     ArrayList<String> Items;
     ArrayAdapter<String> Adapter;
     ArrayAdapter<String> Adapter2;
@@ -70,8 +70,105 @@ public class WeekPlanActivity extends AppCompatActivity {
     Calendar daytemp;
     String state="";
     String userId="";
+    int nowDayofweek=0;
+    int nowWeek=0;
     Retrofit retrofit;
     ApiService apiService;
+
+
+    public void preventModify(){
+
+
+        if(nowWeek == getFirstDay2()){
+
+
+
+            if(nowDayofweek == 1){
+                montext.setEnabled(true);
+                tuetext.setEnabled(true);
+                wedtext.setEnabled(true);
+                thutext.setEnabled(true);
+                fritext.setEnabled(true);
+            }
+
+            else if(nowDayofweek== 2){
+                montext.setEnabled(true);
+                tuetext.setEnabled(true);
+                wedtext.setEnabled(true);
+                thutext.setEnabled(true);
+                fritext.setEnabled(true);
+                //Monday
+            }
+            else if(nowDayofweek== 3){
+                montext.setEnabled(false);
+                tuetext.setEnabled(true);
+                wedtext.setEnabled(true);
+                thutext.setEnabled(true);
+                fritext.setEnabled(true);
+
+            }
+            else if(nowDayofweek== 4){
+                montext.setEnabled(false);
+                tuetext.setEnabled(false);
+                wedtext.setEnabled(true);
+                thutext.setEnabled(true);
+                fritext.setEnabled(true);
+
+            }
+            else if(nowDayofweek== 5){
+                montext.setEnabled(false);
+                tuetext.setEnabled(false);
+                wedtext.setEnabled(false);
+                thutext.setEnabled(true);
+                fritext.setEnabled(true);
+
+            }
+            else if(nowDayofweek== 6){
+                montext.setEnabled(false);
+                tuetext.setEnabled(false);
+                wedtext.setEnabled(false);
+                thutext.setEnabled(false);
+                fritext.setEnabled(true);
+
+            }
+            else if(nowDayofweek== 7){
+                montext.setEnabled(false);
+                tuetext.setEnabled(false);
+                wedtext.setEnabled(false);
+                thutext.setEnabled(false);
+                fritext.setEnabled(false);
+
+            }
+
+
+        }
+
+
+
+        else if(nowWeek > getFirstDay2()){
+
+            //sendItem.setEnabled(false);
+            montext.setEnabled(false);
+            tuetext.setEnabled(false);
+            wedtext.setEnabled(false);
+            thutext.setEnabled(false);
+            fritext.setEnabled(false);
+        }
+
+
+
+        else if(nowWeek < getFirstDay2()){
+
+            montext.setEnabled(true);
+            tuetext.setEnabled(true);
+            wedtext.setEnabled(true);
+            thutext.setEnabled(true);
+            fritext.setEnabled(true);
+        }
+
+
+
+    }
 
     public String createComma(String num) {
         int value = Integer.parseInt(num);
@@ -142,9 +239,9 @@ public class WeekPlanActivity extends AppCompatActivity {
 
                     JSONObject datajson = jsonbody.getJSONObject("data");
 
-//                    mDayItems.setFirstDate(datajson.getString("first_date"));
-//                    weektext.setText(mDayItems.getFirstDate());
-//                    String tempDay = mDayItems.getFirstDate().substring(8,10);
+//                    mWeekItems.setFirstDate(datajson.getString("first_date"));
+//                    weektext.setText(mWeekItems.getFirstDate());
+//                    String tempDay = mWeekItems.getFirstDate().substring(8,10);
 //                    int day = Integer.parseInt(tempDay);
                     weektext.setText(getFirstDay());
                     createDay(firstdayofweek.get(firstdayofweek.DAY_OF_MONTH));
@@ -152,16 +249,31 @@ public class WeekPlanActivity extends AppCompatActivity {
                     showFigure();
                     showDayItem();
                     state = "update";
+
                     String date = datajson.getString("week_no");
-                    String date2 = date.charAt(0)+"월   "+date.charAt(2)+"주차";
+                    String date2 = date.charAt(0)+"월 "+date.charAt(2)+"주차";
+                    String weekdata ="";
                     if(date.length() ==7){
                         Log.v("leng7777","ok");
-                        date2 = date.charAt(4)+"월   "+date.charAt(6)+"주차";
+                        date2 = date.charAt(4)+"월 "+date.charAt(6)+"주차";
+                        weekdata = date2+" ("+firstdayofweek.get(Calendar.YEAR)+")";
                     }
                     else if(date.length()==8){
                         Log.v("leng8888","ok");
-                        date2 = date.charAt(4)+""+date.charAt(5)+"월   "+date.charAt(7)+"주차";
+
+                        String temp = date.charAt(4)+"";
+
+                        if(temp.equals("0")){
+
+                            date2 = date.charAt(5) + "월 " + date.charAt(7) + "주차";
+                        }
+                        else {
+                            date2 = date.charAt(4) + "" + date.charAt(5) + "월 " + date.charAt(7) + "주차";
+                        }
+                            weekdata = date2+" ("+firstdayofweek.get(Calendar.YEAR)+")";
                     }
+
+                    weektext.setText(weekdata);
 
                     Toast.makeText(WeekPlanActivity.this,date2, Toast.LENGTH_SHORT).show();
 
@@ -171,10 +283,10 @@ public class WeekPlanActivity extends AppCompatActivity {
 
 
                     JSONObject datajson = jsonbody.getJSONObject("data");
-                    mDayItems.setFirstDate(datajson.getString("first_date"));
+                    mWeekItems.setFirstDate(datajson.getString("first_date"));
                     weektext.setText(getFirstDay());
                     createDay(firstdayofweek.get(firstdayofweek.DAY_OF_MONTH));
-                    mDayItems.initData();
+                    mWeekItems.initData();
                     showFigure();
                     showDayItem();
                     state = "insert";
@@ -193,10 +305,10 @@ public class WeekPlanActivity extends AppCompatActivity {
 
     public void addTargetSale(){
 
-        int temp =Integer.parseInt(mDayItems.getMonSales())+Integer.parseInt(mDayItems.getTueSales())+
-                Integer.parseInt(mDayItems.getWedSales())+Integer.parseInt(mDayItems.getThuSales())+
-                Integer.parseInt(mDayItems.getFriSales());
-        mDayItems.setTargetFigure(temp+"");
+        int temp =Integer.parseInt(mWeekItems.getMonSales())+Integer.parseInt(mWeekItems.getTueSales())+
+                Integer.parseInt(mWeekItems.getWedSales())+Integer.parseInt(mWeekItems.getThuSales())+
+                Integer.parseInt(mWeekItems.getFriSales());
+        mWeekItems.setTargetFigure(temp+"");
     }
 
     public String getFirstDay(){
@@ -214,6 +326,24 @@ public class WeekPlanActivity extends AppCompatActivity {
         String firstDay = year+"-"+month+"-"+day;
         return firstDay;
     }
+
+    public int getFirstDay2(){
+        String year = firstdayofweek.get(firstdayofweek.YEAR)+"";
+        String month = (firstdayofweek.get(firstdayofweek.MONTH)+1)+"";
+        String day = firstdayofweek.get(firstdayofweek.DAY_OF_MONTH)+"";
+
+        if(month.length()==1){
+            month ="0"+month;
+        }
+        if(day.length()==1){
+            day ="0"+day;
+        }
+
+        String firstDay = year+month+day;
+        return Integer.parseInt(firstDay);
+    }
+
+
     public void createFirstDay(int dayofweek){
 
         if(dayofweek== 1){
@@ -242,32 +372,32 @@ public class WeekPlanActivity extends AppCompatActivity {
 
     public void createDayItem(JSONObject datajson) throws JSONException{
 
-        mDayItems.setMonItems( splitString(datajson.getString("monday")));
-        mDayItems.setTueItems( splitString(datajson.getString("tuesday")));
-        mDayItems.setWedItems( splitString(datajson.getString("wednesday")));
-        mDayItems.setThuItems( splitString(datajson.getString("thursday")));
-        mDayItems.setFriItems( splitString(datajson.getString("friday")));
-        mDayItems.setMonSales(datajson.getString("monday_money"));
-        mDayItems.setTueSales(datajson.getString("tuesday_money"));
-        mDayItems.setWedSales(datajson.getString("wednesday_money"));
-        mDayItems.setThuSales(datajson.getString("thursday_money"));
-        mDayItems.setFriSales(datajson.getString("friday_money"));
+        mWeekItems.setMonItems( splitString(datajson.getString("monday")));
+        mWeekItems.setTueItems( splitString(datajson.getString("tuesday")));
+        mWeekItems.setWedItems( splitString(datajson.getString("wednesday")));
+        mWeekItems.setThuItems( splitString(datajson.getString("thursday")));
+        mWeekItems.setFriItems( splitString(datajson.getString("friday")));
+        mWeekItems.setMonSales(datajson.getString("monday_money"));
+        mWeekItems.setTueSales(datajson.getString("tuesday_money"));
+        mWeekItems.setWedSales(datajson.getString("wednesday_money"));
+        mWeekItems.setThuSales(datajson.getString("thursday_money"));
+        mWeekItems.setFriSales(datajson.getString("friday_money"));
 
-        mDayItems.setWeekSale(datajson.getString("week_sale"));
-        mDayItems.setTargetFigure(datajson.getString("target_figure"));
-        mDayItems.setAchiveRank(datajson.getString("achive_rank"));
+        mWeekItems.setWeekSale(datajson.getString("week_sale"));
+        mWeekItems.setTargetFigure(datajson.getString("target_figure"));
+        mWeekItems.setAchiveRank(datajson.getString("achive_rank"));
 
     }
     public void showFigure() {
-        monsale.setText(createComma(mDayItems.getMonSales()));
-        tuesale.setText(createComma(mDayItems.getTueSales()));
-        wedsale.setText(createComma(mDayItems.getWedSales()));
-        thusale.setText(createComma(mDayItems.getThuSales()));
-        frisale.setText(createComma(mDayItems.getFriSales()));
+        monsale.setText(createComma(mWeekItems.getMonSales()));
+        tuesale.setText(createComma(mWeekItems.getTueSales()));
+        wedsale.setText(createComma(mWeekItems.getWedSales()));
+        thusale.setText(createComma(mWeekItems.getThuSales()));
+        frisale.setText(createComma(mWeekItems.getFriSales()));
 
-        targettext.setText(createComma(mDayItems.getTargetFigure()));
-        salestext.setText(createComma(mDayItems.getWeekSale()));
-        achivetext.setText(mDayItems.getAchiveRank());
+        targettext.setText(createComma(mWeekItems.getTargetFigure()));
+        salestext.setText(createComma(mWeekItems.getWeekSale()));
+        achivetext.setText(mWeekItems.getAchiveRank());
     }
     public void createDay(int day){
 
@@ -295,11 +425,11 @@ public class WeekPlanActivity extends AppCompatActivity {
     }
 
     public void showDayItem(){
-        Adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,mDayItems.getMonItems());
-        Adapter2 = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,mDayItems.getTueItems());
-        Adapter3 = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,mDayItems.getWedItems());
-        Adapter4 = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,mDayItems.getThuItems());
-        Adapter5 = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,mDayItems.getFriItems());
+        Adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,mWeekItems.getMonItems());
+        Adapter2 = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,mWeekItems.getTueItems());
+        Adapter3 = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,mWeekItems.getWedItems());
+        Adapter4 = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,mWeekItems.getThuItems());
+        Adapter5 = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,mWeekItems.getFriItems());
 
         list.setAdapter(Adapter);
         list2.setAdapter(Adapter2);
@@ -357,7 +487,6 @@ public class WeekPlanActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_week, menu);
-
         return true;
     }
 
@@ -390,18 +519,18 @@ public class WeekPlanActivity extends AppCompatActivity {
             Log.v("statetasteaetat",state);
             map.put("first_date",getFirstDay());
             map.put("title",getFirstDay());
-            map.put("target_figure",mDayItems.getTargetFigure());
-            map.put("monday",combineItem(mDayItems.getMonItems()));
-            map.put("tuesday",combineItem(mDayItems.getTueItems()));
-            map.put("wednesday",combineItem(mDayItems.getWedItems()));
-            map.put("thursday",combineItem(mDayItems.getThuItems()));
-            map.put("friday",combineItem(mDayItems.getFriItems()));
+            map.put("target_figure",mWeekItems.getTargetFigure());
+            map.put("monday",combineItem(mWeekItems.getMonItems()));
+            map.put("tuesday",combineItem(mWeekItems.getTueItems()));
+            map.put("wednesday",combineItem(mWeekItems.getWedItems()));
+            map.put("thursday",combineItem(mWeekItems.getThuItems()));
+            map.put("friday",combineItem(mWeekItems.getFriItems()));
 
-            map.put("monday_money",mDayItems.getMonSales());
-            map.put("tuesday_money",mDayItems.getTueSales());
-            map.put("wednesday_money",mDayItems.getWedSales());
-            map.put("thursday_money",mDayItems.getThuSales());
-            map.put("friday_money",mDayItems.getFriSales());
+            map.put("monday_money",mWeekItems.getMonSales());
+            map.put("tuesday_money",mWeekItems.getTueSales());
+            map.put("wednesday_money",mWeekItems.getWedSales());
+            map.put("thursday_money",mWeekItems.getThuSales());
+            map.put("friday_money",mWeekItems.getFriSales());
 
 
             if(state.equals("insert")){
@@ -421,7 +550,7 @@ public class WeekPlanActivity extends AppCompatActivity {
             firstdayofweek.add(firstdayofweek.DAY_OF_MONTH,-7);
             map.put("first_date",getFirstDay());
 
-
+            preventModify();
 
             httpcon.accessServerMap("weekselect",map,mCallback);
             return true;
@@ -432,7 +561,7 @@ public class WeekPlanActivity extends AppCompatActivity {
             //   httpcon.accessServerMap4(map,mCallback2);
             firstdayofweek.add(firstdayofweek.DAY_OF_MONTH,+7);
             map.put("first_date",getFirstDay());
-
+            preventModify();
 
 
             httpcon.accessServerMap("weekselect",map,mCallback);
@@ -480,14 +609,13 @@ public class WeekPlanActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("주간계획");
         User user = User.get();
         userId = user.getId();
+        userId = "test01";
         Log.v("useruser",userId);
-        mDayItems = mDayItems.get();
+        mWeekItems = WeekItems.get();
         firstdayofweek = Calendar.getInstance();
+        nowDayofweek = firstdayofweek.get(firstdayofweek.DAY_OF_WEEK);
         createFirstDay(firstdayofweek.get(firstdayofweek.DAY_OF_WEEK));
-
-
-
-
+        nowWeek = getFirstDay2();
 
 //        Items = new ArrayList<String>();
 //        Items.add("본사출근");
@@ -524,10 +652,11 @@ public class WeekPlanActivity extends AppCompatActivity {
         map.put("id",userId);
         map.put("first_date",getFirstDay());
 
-
+        preventModify();
         HttpConnector httpcon = new HttpConnector();
         httpcon.accessServerMap("weekselect",map,mCallback);
 
+       // montext.setEnabled(false);
 
 
       /*  retrofit = new Retrofit.Builder().baseUrl(ApiService.API_URL).build();
@@ -698,33 +827,33 @@ public class WeekPlanActivity extends AppCompatActivity {
             }
         });
 
-        salestext.setOnLongClickListener(new TextView.OnLongClickListener(){
-            @Override
-            public boolean onLongClick(View v) {
-                final LinearLayout linear = (LinearLayout)
-                        View.inflate(WeekPlanActivity.this, R.layout.dialog_weeksale, null);
-
-                new AlertDialog.Builder(WeekPlanActivity.this)
-                        .setTitle("목표액 수정")
-                        .setView(linear)
-                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                EditText product = (EditText)linear.findViewById(R.id.saletext);
-                                targettext.setText(product.getText());
-                                mDayItems.setTargetFigure(product.getText()+"");
-
-                            }
-                        })
-                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                            }
-                        })
-                        .show();
-                return true;
-            }
-        });
-
+//        salestext.setOnLongClickListener(new TextView.OnLongClickListener(){
+//            @Override
+//            public boolean onLongClick(View v) {
+//                final LinearLayout linear = (LinearLayout)
+//                        View.inflate(WeekPlanActivity.this, R.layout.dialog_weeksale, null);
+//
+//                new AlertDialog.Builder(WeekPlanActivity.this)
+//                        .setTitle("목표액 수정")
+//                        .setView(linear)
+//                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int whichButton) {
+//                                EditText product = (EditText)linear.findViewById(R.id.saletext);
+//                                targettext.setText(product.getText());
+//                                mDayItems.setTargetFigure(product.getText()+"");
+//
+//                            }
+//                        })
+//                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int whichButton) {
+//
+//                            }
+//                        })
+//                        .show();
+//                return true;
+//            }
+//        });
+//
 
 
 

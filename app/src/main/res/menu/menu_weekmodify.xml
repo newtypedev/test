@@ -1,6 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools" tools:context=".WeekActivity">
+
+    <item android:id="@+id/weekback"
+        android:title="취소"
+        app:showAsAction="always|withText"/>
+
     <item android:id="@+id/modify"
           android:title="완료"
           app:showAsAction="always|withText"/>

@@ -57,6 +57,20 @@ public class HttpConnector {
         else if(url.equals("weekupdate")){
             comment2 = apiService.getPostWeekUpdate(map);
         }
+        else if(url.equals("dayselect")){
+            comment2 = apiService.getPostDaySelect(map);
+        }
+        else if(url.equals("dayinsert")){
+            Log.v("dadadadayyer","09090901");
+            comment2 = apiService.getPostDayInsert(map);
+        }
+        else if(url.equals("dayupdate")){
+            comment2 = apiService.getPostDayUpdate(map);
+        }
+
+        else if(url.equals("daydelete")){
+            comment2 = apiService.getPostDayDelete(map);
+        }
 
 
 
@@ -65,11 +79,15 @@ public class HttpConnector {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
 
+
+                    Log.v("callcall",response.message());
+
                     String json = response.body().string();
+                    Log.v("jontest",json);
                     resultJson = json;
                     callback.callback(json);
 
-                    Log.v("jontest",resultJson);
+
 
 
 

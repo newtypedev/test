@@ -1,4 +1,66 @@
 <resources xmlns:android="http://schemas.android.com/tools">
+
+	<string-array name="a_zoomlevel">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+		<item>5</item>
+		<item>6</item>
+		<item>7</item>
+		<item>8</item>
+		<item>9</item>
+		<item>10</item>
+		<item>11</item>
+		<item>12</item>
+		<item>13</item>
+		<item>14</item>
+		<item>15</item>
+		<item>16</item>
+		<item>17</item>
+		<item>18</item>
+		<item>19</item>
+	</string-array>
+
+	<string-array name="a_maptype">
+		<item>STANDARD</item>
+		<item>SATELLITE</item>
+		<item>HYBRID</item>
+		<item>TRAFFIC</item>
+	</string-array>
+
+	<string-array name="a_tiletype">
+		<item>NORMALTILE</item>
+		<item>EXTENSIONTILE</item>
+		<item>HDTILE</item>
+		<item>ENGLISHTILE</item>
+		<item>CHINATILE</item>
+		<item>HIGHCONTRASTTILE</item>
+	</string-array>
+
+	<string-array name="a_linesize">
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+		<item>5</item>
+		<item>6</item>
+		<item>7</item>
+		<item>8</item>
+		<item>9</item>
+		<item>10</item>
+		<item>11</item>
+		<item>12</item>
+		<item>13</item>
+		<item>14</item>
+		<item>15</item>
+		<item>16</item>
+		<item>17</item>
+		<item>18</item>
+		<item>19</item>
+	</string-array>
+
 	<string-array name="country">
 		<item>조선</item>
 		<item>옥저</item>
@@ -27,6 +89,9 @@
 	<string-array name="level">
 		<item>사원</item>
 		<item>대리</item>
+		<item>과장</item>
+		<item>차장</item>
+		<item>부장</item>
 
 	</string-array>
 	<string-array name="foods">

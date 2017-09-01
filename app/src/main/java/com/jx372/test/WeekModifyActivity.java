@@ -23,7 +23,7 @@ public class WeekModifyActivity extends AppCompatActivity {
     ArrayList<String> Items;
     ArrayAdapter<String> Adapter6;
     ListView list;
-    DayItems mDayItems;
+    WeekItems mWeekItems;
     String mDaysale="";
     EditText saleEdit;
     @Override
@@ -40,28 +40,28 @@ public class WeekModifyActivity extends AppCompatActivity {
 
         if(nowday.equals("mon")){
 
-            mDayItems.setMonItems(Items);
-               mDayItems.setMonSales(mDaysale);
+            mWeekItems.setMonItems(Items);
+            mWeekItems.setMonSales(mDaysale);
         }
 
         else if(nowday.equals("tue")){
-            mDayItems.setTueItems(Items);
-              mDayItems.setTueSales(mDaysale);
+            mWeekItems.setTueItems(Items);
+            mWeekItems.setTueSales(mDaysale);
         }
 
         else if(nowday.equals("wed")){
-            mDayItems.setWedItems(Items);
-             mDayItems.setWedSales(mDaysale);
+            mWeekItems.setWedItems(Items);
+            mWeekItems.setWedSales(mDaysale);
         }
 
         else if(nowday.equals("thu")){
-            mDayItems.setThuItems(Items);
-             mDayItems.setThuSales(mDaysale);
+            mWeekItems.setThuItems(Items);
+            mWeekItems.setThuSales(mDaysale);
         }
 
         else if(nowday.equals("fri")){
-            mDayItems.setFriItems(Items);
-             mDayItems.setFriSales(mDaysale);
+            mWeekItems.setFriItems(Items);
+            mWeekItems.setFriSales(mDaysale);
         }
 
     }
@@ -69,28 +69,28 @@ public class WeekModifyActivity extends AppCompatActivity {
 
 
         if(nowday.equals("mon")){
-              salehint = mDayItems.getMonSales();
-            return mDayItems.getMonItems();
+              salehint = mWeekItems.getMonSales();
+            return mWeekItems.getMonItems();
         }
 
         else if(nowday.equals("tue")){
-             salehint = mDayItems.getTueSales();
-            return mDayItems.getTueItems();
+             salehint = mWeekItems.getTueSales();
+            return mWeekItems.getTueItems();
         }
 
         else if(nowday.equals("wed")){
-               salehint = mDayItems.getWedSales();
-            return mDayItems.getWedItems();
+               salehint = mWeekItems.getWedSales();
+            return mWeekItems.getWedItems();
         }
 
         else if(nowday.equals("thu")){
-              salehint = mDayItems.getThuSales();
-            return mDayItems.getThuItems();
+              salehint = mWeekItems.getThuSales();
+            return mWeekItems.getThuItems();
         }
 
         else if(nowday.equals("fri")){
-             salehint = mDayItems.getFriSales();
-            return mDayItems.getFriItems();
+             salehint = mWeekItems.getFriSales();
+            return mWeekItems.getFriItems();
         }
 
         return Items;
@@ -119,6 +119,16 @@ public class WeekModifyActivity extends AppCompatActivity {
             onBackPressed();
 
         }
+
+        if(item.getItemId()==R.id.weekback){
+            onBackPressed();
+        }
+
+
+//        if(item.getItemId()==android.R.id.home){
+//            Log.v("sdfsdf","sdfsf");
+//            onBackPressed();
+//        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -128,7 +138,7 @@ public class WeekModifyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_week_modify);
 
         nowday = getIntent().getStringExtra("day");
-        mDayItems = DayItems.get();
+        mWeekItems = WeekItems.get();
         Items = new ArrayList<>();
 
         for(String s: getItem()){
@@ -137,7 +147,6 @@ public class WeekModifyActivity extends AppCompatActivity {
 
 
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(nowday.toUpperCase());
 //        Items = new ArrayList<String>();
 //        Items.add("본사출근");
