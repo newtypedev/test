@@ -24,10 +24,28 @@ public class DayModifyActivity extends AppCompatActivity{
     DayItems mDayItem;
     EditText daymemo;
     EditText goalsale;
+    Spinner spin;
+    int itemPos=0;
+
+    public int getItemNum(String msg){
+
+        if(msg.equals("도전과제하나")){
+            return 0;
+        }
+        else if(msg.equals("도전과제둘")){
+            return 1;
+        }
+        else if(msg.equals("도전과제셋")){
+            return 2;
+        }
+
+        return 0;
+    }
 
     public void itemUpdate(){
       mDayItem.setContent(daymemo.getText()+"");
         mDayItem.setGoalsale(goalsale.getText()+"");
+        mDayItem.setChallenge(itemPos+"");
 
     }
 
@@ -85,7 +103,7 @@ public class DayModifyActivity extends AppCompatActivity{
         daymemo.setText(mDayItem.getContent());
         goalsale.setText(mDayItem.getGoalsale());
 
-        Spinner spin = (Spinner)findViewById(R.id.dayspinner);
+        spin= (Spinner)findViewById(R.id.dayspinner);
 
         spin.setPrompt("도전과제");
 
@@ -95,7 +113,7 @@ public class DayModifyActivity extends AppCompatActivity{
 
         adspin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin.setAdapter(adspin);
-        spin.setSelection(2);
+        //spin.setSelection(Integer.parseInt(mDayItem.getChallenge()));
 
         spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view,
@@ -107,6 +125,7 @@ public class DayModifyActivity extends AppCompatActivity{
 					return;
 				}
 				//*/
+				itemPos = position;
                   Toast.makeText(DayModifyActivity.this,position+"", Toast.LENGTH_SHORT).show();
             }
             public void onNothingSelected(AdapterView<?> parent) {

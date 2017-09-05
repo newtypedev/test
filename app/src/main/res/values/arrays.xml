@@ -62,19 +62,10 @@
 	</string-array>
 
 	<string-array name="country">
-		<item>조선</item>
-		<item>옥저</item>
-		<item>동예</item>
-		<item>부여</item>
-		<item>신라</item>
-		<item>고구려</item>
-		<item>백제</item>
-		<item>발해</item>
-		<item>당나라</item>
-		<item>송나라</item>
-		<item>고려</item>
-		<item>대한민국</item>
-		<item>식물나라</item>
+		<item>도전과제하나</item>
+		<item>도전과제둘</item>
+		<item>도전과제셋</item>
+
 	</string-array>
 	<string-array
 		name="fruits">

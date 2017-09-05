@@ -38,8 +38,10 @@ public class JoinActivity extends AppCompatActivity {
     boolean mInitSpinner;
     Retrofit retrofit;
     ApiService apiService;
+    boolean checkState = false;
     String dept="";
     String grade="";
+    String joinId="";
     String jsonTest="";
     public class HttpMessage{
          String temp;
@@ -69,6 +71,8 @@ Callback2 mCallback = new Callback2() {
             if(jsonbody.getString("result").equals("success")){
                 textId.setFocusable(false);
                 Toast.makeText(JoinActivity.this,"사용 가능한 ID 입니다", Toast.LENGTH_SHORT).show();
+                checkState = true;
+                joinId = ((EditText) findViewById(R.id.joinId)).getText().toString();
             }
             else if(jsonbody.getString("result").equals("fail")){
                 Toast.makeText(JoinActivity.this,"이미 존재하는 ID 입니다", Toast.LENGTH_SHORT).show();
@@ -104,6 +108,10 @@ Callback2 mCallback = new Callback2() {
                 }
                 else if(jsonbody.getString("result").equals("fail")){
                     Toast.makeText(JoinActivity.this,"등록 실패", Toast.LENGTH_SHORT).show();
+
+                }
+                else if(jsonbody.getString("result").equals("error")){
+                    Toast.makeText(JoinActivity.this,jsonbody.getString("message"), Toast.LENGTH_SHORT).show();
 
                 }
             } catch (JSONException e) {
@@ -270,18 +278,25 @@ Callback2 mCallback = new Callback2() {
 
             @Override
             public void onClick(View v) {
-                String id =((EditText) findViewById(R.id.joinId)).getText().toString();
+
+                if(checkState==true){
+
+               // String id =((EditText) findViewById(R.id.joinId)).getText().toString();
                String passwd = ((EditText) findViewById(R.id.joinPasswd)).getText().toString();
                 String name =((EditText) findViewById(R.id.joinName)).getText().toString();
                 Map map = new HashMap();
-                map.put("id",id);
+                map.put("id",joinId);
                 map.put("passwd",passwd);
                 map.put("name",name);
                 map.put("dept",dept);
                 map.put("grade",grade);
 
                 HttpConnector httpcon = new HttpConnector();
-                String result = httpcon.accessServerMap("join",map,mCallback2);
+                String result = httpcon.accessServerMap("join",map,mCallback2);}
+
+                else{
+                    Toast.makeText(JoinActivity.this,"아이디 중복 체크를 해주세요", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });

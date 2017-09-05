@@ -39,19 +39,21 @@ public class DayActivity extends AppCompatActivity {
     LinearLayout dayLayout;
     TextView dayContent;
     TextView dayGoalsale;
+    TextView dayChallenge;
     String state="";
 
 
     public void showData() {
         dayContent.setText(mdayItems.getContent());
         dayGoalsale.setText(mdayItems.getGoalsale()+"");
-
+        dayChallenge.setText(mdayItems.getChallenge());
     }
 
     public void createDayItem(JSONObject datajson) throws JSONException{
 
         mdayItems.setContent(datajson.getString("content"));
         mdayItems.setGoalsale(datajson.getString("goal_sale"));
+        mdayItems.setGoalsale(datajson.getString("opinion"));
 
     }
 
@@ -223,6 +225,7 @@ public class DayActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("일일계획");
         dayGoalsale = (TextView) findViewById(R.id.dayGoalsale);
         dayContent = (TextView) findViewById(R.id.daycontent);
+        dayChallenge = (TextView) findViewById(R.id.daychallenge);
         mdayItems = DayItems.get();
         dayLayout = (LinearLayout)findViewById(R.id.daylinear);
          cal = new GregorianCalendar();
@@ -275,7 +278,7 @@ public class DayActivity extends AppCompatActivity {
                 Log.v("statetasteaetat",state);
                 map.put("date",getDay());
                 map.put("title","1234");
-                map.put("opinion","sdfdsf");
+                map.put("opinion",mdayItems.getChallenge());
                 map.put("content",mdayItems.getContent());
                 map.put("goal_sale",mdayItems.getGoalsale());
 

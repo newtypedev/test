@@ -16,7 +16,7 @@ import retrofit2.http.Query;
 
 public interface ApiService {
    // https://api.androidhive.info/contacts/
-    public static final String API_URL = "http://192.168.1.11:8181/";
+    public static final String API_URL = "http://192.168.1.121:8181/";
     //http://192.168.1.11:8181/
 
 //    @GET("sfa")

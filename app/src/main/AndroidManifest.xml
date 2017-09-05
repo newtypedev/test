@@ -26,6 +26,8 @@
 
         </activity>
 
+        <activity android:name=".ConsultActivity"></activity>
+
         <activity android:name=".DayModifyActivity"
             android:theme="@style/AppTheme">
 
@@ -34,16 +36,21 @@
 
         <activity android:name=".DayActivity"
             android:theme="@style/AppTheme2">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"></meta-data>
+
+        </activity>
+
+
+        <activity android:name=".WorkReportActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
 
