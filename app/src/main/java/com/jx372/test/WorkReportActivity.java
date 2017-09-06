@@ -1,5 +1,6 @@
 package com.jx372.test;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.ColorRes;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jx372.test.fragment.ConsultFragment;
@@ -28,6 +30,8 @@ import com.jx372.test.fragment.WorkReportFragment;
 import com.jx372.test.view.PagerSlidingTabStrip;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import static com.jx372.test.R.id.activity_tab_universal_pager;
 import static com.jx372.test.R.id.activity_tab_universal_pager2;
@@ -44,7 +48,28 @@ public class WorkReportActivity extends AppCompatActivity {
     private PagerSlidingTabStrip tabs;
     private ViewPager pager;
     private boolean menuState=true;
+    private TextView reportDate;
+    Calendar cal;
+    int mYear, mMonth, mDay;
 
+
+
+    public String getDay(){
+        String year =  cal.get(Calendar.YEAR)+"";
+        String month = (cal.get(Calendar.MONTH)+1)+"";
+        String day = cal.get(Calendar.DAY_OF_MONTH)+"";
+
+        if(month.length()==1){
+            month ="0"+month;
+        }
+
+        if(day.length()==1){
+            day ="0"+day;
+        }
+
+        String firstDay = year+"-"+month+"-"+day;
+        return firstDay;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -66,22 +91,39 @@ public class WorkReportActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        int id = item.getItemId();
 
+        if (id == R.id.previous) {
+            cal.add(cal.DAY_OF_MONTH,-1);
+            reportDate.setText(getDay());
+
+            return true;
+        }
+
+        else if (id == R.id.next) {
+            cal.add(cal.DAY_OF_MONTH,+1);
+            reportDate.setText(getDay());
+            return true;
+        }
+        else if(id == R.id.writeconsult){
+            Intent i = new Intent(this,ConsultActivity.class);
+            startActivity(i);
+        }
 
 
         // itemUpdate();
         //onBackPressed();
-        if(item.getItemId() == R.id.writeconsult){
-            //itemUpdate();
-            //    NavUtils.navigateUpFromSameTask(this);
-          //  onBackPressed();
-
-
-        }
-
-        if(item.getItemId()==R.id.dayback){
-            onBackPressed();
-        }
+//        if(item.getItemId() == R.id.writeconsult){
+//            //itemUpdate();
+//            //    NavUtils.navigateUpFromSameTask(this);
+//          //  onBackPressed();
+//
+//
+//        }
+//
+//        if(item.getItemId()==R.id.dayback){
+//            onBackPressed();
+//        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -90,11 +132,18 @@ public class WorkReportActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
-
+        reportDate = (TextView)findViewById(R.id.reportDate);
 
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        getSupportActionBar().setTitle("업무보고");
 
+        cal = new GregorianCalendar();
+        reportDate.setText(getDay());
+//        mYear = cal.get(Calendar.YEAR);
+//
+//        mMonth = cal.get(Calendar.MONTH);
+//
+//        mDay = cal.get(Calendar.DAY_OF_MONTH);
 
 
 

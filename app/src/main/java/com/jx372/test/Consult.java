@@ -28,6 +28,7 @@ public class Consult {
         this.date = date;
     }
 
+
     public boolean isSolved() {
         return solved;
     }

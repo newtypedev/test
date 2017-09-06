@@ -25,7 +25,7 @@ public class ConsultList {
 
     private ConsultList(Context context){
         consults = new ArrayList<>();
-        for(int i=0;i<100;i++){
+        for(int i=0;i<10;i++){
             Consult consult = new Consult();
             consult.setTitle("상담일지"+i);
             consult.setSolved(i%2 ==0 );
@@ -43,6 +43,13 @@ public class ConsultList {
             }
     }
 
+    }
+
+    public void addItem(String s,boolean b){
+        Consult consult = new Consult();
+        consult.setTitle(s);
+        consult.setSolved(b);
+        consults.add(consult);
     }
 
     public List<Consult> getConsults(){

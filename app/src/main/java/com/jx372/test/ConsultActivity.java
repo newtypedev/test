@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -14,18 +17,22 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class ConsultActivity extends AppCompatActivity {
 
 
-    public static final String CRIME_ID = "";
+    public static final String CRIME_ID="";
 
     private Consult consult;
     private EditText titleField;
     private Button dateButton;
     private CheckBox solvedCheckBox;
     private  UUID consultId;
+    private String state="";
+
 
     public static Intent newIntent(Context packageContext, UUID crimeid) {
 
@@ -36,55 +43,70 @@ public class ConsultActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_consult_modify, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        ConsultList cl =ConsultList.get(ConsultActivity.this);
+
+        if(id == R.id.finish){
+
+            if(state.equals("insert")){
+
+                cl.addItem(titleField.getText()+"",true);
+                onBackPressed();
+            }
+
+            else if(state.equals("update")){
+
+            }
+
+        }
+
+        else if(id ==R.id.delete){
+
+          if(!(consultId==null)){
+            cl.deleteItem(consultId);
+              onBackPressed();
+          }
+
+        }
+
+            return true;
+
+        }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consult);
-        consultId = (UUID)getIntent().getSerializableExtra(ConsultActivity.CRIME_ID);
-        consult = ConsultList.get(this).getConsults(consultId);
-
-
-
+        getSupportActionBar().setTitle("상담일지");
         dateButton = (Button)findViewById(R.id.crime_date);
-        dateButton.setText(consult.getDate().toString());
-        //dateButton.setEnabled(false);
-        dateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ConsultList cl =ConsultList.get(ConsultActivity.this);
-                cl.deleteItem(consultId);
-            }
-        });
-
-        solvedCheckBox = (CheckBox)findViewById(R.id.crime_solved);
-        solvedCheckBox.setChecked(consult.isSolved());
-        solvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isCheck) {
-                consult.setSolved(isCheck);
-            }
-        });
-
-
         titleField = (EditText) findViewById(R.id.crime_title);
-        titleField.setText(consult.getTitle());
-        titleField.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        solvedCheckBox = (CheckBox)findViewById(R.id.crime_solved);
 
-            }
+        Log.v("프래그먼트","실행");
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                consult.setTitle(s.toString());
+            consultId = (UUID)getIntent().getSerializableExtra(ConsultActivity.CRIME_ID);
+        if(!(consultId==null)) {
+            state = "update";
+            Log.v("크라임", consultId + "");
+            consult = ConsultList.get(this).getConsults(consultId);
+            dateButton.setText(consult.getDate().toString());
+            //dateButton.setEnabled(false);
+            solvedCheckBox.setChecked(consult.isSolved());
+            titleField.setText(consult.getTitle());
+        }
+        else{
+            state = "insert";
 
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
+        }
     }
 
 }
