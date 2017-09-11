@@ -146,11 +146,10 @@ public class WorkReportActivity extends AppCompatActivity {
 //        mDay = cal.get(Calendar.DAY_OF_MONTH);
 
 
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        toolbar.setTitle("업무보고");
-        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("업무보고");
+//        toolbar = (Toolbar) findViewById(R.id.toolbar2);
+//        toolbar.setTitle("업무보고");
+//        setSupportActionBar(toolbar);
         tabs = (PagerSlidingTabStrip) findViewById(R.id.activity_tab_universal_tabs2);
         //tabs.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         pager = (ViewPager) findViewById(activity_tab_universal_pager2);

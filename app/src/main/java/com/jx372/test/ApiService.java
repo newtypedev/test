@@ -16,7 +16,7 @@ import retrofit2.http.Query;
 
 public interface ApiService {
    // https://api.androidhive.info/contacts/
-    public static final String API_URL = "http://192.168.1.121:8181/";
+    public static final String API_URL = "http://192.168.1.121:8080/";
     //http://192.168.1.11:8181/
 
 //    @GET("sfa")
@@ -72,5 +72,9 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("sfa/m/date/delete")
     Call<ResponseBody> getPostDayDelete(@FieldMap Map<String, String> day);
+
+    @FormUrlEncoded
+    @POST("sfa/m/position/")
+    Call<ResponseBody> getPostPosition(@FieldMap Map<String, String> day);
 
 }

@@ -8,11 +8,11 @@ public class DayItems {
 
     private static DayItems sDayItems;
     private static String goalsale="0";
-    private static String content="일일내용";
+    private static String content="";
     private static String challenge="";
 
     public static void initData(){
-        goalsale="";
+        goalsale="0";
         content="";
         challenge="";
 

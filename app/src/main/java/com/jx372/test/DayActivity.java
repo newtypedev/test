@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Layout;
 
 import android.util.Log;
@@ -41,7 +42,7 @@ public class DayActivity extends AppCompatActivity {
     TextView dayGoalsale;
     TextView dayChallenge;
     String state="";
-
+    private Toolbar toolbar;
 
     public void showData() {
         dayContent.setText(mdayItems.getContent());
@@ -222,7 +223,11 @@ public class DayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dayplan);
-        getSupportActionBar().setTitle("일일계획");
+       getSupportActionBar().setTitle("일일계획");
+
+//        toolbar = (Toolbar) findViewById(R.id.toolbar2);
+//        toolbar.setTitle("Plan");
+//        setSupportActionBar(toolbar);
         dayGoalsale = (TextView) findViewById(R.id.dayGoalsale);
         dayContent = (TextView) findViewById(R.id.daycontent);
         dayChallenge = (TextView) findViewById(R.id.daychallenge);

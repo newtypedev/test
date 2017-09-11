@@ -41,48 +41,63 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-
+                    <TextView
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:background="@color/material_light_blue_300"
+                        android:gravity="left"
+                        />
                 <TextView
                     android:textColor="#000000"
-                    android:textSize="15sp"
+                    android:textSize="15dp"
                     android:textStyle="bold"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:background="@color/material_green_100"
                     android:layout_weight="2"
                     android:text="매출목표"/>
 
                 <TextView
                     android:textColor="#000000"
-                    android:textSize="15sp"
+                    android:textSize="15dp"
                     android:textStyle="bold"
                     android:layout_weight="2"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="1,000,000"/>
+                    android:gravity="left"
+                    android:text="100,000"/>
+
+
+                    <TextView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:background="@color/material_light_blue_300"
+                        android:gravity="left"
+                        />
 
                 <TextView
                     android:textColor="#000000"
-                    android:textSize="15sp"
+                    android:textSize="15dp"
                     android:textStyle="bold"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:background="@color/material_green_100"
                     android:layout_weight="2"
                     android:text="매출액"/>
 
                 <TextView
                     android:textColor="#000000"
-                    android:textSize="15sp"
+                    android:textSize="15dp"
                     android:textStyle="bold"
                     android:layout_weight="2"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="800,000"/>
+                    android:gravity="left"
+                    android:text="0"/>
+
                     </LinearLayout>
 
                 <LinearLayout
@@ -92,31 +107,38 @@
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:background="@color/material_light_blue_300"
+                        android:gravity="left"
+                        />
 
-                <TextView
-                    android:textColor="#000000"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:layout_width="0dip"
-                    android:background="@color/material_green_100"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_weight="1"
-                    android:text="달성률"/>
+                    <TextView
+                        android:textColor="#000000"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="2"
+                        android:text="달성률"/>
 
-                <TextView
-                    android:textColor="#000000"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:id="@+id/daychallenge"
-                    android:layout_weight="1"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="80%"/>
-                    </LinearLayout>
+                    <TextView
+                        android:textColor="#000000"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        android:id="@+id/daychallenge"
+                        android:layout_weight="1"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text="80%"/>
+                </LinearLayout>
 
             </LinearLayout>
+
             <View style="@style/DividerStyle2"/>
 
             <LinearLayout
@@ -132,6 +154,14 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
+                    <TextView
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:background="@color/material_light_blue_300"
+                        android:gravity="left"
+                        />
 
                     <TextView
                         android:textColor="#000000"
@@ -140,7 +170,7 @@
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:background="@color/material_green_100"
+
                         android:layout_weight="2"
                         android:text="출근(km)"/>
 
@@ -155,10 +185,18 @@
                         android:text="25"/>
 
                     <TextView
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:background="@color/material_light_blue_300"
+                        android:gravity="left"
+                        />
+                    <TextView
                         android:textColor="#000000"
                         android:textSize="15sp"
                         android:textStyle="bold"
-                        android:background="@color/material_green_100"
+
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -177,10 +215,18 @@
 
 
                     <TextView
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:background="@color/material_light_blue_300"
+                        android:gravity="left"
+                        />
+                    <TextView
                         android:textColor="#000000"
                         android:textSize="15sp"
                         android:textStyle="bold"
-                        android:background="@color/material_green_100"
+
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:gravity="center"

@@ -71,6 +71,9 @@ public class HttpConnector {
         else if(url.equals("daydelete")){
             comment2 = apiService.getPostDayDelete(map);
         }
+        else if(url.equals("selectposition")){
+            comment2 = apiService.getPostPosition(map);
+        }
 
 
 

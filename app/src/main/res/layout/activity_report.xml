@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/toolbar"/>
+
 <LinearLayout
     android:layout_width="match_parent"
     android:orientation="horizontal"
@@ -18,17 +18,19 @@
         android:id="@+id/reportDate"
         android:gravity="center"
         android:textColor="@color/white"
-        android:textSize="20dp"
-        android:background="@color/colorPrimary"
+        android:textSize="15dp"
+        android:background="@color/material_light_blue_500"
         android:layout_height="30dp" />
+
     <TextView
+        android:background="@color/material_light_blue_500"
         android:layout_width="0dip"
         android:layout_weight="1"
         android:text="승인"
         android:gravity="center"
-        android:textColor="@color/material_green_400"
-        android:textSize="20dp"
-        android:background="@color/colorPrimary"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="15dp"
+
         android:layout_height="30dp" />
 
     <com.jx372.test.view.PagerSlidingTabStrip
