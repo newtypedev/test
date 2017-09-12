@@ -33,16 +33,26 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
+
                 <TextView
-                    android:textColor="#000000"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@color/material_light_blue_300"
+                    android:gravity="right" />
+
+                <TextView
                     android:id="@+id/textView6"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
                     android:layout_weight="1"
-                    android:text="도전과제"/>
+                    android:gravity="center"
+                    android:text="도전과제"
+                    android:textColor="#000000"
+                    android:textSize="15sp" />
+
 
                 <Spinner
                     android:id="@+id/dayspinner"
@@ -70,14 +80,15 @@
                     android:gravity="center"
                     android:text=""/>
             </LinearLayout>
-            <View style="@style/DividerStyle2"/>
 
             <LinearLayout
+                android:visibility="gone"
                 android:paddingTop="3dp"
                 android:background="#ffffff"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
 
                 <TextView
                     android:textColor="#000000"
@@ -101,7 +112,7 @@
 
             </LinearLayout>
 
-            <View style="@style/DividerStyle2"/>
+
             <LinearLayout
                 android:paddingTop="3dp"
                 android:background="#ffffff"
@@ -110,10 +121,18 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@color/material_light_blue_300"
+                    android:gravity="right" />
+
+                <TextView
                     android:textColor="#000000"
                     android:id="@+id/achievetext"
                     android:textSize="15sp"
-                    android:textStyle="bold"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:gravity="right"
@@ -151,7 +170,7 @@
                     app:typeface="robotoMedium"/>
 
             </LinearLayout>
-            <View style="@style/DividerStyle2"/>
+
 
             <LinearLayout
                 android:paddingTop="3dp"
@@ -161,12 +180,20 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@color/material_light_blue_300"
+                    android:gravity="right" />
+
+                <TextView
                     android:textColor="#000000"
                     android:textSize="15sp"
-                    android:textStyle="bold"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
+                    android:gravity="center"
                     android:layout_weight="1"
                     android:text="방문지점"/>
 
@@ -181,20 +208,35 @@
                     android:gravity="center"
                     android:text=""/>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:paddingTop="20dp">
+
+
+                <TextView
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="활동계획"
+                    android:textColor="@color/material_blue_400"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+
             <View style="@style/DividerStyle2"/>
             <LinearLayout
                 android:paddingTop="5dp"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:text="업무계획"
-                    android:background="@color/material_grey_600"
-                    android:textColor="#ffffff"
-                    android:gravity="center"
-                    android:textSize="15dp"
-                    android:layout_height="wrap_content"/>
+
 
                 <EditText
                     android:gravity="top|left"

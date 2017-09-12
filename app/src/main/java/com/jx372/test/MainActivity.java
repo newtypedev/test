@@ -272,7 +272,12 @@ else if(position==2){
     getSupportActionBar().setTitle("주간계획작성");
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 }
-
+else if(position==3){
+    Intent i = new Intent(this, DayActivity.class);
+    startActivity(i);
+    getSupportActionBar().setTitle("일일계획작성");
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+}
         mDrawerList.setItemChecked(position, true);
         setTitle(mDrawerItems.get(position - 1).getTitle());
         mDrawerLayout.closeDrawer(mDrawerList);

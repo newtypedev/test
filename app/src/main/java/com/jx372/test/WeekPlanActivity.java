@@ -609,8 +609,7 @@ public class WeekPlanActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("주간계획");
         User user = User.get();
         userId = user.getId();
-        userId = "test01";
-        Log.v("useruser",userId);
+//        Log.v("useruser",userId);
         mWeekItems = WeekItems.get();
         firstdayofweek = Calendar.getInstance();
         nowDayofweek = firstdayofweek.get(firstdayofweek.DAY_OF_WEEK);

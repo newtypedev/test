@@ -74,6 +74,9 @@ public class HttpConnector {
         else if(url.equals("selectposition")){
             comment2 = apiService.getPostPosition(map);
         }
+        else if(url.equals("challenge")){
+            comment2 = apiService.getPostChallenge(map);
+        }
 
 
 

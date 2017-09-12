@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -9,18 +9,28 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/linearLayout4"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp">
         <TextView
-            android:text="매출액"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:paddingLeft="10dp"
+            android:layout_gravity="center"
+            android:background="@color/material_light_blue_300"
+            android:gravity="right" />
+        <TextView
+            android:text="목표액"
             android:gravity="center"
+            android:textColor="@color/black"
             android:layout_weight="1"
             android:layout_width="0dip"
             android:layout_height="wrap_content"/>
 
         <EditText
             android:id="@+id/saleedit"
-            android:layout_weight="2"
+            android:layout_weight="4"
             android:layout_width="0dip"
             android:layout_height="wrap_content"/>
         <Button
@@ -40,17 +50,39 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/linearLayout"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="39dp">
+        android:layout_marginTop="10dp"
+        android:layout_alignParentStart="true">
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:paddingLeft="10dp"
+            android:layout_gravity="top"
+            android:background="@color/material_light_blue_300"
+            android:gravity="right" />
+        <TextView
+            android:text="요일활동"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:layout_weight="1"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"/>
+
 
         <EditText
             android:id="@+id/newitem"
             android:layout_width="0px"
-            android:layout_weight="2"
+            android:layout_weight="4"
             android:layout_height="wrap_content"/>
 
-
+</LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="0dip"
+            android:layout_weight="5"
+            android:layout_height="1dp" />
         <com.jx372.test.font.RobotoTextView
             android:onClick="mOnclick"
             android:layout_gravity="right"
@@ -60,11 +92,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignStart="@+id/joinCheck"
-            android:layout_marginBottom="15dp"
+
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/selector_expandable_shop"
+
+            android:background="@color/material_light_blue_300"
             android:gravity="center"
             android:minHeight="36dp"
             android:minWidth="64dp"
@@ -72,48 +104,44 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingStart="8dp"
-            android:text="ADD"
+            android:text="추가"
             android:textColor="@android:color/white"
             android:textSize="15sp"/>
 
-
         <com.jx372.test.font.RobotoTextView
-            android:onClick="mOnclick"
-            android:layout_gravity="right"
             android:id="@+id/delete"
             android:layout_width="0dip"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignStart="@+id/joinCheck"
-            android:layout_marginBottom="15dp"
+            android:layout_gravity="right"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/selector_expandable_shop"
+
+            android:layout_weight="1"
+            android:background="@color/material_light_blue_300"
+
             android:gravity="center"
             android:minHeight="36dp"
             android:minWidth="64dp"
+            android:onClick="mOnclick"
             android:paddingEnd="8dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingStart="8dp"
-            android:text="DELETE"
+            android:text="삭제"
             android:textColor="@android:color/white"
-            android:textSize="15sp"/>
-
-
-
-
+            android:textSize="15sp" />
     </LinearLayout>
+
 
     <ListView
         android:id="@+id/weeklist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/linearLayout"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="48dp"></ListView>
+        android:layout_below="@+id/linearLayout"
+        android:layout_marginTop="30dp"></ListView>
 
 
-</RelativeLayout>
+</LinearLayout>

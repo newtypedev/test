@@ -76,5 +76,8 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("sfa/m/position/")
     Call<ResponseBody> getPostPosition(@FieldMap Map<String, String> day);
+    @FormUrlEncoded
+    @POST("sfa/m/challenge/")
+    Call<ResponseBody> getPostChallenge(@FieldMap Map<String, String> day);
 
 }

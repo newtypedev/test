@@ -30,13 +30,13 @@ public class DayModifyActivity extends AppCompatActivity{
     public int getItemNum(String msg){
 
         if(msg.equals("도전과제하나")){
-            return 0;
-        }
-        else if(msg.equals("도전과제둘")){
             return 1;
         }
-        else if(msg.equals("도전과제셋")){
+        else if(msg.equals("도전과제둘")){
             return 2;
+        }
+        else if(msg.equals("도전과제셋")){
+            return 3;
         }
 
         return 0;
@@ -45,7 +45,7 @@ public class DayModifyActivity extends AppCompatActivity{
     public void itemUpdate(){
       mDayItem.setContent(daymemo.getText()+"");
         mDayItem.setGoalsale(goalsale.getText()+"");
-        mDayItem.setChallenge(itemPos+"");
+        mDayItem.setChallenge(itemPos);
 
     }
 
@@ -107,12 +107,21 @@ public class DayModifyActivity extends AppCompatActivity{
 
         spin.setPrompt("도전과제");
 
+      //  spin.setSelection(mDayItem.getChallenge());
 
-        adspin = ArrayAdapter.createFromResource(this, R.array.country,
-                R.layout.spinner_item);
 
-        adspin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spin.setAdapter(adspin);
+        String[] entries = {"List Item A", "List Item B"};
+
+
+        ArrayAdapter<String> arrAdapt=
+                new ArrayAdapter<String>(this, R.layout.spinner_item, entries);
+        spin.setAdapter(arrAdapt);
+
+//        adspin = ArrayAdapter.createFromResource(this, R.array.country,
+//                R.layout.spinner_item);
+
+      //  adspin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+      //  spin.setAdapter(adspin);
         //spin.setSelection(Integer.parseInt(mDayItem.getChallenge()));
 
         spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -125,7 +134,7 @@ public class DayModifyActivity extends AppCompatActivity{
 					return;
 				}
 				//*/
-				itemPos = position;
+				itemPos = position+1;
                   Toast.makeText(DayModifyActivity.this,position+"", Toast.LENGTH_SHORT).show();
             }
             public void onNothingSelected(AdapterView<?> parent) {
@@ -143,9 +152,8 @@ public class DayModifyActivity extends AppCompatActivity{
 
     @Override
     protected void onResume() {
-        TmapItem tm = TmapItem.get();
-        visitPos.setText(tm.getVisitPoint());
-        shortDis.setText(tm.getShortDistance());
+        visitPos.setText(mDayItem.getVisitPoint());
+        shortDis.setText(mDayItem.getShortDistance());
         super.onResume();
     }
 }

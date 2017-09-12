@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -21,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,19 +44,46 @@ public class DayActivity extends AppCompatActivity {
     TextView dayGoalsale;
     TextView dayChallenge;
     String state="";
+    TextView visitPoint;
+    TextView distance;
+    String userId="";
+    ViewFlipper mFlip;
     private Toolbar toolbar;
 
     public void showData() {
         dayContent.setText(mdayItems.getContent());
         dayGoalsale.setText(mdayItems.getGoalsale()+"");
-        dayChallenge.setText(mdayItems.getChallenge());
+        distance.setText(mdayItems.getShortDistance());
+        visitPoint.setText(mdayItems.getVisitPoint());
+
+
+        String temp="";
+
+        if(mdayItems.getChallenge()==1){
+            temp = "도전과제하나";
+        }
+
+        else if(mdayItems.getChallenge()==2){
+            temp = "도전과제둘";
+        }
+
+        else if(mdayItems.getChallenge()==3){
+            temp = "도전과제셋";
+        }
+        else if(mdayItems.getChallenge()==0){
+            temp = "";
+        }
+        dayChallenge.setText(temp);
+
+
     }
 
     public void createDayItem(JSONObject datajson) throws JSONException{
 
         mdayItems.setContent(datajson.getString("content"));
         mdayItems.setGoalsale(datajson.getString("goal_sale"));
-        mdayItems.setGoalsale(datajson.getString("opinion"));
+        mdayItems.setChallenge(datajson.getInt("opinion"));
+        mdayItems.setTitle(datajson.getString("title"));
 
     }
 
@@ -104,7 +133,7 @@ public class DayActivity extends AppCompatActivity {
                     cal.set(Integer.parseInt(year2),Integer.parseInt(month)-1,Integer.parseInt(day));
                     Map map = new HashMap();
                     map.put("date",getDay());
-                    map.put("id","test01");
+                    map.put("id",userId);
                     HttpConnector httpcon = new HttpConnector();
 
                     httpcon.accessServerMap("dayselect",map,mCallback);
@@ -199,6 +228,40 @@ public class DayActivity extends AppCompatActivity {
         }
     };
 
+    Callback2 mCallback3 = new Callback2() {
+        @Override
+        public void callback(String msg) {
+            if(msg.equals("JsonException")){
+                Toast.makeText(DayActivity.this,msg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if(msg.equals("ConnectFail")){
+                Toast.makeText(DayActivity.this,msg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                JSONObject jsonbody = new JSONObject(msg);
+                Log.v("dayjson3",msg);
+                if(jsonbody.getString("result").equals("success")){
+
+
+                }
+                else if(jsonbody.getString("result").equals("fail")){
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+//            jsonTest = msg;
+//            if(!msg.equals(""))
+//                Toast.makeText(JoinActivity.this,"사용 가능한 ID 입니다", Toast.LENGTH_SHORT).show();
+
+        }
+    };
+
 
 
     public String getDay(){
@@ -224,13 +287,15 @@ public class DayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dayplan);
        getSupportActionBar().setTitle("일일계획");
-
+        mFlip = (ViewFlipper)findViewById(R.id.dayflip);
 //        toolbar = (Toolbar) findViewById(R.id.toolbar2);
 //        toolbar.setTitle("Plan");
 //        setSupportActionBar(toolbar);
         dayGoalsale = (TextView) findViewById(R.id.dayGoalsale);
         dayContent = (TextView) findViewById(R.id.daycontent);
         dayChallenge = (TextView) findViewById(R.id.daychallenge);
+        visitPoint = (TextView)findViewById(R.id.visitPoint);
+        distance =(TextView) findViewById(R.id.distance);
         mdayItems = DayItems.get();
         dayLayout = (LinearLayout)findViewById(R.id.daylinear);
          cal = new GregorianCalendar();
@@ -241,16 +306,19 @@ public class DayActivity extends AppCompatActivity {
         mMonth = cal.get(Calendar.MONTH);
 
         mDay = cal.get(Calendar.DAY_OF_MONTH);
-
+        User user = User.get();
+        userId = user.getId();
         Map map = new HashMap();
-        map.put("id","test01");
+        map.put("id",userId);
         Log.v("dayday",getDay());
         map.put("date",getDay());
 
 
         HttpConnector httpcon = new HttpConnector();
         httpcon.accessServerMap("dayselect",map,mCallback);
-
+        Map map2 = new HashMap();
+        map2.put("dept","영업 1팀");
+        httpcon.accessServerMap("challenge",map2,mCallback3);
         dayLayout.setOnLongClickListener(new TextView.OnLongClickListener(){
             @Override
             public boolean onLongClick(View v) {
@@ -273,7 +341,7 @@ public class DayActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         Map map = new HashMap();
-        map.put("id","test01");
+        map.put("id",userId);
         HttpConnector httpcon = new HttpConnector();
 
 
@@ -282,7 +350,7 @@ public class DayActivity extends AppCompatActivity {
 
                 Log.v("statetasteaetat",state);
                 map.put("date",getDay());
-                map.put("title","1234");
+                map.put("title",mdayItems.getTitle());
                 map.put("opinion",mdayItems.getChallenge());
                 map.put("content",mdayItems.getContent());
                 map.put("goal_sale",mdayItems.getGoalsale());
@@ -309,6 +377,9 @@ public class DayActivity extends AppCompatActivity {
             Log.v("preprepre",getDay());
             map.put("date",getDay());
             httpcon.accessServerMap("dayselect",map,mCallback);
+                mFlip.showPrevious();
+                mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewin));
+                mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewout));
             return true;
         }
 
@@ -317,6 +388,10 @@ public class DayActivity extends AppCompatActivity {
             daytext.setText(getDay());
             map.put("date",getDay());
             httpcon.accessServerMap("dayselect",map,mCallback);
+                mFlip.showNext();
+                mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewin));
+                mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewout));
+
             return true;
         }
         else if(id == R.id.daysearch){
@@ -338,7 +413,7 @@ public class DayActivity extends AppCompatActivity {
                         .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 Map map = new HashMap();
-                                map.put("id","test01");
+                                map.put("id",userId);
                                 map.put("date",getDay());
                                 HttpConnector httpcon = new HttpConnector();
                                 httpcon.accessServerMap("daydelete",map,mCallback2);

@@ -22,11 +22,7 @@
         <activity android:name=".tmap.TmapActivity"
             android:configChanges="keyboardHidden|orientation"
             >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
 
 
@@ -36,7 +32,7 @@
             android:theme="@style/AppTheme"></activity>
 
         <activity android:name=".DayModifyActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme3">
 
 
         </activity>
@@ -66,10 +62,15 @@
         </activity>
 
         <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
         <activity android:name=".JoinActivity"
-                  android:theme="@style/AppTheme">
+                  android:theme="@style/AppTheme3">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -94,7 +95,7 @@
 
 
         <activity android:name=".WeekModifyActivity"
-                  android:theme="@style/AppTheme">
+                  android:theme="@style/AppTheme3">
 
 
 
@@ -102,9 +103,8 @@
         </activity>
 
         <activity
-            android:theme="@style/AppTheme2"
+            android:theme="@style/AppTheme3"
             android:name=".WeekPlanActivity">
-
 
 
             <meta-data

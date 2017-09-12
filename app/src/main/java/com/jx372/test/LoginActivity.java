@@ -32,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     ApiService apiService;
     int messageResId = 0;
     int messageResId2 = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

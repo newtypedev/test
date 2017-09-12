@@ -10,6 +10,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 
 import com.jx372.test.Callback2;
 import com.jx372.test.DayActivity;
+import com.jx372.test.DayItems;
 import com.jx372.test.HttpConnector;
 import com.jx372.test.R;
 import com.jx372.test.TmapItem;
@@ -62,11 +65,55 @@ import java.util.Map;
 public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocationChangedCallback
 {
 
+
     String pos ="";
     TextView posText ;
     TextView disText;
     double dd=0.0;
     int posCount=0;
+    TextView posNow;
+    LocationManager lm;
+    double nowLatitude=0.0;
+    double nowLongitude=0.0;
+
+
+    private final LocationListener mLocationListener = new LocationListener() {
+        public void onLocationChanged(Location location) {
+            //여기서 위치값이 갱신되면 이벤트가 발생한다.
+            //값은 Location 형태로 리턴되며 좌표 출력 방법은 다음과 같다.
+
+            Log.d("test", "onLocationChanged, location:" + location);
+            double longitude = location.getLongitude(); //경도
+            double latitude = location.getLatitude();   //위도
+            double altitude = location.getAltitude();   //고도
+            float accuracy = location.getAccuracy();    //정확도
+            String provider = location.getProvider();   //위치제공자
+            //Gps 위치제공자에 의한 위치변화. 오차범위가 좁다.
+            //Network 위치제공자에 의한 위치변화
+            //Network 위치는 Gps에 비해 정확도가 많이 떨어진다.
+
+           // posNow.setText("위치정보 : " + provider + "위도 : " + latitude + " 경도 : " + longitude);
+            posNow.setText("위도 : " + latitude + " 경도 : " + longitude);
+            lm.removeUpdates(mLocationListener);
+            nowLatitude= latitude;
+            nowLongitude = longitude;
+        }
+        public void onProviderDisabled(String provider) {
+            // Disabled시
+            Log.d("test", "onProviderDisabled, provider:" + provider);
+        }
+
+        public void onProviderEnabled(String provider) {
+            // Enabled시
+            Log.d("test", "onProviderEnabled, provider:" + provider);
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            // 변경시
+            Log.d("test", "onStatusChanged, provider:" + provider + ", status:" + status + " ,Bundle:" + extras);
+        }
+    };
+
 
     ArrayList<TMapMarkerItem> mapPosition;
     Callback2 mCallback = new Callback2() {
@@ -272,6 +319,28 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_tmap);
+        lm= (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        posNow = (TextView)findViewById(R.id.nowPosition);
+
+
+
+                try{
+
+                        posNow.setText("수신중..");
+                        // GPS 제공자의 정보가 바뀌면 콜백하도록 리스너 등록하기~!!!
+                        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, // 등록할 위치제공자
+                                100, // 통지사이의 최소 시간간격 (miliSecond)
+                                1, // 통지사이의 최소 변경거리 (m)
+                                mLocationListener);
+                        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자
+                                100, // 통지사이의 최소 시간간격 (miliSecond)
+                                1, // 통지사이의 최소 변경거리 (m)
+                                mLocationListener);
+
+                }catch(SecurityException ex){
+                }
+
+
 
         Map map = new HashMap();
         map.put("id","test01");
@@ -308,9 +377,11 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
         gps = new TMapGpsManager(TmapActivity.this);
         gps.setMinTime(1000);
         gps.setMinDistance(5);
-        gps.setProvider(gps.NETWORK_PROVIDER);
+        gps.setProvider(gps.GPS_PROVIDER);
         gps.OpenGps();
-
+       // TMapPoint po = gps.getLocation();
+       // Log.v("sisisisisisiblablabal",po.getLatitude()+"");
+       // mMapView.setLocationPoint(po.getLatitude(),po.getLongitude());
         mMapView.setTMapLogoPosition(TMapView.TMapLogoPositon.POSITION_BOTTOMRIGHT);
     }
 
@@ -468,7 +539,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
             case R.id.btnSetZoomLevel	  :  	setZoomLevel(); 		break;
             case R.id.btnSetMapType		  :		setMapType(); 			break;
             case R.id.btnGetLocationPoint : 	getLocationPoint(); 	break;
-            case R.id.btnSetLocationPoint : 	setLocationPoint(); 	break;
+           // case R.id.btnSetLocationPoint : 	setLocationPoint(); 	break;
             case R.id.btnSetIcon		  : 	setMapIcon(); 			break;
             case R.id.btnSetCompassMode	  : 	setCompassMode();		break;
             case R.id.btnGetIsCompass     :		getIsCompass();			break;
@@ -679,13 +750,13 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
      * setLocationPoint
      * 현재위치로 표시될 좌표의 위도,경도를 설정한다.
      */
-    public void setLocationPoint() {
-        double 	Latitude  = 37.5077664;
-        double  Longitude = 126.8805826;
+    public void setLocationPoint(double latitude,double longitude) {
+        double 	Latitude  =latitude;
+        double  Longitude = longitude;
 
         LogManager.printLog("setLocationPoint " + Latitude + " " + Longitude);
 
-        mMapView.setLocationPoint(Longitude, Latitude);
+        mMapView.setLocationPoint(Latitude, Longitude);
     }
 
     /**
@@ -1127,14 +1198,18 @@ Log.v("strId 알아보기",strID);
         }
         TMapData tmapdata = new TMapData();
 
-        if(pathList.size()<2){
+        if(nowLatitude==0.0 || nowLongitude==0.0)return;
+
+        if(pathList.size()<1){
            return;
        }
 
-       else if(pathList.size()==2){
-            TMapPoint startPoint = pathList.get(0);
-            TMapPoint endPoint = pathList.get(1);
+       else if(pathList.size()==1){
+//            TMapPoint startPoint = pathList.get(0);
+//            TMapPoint endPoint = pathList.get(1);
 
+            TMapPoint startPoint = new TMapPoint(nowLatitude,nowLongitude);
+            TMapPoint endPoint = pathList.get(0);
 
             tmapdata.findPathData(startPoint,endPoint,new TMapData.FindPathDataListenerCallback() {
                 @Override
@@ -1158,9 +1233,12 @@ Log.v("strId 알아보기",strID);
                         public void run() {
                             String result = dd+"";
 
+
                             // 내용
-                            Toast.makeText(TmapActivity.this,    result.substring(0,3)+"km",Toast.LENGTH_SHORT).show();
-                            disText.setText(result.substring(0,3)+"km");
+                            Toast.makeText(TmapActivity.this,    result+"km",Toast.LENGTH_SHORT).show();
+                            result = result.substring(0,3);
+                            double value = Double.parseDouble(result);
+                            disText.setText(value+"km");
                         }
                     }, 1000);
 
@@ -1174,23 +1252,14 @@ Log.v("strId 알아보기",strID);
                     Log.v("disdisdistance",polyLine.getDistance()+"");
                 }
             });
-
-
-
-
-
-
-
-
-
         }
 
-        else if(pathList.size()>2){
-            TMapPoint startPoint = pathList.get(0);
+        else if(pathList.size()>1){
+            TMapPoint startPoint =  new TMapPoint(nowLatitude,nowLongitude);
             TMapPoint endPoint = pathList.get(pathList.size()-1);
             ArrayList<TMapPoint> pointList = new ArrayList<>();
 
-            for(int i=1;i<pathList.size()-1;i++){
+            for(int i=0;i<pathList.size()-1;i++){
                 TMapPoint Point = pathList.get(i);
                 pointList.add(Point);
             }
@@ -1683,10 +1752,10 @@ Log.v("strId 알아보기",strID);
 
     public void submitClick(View view) {
 
-        TmapItem tm = TmapItem.get();
-        tm.setShortDistance(disText.getText()+"");
-        tm.setVisitPoint(posText.getText()+"");
 
+        DayItems dayItems = DayItems.get();
+        dayItems.setShortDistance(disText.getText()+"");
+        dayItems.setVisitPoint(posText.getText()+"");
         onBackPressed();
 
     }

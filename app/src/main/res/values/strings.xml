@@ -123,7 +123,7 @@
     <string name="drawer_title_wizards">Wizards</string>
     <string name="drawer_title_linked_in">팀원등록</string>
     <string name="drawer_title_blog">주간계획</string>
-    <string name="drawer_title_git_hub">도우미검색</string>
+    <string name="drawer_title_git_hub">일일계획</string>
     <string name="drawer_title_instagram">기획서작성</string>
 
     <string name="fontello_logo">&#xe8ad;</string>
