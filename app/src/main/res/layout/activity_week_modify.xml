@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="10dp"
             android:layout_height="10dp"
-            android:paddingLeft="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_gravity="center"
             android:background="@color/material_light_blue_300"
             android:gravity="right" />
@@ -55,8 +55,8 @@
         <TextView
             android:layout_width="10dp"
             android:layout_height="10dp"
-            android:paddingLeft="10dp"
-            android:layout_gravity="top"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center"
             android:background="@color/material_light_blue_300"
             android:gravity="right" />
         <TextView

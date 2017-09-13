@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,10 +26,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.jx372.test.tmap.LogManager;
+import com.skp.Tmap.TMapMarkerItem;
+import com.skp.Tmap.TMapPoint;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -55,25 +63,7 @@ public class DayActivity extends AppCompatActivity {
         dayGoalsale.setText(mdayItems.getGoalsale()+"");
         distance.setText(mdayItems.getShortDistance());
         visitPoint.setText(mdayItems.getVisitPoint());
-
-
-        String temp="";
-
-        if(mdayItems.getChallenge()==1){
-            temp = "도전과제하나";
-        }
-
-        else if(mdayItems.getChallenge()==2){
-            temp = "도전과제둘";
-        }
-
-        else if(mdayItems.getChallenge()==3){
-            temp = "도전과제셋";
-        }
-        else if(mdayItems.getChallenge()==0){
-            temp = "";
-        }
-        dayChallenge.setText(temp);
+        dayChallenge.setText(mdayItems.getChallenge());
 
 
     }
@@ -82,7 +72,7 @@ public class DayActivity extends AppCompatActivity {
 
         mdayItems.setContent(datajson.getString("content"));
         mdayItems.setGoalsale(datajson.getString("goal_sale"));
-        mdayItems.setChallenge(datajson.getInt("opinion"));
+        mdayItems.setChallenge(datajson.getString("opinion"));
         mdayItems.setTitle(datajson.getString("title"));
 
     }
@@ -246,6 +236,16 @@ public class DayActivity extends AppCompatActivity {
                 Log.v("dayjson3",msg);
                 if(jsonbody.getString("result").equals("success")){
 
+                    JSONArray datas = jsonbody.getJSONArray("data");
+                    int size = datas.length();
+                    ArrayList<String> spinList = new ArrayList<>();
+
+                    for(int i=0;i<size;i++){
+                        spinList.add(datas.getJSONObject(i).getString("content"));
+
+                    }
+                    mdayItems.setSpinnerItem(spinList);
+
 
                 }
                 else if(jsonbody.getString("result").equals("fail")){
@@ -353,7 +353,7 @@ public class DayActivity extends AppCompatActivity {
                 map.put("title",mdayItems.getTitle());
                 map.put("opinion",mdayItems.getChallenge());
                 map.put("content",mdayItems.getContent());
-                map.put("goal_sale",mdayItems.getGoalsale());
+               // map.put("goal_sale",mdayItems.getGoalsale());
 
 
                 if(state.equals("insert")){
@@ -378,8 +378,13 @@ public class DayActivity extends AppCompatActivity {
             map.put("date",getDay());
             httpcon.accessServerMap("dayselect",map,mCallback);
                 mFlip.showPrevious();
-                mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewin));
-                mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewout));
+
+
+                  mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewdown));
+                  mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewup));
+
+              //  mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewin));
+              //  mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewout));
             return true;
         }
 
@@ -389,8 +394,10 @@ public class DayActivity extends AppCompatActivity {
             map.put("date",getDay());
             httpcon.accessServerMap("dayselect",map,mCallback);
                 mFlip.showNext();
-                mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewin));
-                mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewout));
+             //   mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewout));
+               // mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewin));
+                mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewdown));
+                mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewup));
 
             return true;
         }

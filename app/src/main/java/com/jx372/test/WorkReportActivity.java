@@ -51,7 +51,7 @@ public class WorkReportActivity extends AppCompatActivity {
     private TextView reportDate;
     Calendar cal;
     int mYear, mMonth, mDay;
-
+    private ReportItems reportItems;
 
 
     public String getDay(){
@@ -133,6 +133,7 @@ public class WorkReportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
         reportDate = (TextView)findViewById(R.id.reportDate);
+        reportItems = ReportItems.get();
 
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        getSupportActionBar().setTitle("업무보고");
@@ -144,6 +145,11 @@ public class WorkReportActivity extends AppCompatActivity {
 //        mMonth = cal.get(Calendar.MONTH);
 //
 //        mDay = cal.get(Calendar.DAY_OF_MONTH);
+
+
+
+
+
 
 
         getSupportActionBar().setTitle("업무보고");

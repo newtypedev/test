@@ -6,10 +6,11 @@ import java.util.ArrayList;
 public class DayItems {
 
 
+    private static ArrayList<String> spinnerItem;
     private static DayItems sDayItems;
     private static String goalsale="0";
-    private static String content="";
-    private static int challenge=0;
+    private static String content="-";
+    private static String challenge="";
     private static String shortDistance="";
     private static String visitPoint="";
     private static String title="제목";
@@ -17,12 +18,20 @@ public class DayItems {
 
     public static void initData(){
         goalsale="0";
-        content="";
-        challenge=0;
+        content="-";
+        challenge="";
         shortDistance="";
         visitPoint="";
-        title="";
+        //title="";
 
+    }
+
+    public static ArrayList<String> getSpinnerItem() {
+        return spinnerItem;
+    }
+
+    public static void setSpinnerItem(ArrayList<String> spinnerItem) {
+        DayItems.spinnerItem = spinnerItem;
     }
 
     public static String getTitle() {
@@ -49,11 +58,11 @@ public class DayItems {
         this.visitPoint = visitPoint;
     }
 
-    public static int getChallenge() {
+    public static String getChallenge() {
         return challenge;
     }
 
-    public static void setChallenge(int challenge) {
+    public static void setChallenge(String challenge) {
         DayItems.challenge = challenge;
     }
 

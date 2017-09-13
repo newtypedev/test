@@ -18,9 +18,14 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,6 +80,23 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
     LocationManager lm;
     double nowLatitude=0.0;
     double nowLongitude=0.0;
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_switch, menu);
+        MenuItem network = menu.findItem(R.id.network);
+        Switch sw = (Switch)network.getActionView();
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                String msg = "선택된 네트워크 = " + (isChecked ? "WiFi":"LTE");
+                Toast.makeText(TmapActivity.this,msg,Toast.LENGTH_LONG).show();
+                // mText.setText("선택된 네트워크 = " + (isChecked ? "WiFi":"LTE"));
+            }
+        });
+
+        return true;
+    }
 
 
     private final LocationListener mLocationListener = new LocationListener() {
@@ -319,6 +341,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_tmap);
+
         lm= (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         posNow = (TextView)findViewById(R.id.nowPosition);
 

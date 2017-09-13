@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -19,6 +20,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,7 +76,7 @@ public class WeekPlanActivity extends AppCompatActivity {
     int nowWeek=0;
     Retrofit retrofit;
     ApiService apiService;
-
+    ViewFlipper mFlip;
 
     public void preventModify(){
 
@@ -553,6 +555,10 @@ public class WeekPlanActivity extends AppCompatActivity {
             preventModify();
 
             httpcon.accessServerMap("weekselect",map,mCallback);
+            mFlip.showPrevious();
+            mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewup));
+            mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewdown));
+
             return true;
         }
         else if (id == R.id.next) {
@@ -565,6 +571,10 @@ public class WeekPlanActivity extends AppCompatActivity {
 
 
             httpcon.accessServerMap("weekselect",map,mCallback);
+            mFlip.showNext();
+            mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewup));
+            mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewdown));
+
             return true;
         }
         else if(id == R.id.del){
@@ -607,6 +617,7 @@ public class WeekPlanActivity extends AppCompatActivity {
         setContentView(R.layout.activity_weekplan);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("주간계획");
+        mFlip = (ViewFlipper)findViewById(R.id.weekflip);
         User user = User.get();
         userId = user.getId();
 //        Log.v("useruser",userId);

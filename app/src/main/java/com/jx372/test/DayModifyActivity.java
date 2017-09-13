@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.jx372.test.tmap.TmapActivity;
 
+import java.util.ArrayList;
+
 
 public class DayModifyActivity extends AppCompatActivity{
     ArrayAdapter<CharSequence> adspin;
@@ -25,18 +27,16 @@ public class DayModifyActivity extends AppCompatActivity{
     EditText daymemo;
     EditText goalsale;
     Spinner spin;
+    String nowItem="";
     int itemPos=0;
 
     public int getItemNum(String msg){
 
-        if(msg.equals("도전과제하나")){
-            return 1;
-        }
-        else if(msg.equals("도전과제둘")){
-            return 2;
-        }
-        else if(msg.equals("도전과제셋")){
-            return 3;
+
+        for(int i=0;i<mDayItem.getSpinnerItem().size();i++){
+            if(msg.equals(mDayItem.getSpinnerItem().get(i))){
+                return i;
+            }
         }
 
         return 0;
@@ -45,7 +45,7 @@ public class DayModifyActivity extends AppCompatActivity{
     public void itemUpdate(){
       mDayItem.setContent(daymemo.getText()+"");
         mDayItem.setGoalsale(goalsale.getText()+"");
-        mDayItem.setChallenge(itemPos);
+        mDayItem.setChallenge(nowItem);
 
     }
 
@@ -102,20 +102,24 @@ public class DayModifyActivity extends AppCompatActivity{
 
         daymemo.setText(mDayItem.getContent());
         goalsale.setText(mDayItem.getGoalsale());
-
+        nowItem = mDayItem.getChallenge();
         spin= (Spinner)findViewById(R.id.dayspinner);
 
-        spin.setPrompt("도전과제");
+        //spin.setPrompt("도전과제");
 
       //  spin.setSelection(mDayItem.getChallenge());
 
 
-        String[] entries = {"List Item A", "List Item B"};
-
+//        String[] entries = {"","List Item A", "List Item B"};
+//        ArrayList<String> ent = new ArrayList<>();
+//        ent.add("");
+//        ent.add("A");
+//        ent.add("b");
 
         ArrayAdapter<String> arrAdapt=
-                new ArrayAdapter<String>(this, R.layout.spinner_item, entries);
+                new ArrayAdapter<String>(this, R.layout.spinner_item, mDayItem.getSpinnerItem());
         spin.setAdapter(arrAdapt);
+        spin.setSelection(getItemNum(nowItem));
 
 //        adspin = ArrayAdapter.createFromResource(this, R.array.country,
 //                R.layout.spinner_item);
@@ -134,7 +138,10 @@ public class DayModifyActivity extends AppCompatActivity{
 					return;
 				}
 				//*/
-				itemPos = position+1;
+
+				nowItem = spin.getItemAtPosition(position)+"";
+				//itemPos = position+1;
+                //Toast.makeText(DayModifyActivity.this,spin.getItemAtPosition(position)+"", Toast.LENGTH_SHORT).show();
                   Toast.makeText(DayModifyActivity.this,position+"", Toast.LENGTH_SHORT).show();
             }
             public void onNothingSelected(AdapterView<?> parent) {
