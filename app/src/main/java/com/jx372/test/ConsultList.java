@@ -25,13 +25,14 @@ public class ConsultList {
 
     private ConsultList(Context context){
         consults = new ArrayList<>();
-        for(int i=0;i<10;i++){
-            Consult consult = new Consult();
-            consult.setTitle("상담일지"+i);
-            consult.setSolved(i%2 ==0 );
-            consults.add(consult);
-        }
+//        for(int i=0;i<10;i++){
+//            Consult consult = new Consult();
+//            consult.setTitle("상담일지"+i);
+//            consult.setSolved(i%2 ==0 );
+//            consults.add(consult);
+//        }
     }
+
 
     public void deleteItem(UUID id){
 
@@ -43,6 +44,13 @@ public class ConsultList {
             }
     }
 
+    }
+
+    public void addConsult(Consult c){
+        Consult consult = new Consult();
+      // consult.setTitle(s);
+       // consult.setSolved(b);
+        consults.add(consult);
     }
 
     public void addItem(String s,boolean b){

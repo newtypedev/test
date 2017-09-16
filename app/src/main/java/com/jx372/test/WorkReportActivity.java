@@ -1,6 +1,8 @@
 package com.jx372.test;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.ColorRes;
@@ -27,7 +29,15 @@ import com.jx372.test.fragment.TabSocialFragment;
 import com.jx372.test.fragment.TabTravelFragment;
 import com.jx372.test.fragment.TabUniversalFragment;
 import com.jx372.test.fragment.WorkReportFragment;
+import com.jx372.test.tmap.LogManager;
+import com.jx372.test.tmap.TmapActivity;
 import com.jx372.test.view.PagerSlidingTabStrip;
+import com.skp.Tmap.TMapMarkerItem;
+import com.skp.Tmap.TMapPoint;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,6 +62,145 @@ public class WorkReportActivity extends AppCompatActivity {
     Calendar cal;
     int mYear, mMonth, mDay;
     private ReportItems reportItems;
+    private ConsultList cl;
+
+
+
+    //업무보고 콜백
+    Callback2 mCallback2 = new Callback2() {
+        @Override
+        public void callback(String msg) {
+            if(msg.equals("JsonException")){
+                Toast.makeText(WorkReportActivity.this,msg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if(msg.equals("ConnectFail")){
+                Toast.makeText(WorkReportActivity.this,msg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                JSONObject jsonbody = new JSONObject(msg);
+                Log.v("dayjson",msg);
+                if(jsonbody.getString("result").equals("success")){
+
+
+                    JSONObject datajson = jsonbody.getJSONObject("data");
+                    Toast.makeText(WorkReportActivity.this,"데이터 있음", Toast.LENGTH_SHORT).show();
+                    createReportItem(datajson);
+
+
+
+                }
+                else if(jsonbody.getString("result").equals("fail")){
+//
+//                    mdayItems.initData();
+//                    showData();
+//                    state = "insert";
+                    Toast.makeText(WorkReportActivity.this,"데이터가 없습니다", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+//            jsonTest = msg;
+//            if(!msg.equals(""))
+//                Toast.makeText(JoinActivity.this,"사용 가능한 ID 입니다", Toast.LENGTH_SHORT).show();
+
+        }
+    };
+
+
+
+    // 상담일지 콜백
+    Callback2 mCallback = new Callback2() {
+        @Override
+        public void callback(String msg) {
+            if(msg.equals("JsonException")){
+                Toast.makeText(WorkReportActivity.this,msg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if(msg.equals("ConnectFail")){
+                Toast.makeText(WorkReportActivity.this,msg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                JSONObject jsonbody = new JSONObject(msg);
+                Log.v("dayjson",msg);
+                if(jsonbody.getString("result").equals("success")){
+
+
+                    JSONArray datas = jsonbody.getJSONArray("data");
+                   createConsultItem(datas);
+
+//
+//                    JSONObject datajson = jsonbody.getJSONObject("data");
+//                    Toast.makeText(TmapActivity.this,"데이터 있음", Toast.LENGTH_SHORT).show();
+//                    createDayItem(datajson);
+//                    showData();
+//                    state = "update";
+
+                }
+                else if(jsonbody.getString("result").equals("fail")){
+//
+//                    mdayItems.initData();
+//                    showData();
+//                    state = "insert";
+                    Toast.makeText(WorkReportActivity.this,"데이터가 없습니다", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+//            jsonTest = msg;
+//            if(!msg.equals(""))
+//                Toast.makeText(JoinActivity.this,"사용 가능한 ID 입니다", Toast.LENGTH_SHORT).show();
+
+        }
+    };
+
+
+
+
+
+    public void createReportItem(JSONObject datajson) throws JSONException {
+
+        reportItems.setSalesAccount(datajson.getString("report_sale"));
+        reportItems.setTargetFigure(datajson.getString("goal_sale"));
+        reportItems.setOpinion(datajson.getString("opinion"));
+        reportItems.setContent(datajson.getString("content"));
+        reportItems.setTitle(datajson.getString("title"));
+        reportItems.setApproval(datajson.getString("approval"));
+        reportItems.setAchiveRate(datajson.getString("achive_rank"));
+
+    }
+
+    public void createConsultItem(JSONArray datas) throws JSONException {
+
+        int size = datas.length();
+        String no;
+        String title;
+        String content;
+        String human_name;
+        String name;
+        Consult consult;
+        for(int i=0;i<size;i++){
+            no = datas.getJSONObject(i).getString("advice_no");
+            title = datas.getJSONObject(i).getString("title");
+            content = datas.getJSONObject(i).getString("content");
+            human_name = datas.getJSONObject(i).getString("human_name");
+            name = datas.getJSONObject(i).getString("name");
+
+            consult = new Consult(no,title,content,name,human_name);
+            cl.addConsult(consult);
+
+        }
+
+
+    }
 
 
     public String getDay(){

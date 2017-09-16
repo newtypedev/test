@@ -23,8 +23,17 @@
             android:theme="@style/AppTheme3"
             android:configChanges="keyboardHidden|orientation"
             >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
+        </activity>
+
+        <activity
+            android:theme="@style/AppTheme3"
+            android:name=".CustomerActivity">
 
 
         </activity>
@@ -52,11 +61,8 @@
 
         <activity android:name=".WorkReportActivity"
             android:theme="@style/AppTheme3">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
 
         <activity android:name=".LoginActivity"

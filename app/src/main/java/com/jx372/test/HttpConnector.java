@@ -132,43 +132,51 @@ public class HttpConnector {
 
 
 
-    public String accessServer(String id,final Callback2 callback) {
+    public String accessServerGet(String req,String key,String search,int version,final Callback2 callback) {
 
-        retrofit = new Retrofit.Builder().baseUrl(ApiService.API_URL).build();
+        retrofit = new Retrofit.Builder().baseUrl(ApiService.API_URL2).build();
         apiService = retrofit.create(ApiService.class);
 
-        Call<ResponseBody> comment2 = apiService.getPostIdStr(id);
+        Call<ResponseBody> comment2 = apiService.getPoi(req,key,search,version);
         comment2.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    try {
+
+
+                        Log.v("callcall",response.message());
+
+                        String json = response.body().string();
+                        Log.v("jontest",json);
+                        resultJson = json;
+                        callback.callback(json);
 
 
 
 
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-
-                    String json = response.body().string();
-                    resultJson = json;
-                    callback.callback(json);
-
-                    Log.v("jontest",resultJson);
 
 
+                    } catch (IOException e) {
+
+                        e.printStackTrace();
 
 
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    }
+                    catch(NullPointerException e){
+                        callback.callback("JsonException");
+                        e.printStackTrace();
+                        Log.v("NNNNNUUUULLLL","nono");
 
+                    }
 
                 }
 
-            }
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    callback.callback("ConnectFail");
+                    Log.v("insfinef","fail");
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.v("insfinef","fail");
-
-            }
+                }
         });
         if(resultJson.equals("")){
             Log.v("result","null");

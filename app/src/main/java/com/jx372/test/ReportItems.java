@@ -15,6 +15,9 @@ public class ReportItems {
     private static String driveDis = "";
     private static String content = "";
     private static String opinion = "";
+    private static String title="";
+    private static String approval="";
+
 
 
     public static ReportItems get() {
@@ -25,6 +28,22 @@ public class ReportItems {
         }
 
         return sReportItems;
+    }
+
+    public static String getTitle() {
+        return title;
+    }
+
+    public static void setTitle(String title) {
+        ReportItems.title = title;
+    }
+
+    public static String getApproval() {
+        return approval;
+    }
+
+    public static void setApproval(String approval) {
+        ReportItems.approval = approval;
     }
 
     public static String getSalesAccount() {

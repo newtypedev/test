@@ -1,20 +1,34 @@
 package com.jx372.test.fragment;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jx372.test.R;
 import com.jx372.test.ReportItems;
 import com.jx372.test.ReportModifyActivity;
 import com.jx372.test.WorkReportActivity;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.text.DecimalFormat;
+
+import static android.R.interpolator.linear;
 
 /**
  * Created by pys on 2017. 9. 5..
@@ -31,6 +45,39 @@ public class WorkReportFragment extends Fragment {
     private TextView repstartdis;
     private TextView rependdis;
     private TextView repmemo;
+    private TextView startclick;
+    private ImageView mImage;
+    private TextView endclick;
+
+    class DownThread extends Thread {
+        String mAddr;
+
+        DownThread(String addr) {
+            mAddr = addr;
+        }
+
+        public void run() {
+            try {
+                InputStream is = new URL(mAddr).openStream();
+                Bitmap bit = BitmapFactory.decodeStream(is);
+                is.close();
+                Message message = mAfterDown.obtainMessage();
+                message.obj = bit;
+                mAfterDown.sendMessage(message);
+            } catch (Exception e) {;}
+        }
+    }
+    Handler mAfterDown = new Handler() {
+        public void handleMessage(Message msg) {
+            Bitmap bit = (Bitmap)msg.obj;
+            if (bit == null) {
+                Toast.makeText(getActivity(), "이미지가 없습니다", Toast.LENGTH_LONG).show();
+            } else {
+                mImage.setImageBitmap(bit);
+            }
+        }
+    };
+
 
     public String createComma(String num) {
 
@@ -97,6 +144,87 @@ public class WorkReportFragment extends Fragment {
                 return true;
             }
         });
+        startclick = (TextView)rootView.findViewById(R.id.startclick);
+
+
+        startclick.setOnClickListener(new TextView.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+
+
+                Dialog dialog = new Dialog(getActivity());
+                dialog.setContentView(R.layout.dialog_imageview);
+
+
+                mImage = (ImageView) dialog.findViewById(R.id.image);
+                (new DownThread("http://www.soen.kr/data/child2.jpg")).start();
+
+
+                    dialog.show();
+
+//                final LinearLayout linear = (LinearLayout)
+//                        View.inflate(getActivity(), R.layout.dialog_weeksale, null);
+//
+//                new AlertDialog.Builder(getActivity())
+//                        .setTitle("목표액 수정")
+//                        .setView(linear)
+//                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int whichButton) {
+//
+//
+//                            }
+//                        })
+//                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int whichButton) {
+//
+//                            }
+//                        })
+//                        .show();
+
+            }
+        });
+        endclick = (TextView)rootView.findViewById(R.id.endclick);
+
+        endclick.setOnClickListener(new TextView.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+
+
+                Dialog dialog = new Dialog(getActivity());
+                dialog.setContentView(R.layout.dialog_imageview);
+
+
+                mImage = (ImageView) dialog.findViewById(R.id.image);
+                (new DownThread("http://www.soen.kr/data/child2222.jpg")).start();
+
+
+                dialog.show();
+
+//                final LinearLayout linear = (LinearLayout)
+//                        View.inflate(getActivity(), R.layout.dialog_weeksale, null);
+//
+//                new AlertDialog.Builder(getActivity())
+//                        .setTitle("목표액 수정")
+//                        .setView(linear)
+//                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int whichButton) {
+//
+//
+//                            }
+//                        })
+//                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int whichButton) {
+//
+//                            }
+//                        })
+//                        .show();
+
+            }
+        });
+
+
 
 
 

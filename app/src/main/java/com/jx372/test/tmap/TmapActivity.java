@@ -1,6 +1,8 @@
 package com.jx372.test.tmap;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,19 +24,24 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jx372.test.Callback2;
+import com.jx372.test.CustomerActivity;
 import com.jx372.test.DayActivity;
 import com.jx372.test.DayItems;
 import com.jx372.test.HttpConnector;
 import com.jx372.test.R;
 import com.jx372.test.TmapItem;
+import com.jx372.test.fragment.WorkReportFragment;
 import com.skp.Tmap.BizCategory;
 import com.skp.Tmap.TMapCircle;
 import com.skp.Tmap.TMapData;
@@ -56,6 +63,7 @@ import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -80,6 +88,82 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
     LocationManager lm;
     double nowLatitude=0.0;
     double nowLongitude=0.0;
+    TextView resultPoi;
+    EditText poiedit;
+    Button poisearch;
+    TextView mapsearchdialog;
+    //업체검색 콜백
+    Callback2 mCallback4 = new Callback2() {
+        @Override
+        public void callback(String msg) {
+            if(msg.equals("JsonException")){
+                Toast.makeText(TmapActivity.this,msg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if(msg.equals("ConnectFail")){
+                Toast.makeText(TmapActivity.this,msg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+
+                JSONObject jsonbody = new JSONObject(msg);
+                //     String jsonbody2 = jsonbody.getString("pois");
+                // JSONArray datas = jsonbody.getJSONArray("pois");
+                JSONArray json = jsonbody.getJSONObject("searchPoiInfo").getJSONObject("pois").getJSONArray("poi");
+
+                String s = "name : "+json.getJSONObject(0).getString("name")+
+                        "\n"+"telNo : "+json.getJSONObject(0).getString("telNo")+
+                        "\n"+"address : "+json.getJSONObject(0).getString("upperAddrName")+"  "+ json.getJSONObject(0).getString("middleAddrName")+"  "
+                        + json.getJSONObject(0).getString("lowerAddrName")+
+                        "\n"+"classification : "+json.getJSONObject(0).getString("lowerBizName")+
+                        "\n"+"explain : "+json.getJSONObject(0).getString("desc")
+                        ;
+                Log.v("결과", json.get(0)+"");
+                resultPoi.setText(s+"");
+                nowLatitude= Double.parseDouble(json.getJSONObject(0).getString("frontLat"));
+                nowLongitude =  Double.parseDouble(json.getJSONObject(0).getString("frontLon"));
+                if(!(nowLongitude==0.0)) {
+                    mMapView.setLocationPoint(nowLongitude, nowLatitude);
+                    mMapView.setCenterPoint(nowLongitude, nowLatitude, true);
+                    Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.end);
+                    mMapView.setIcon(bitmap);
+                    mMapView.setIconVisibility(true);
+                }
+
+
+
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+//            jsonTest = msg;
+//            if(!msg.equals(""))
+//                Toast.makeText(JoinActivity.this,"사용 가능한 ID 입니다", Toast.LENGTH_SHORT).show();
+
+        }
+    };
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+
+        if(id == R.id.finish){
+            submitData();
+            onBackPressed();
+        }
+        else if(id == R.id.back){
+            onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -89,8 +173,32 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
         Switch sw = (Switch)network.getActionView();
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                String msg = "선택된 네트워크 = " + (isChecked ? "WiFi":"LTE");
-                Toast.makeText(TmapActivity.this,msg,Toast.LENGTH_LONG).show();
+                String msg = (isChecked ? "NETWORK":"GPS") + "  좌표 받기"  ;
+                try{
+                    String temp = (isChecked ? "NETWORK":"GPS");
+
+                    posNow.setText("수신중..");
+                    // GPS 제공자의 정보가 바뀌면 콜백하도록 리스너 등록하기~!!!
+                    if(temp.equals("GPS")) {
+
+                        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, // 등록할 위치제공자
+                                100, // 통지사이의 최소 시간간격 (miliSecond)
+                                1, // 통지사이의 최소 변경거리 (m)
+                                mLocationListener);
+                    }
+                    else if(temp.equals("NETWORK")) {
+
+                        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자
+                                100, // 통지사이의 최소 시간간격 (miliSecond)
+                                1, // 통지사이의 최소 변경거리 (m)
+                                mLocationListener);
+                    }
+
+
+                }catch(SecurityException ex){
+                }
+
+               Toast.makeText(TmapActivity.this,msg,Toast.LENGTH_LONG).show();
                 // mText.setText("선택된 네트워크 = " + (isChecked ? "WiFi":"LTE"));
             }
         });
@@ -119,6 +227,14 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
             lm.removeUpdates(mLocationListener);
             nowLatitude= latitude;
             nowLongitude = longitude;
+            if(!(nowLongitude==0.0)) {
+                mMapView.setLocationPoint(nowLongitude, nowLatitude);
+                mMapView.setCenterPoint(longitude, latitude, true);
+                Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.end);
+                mMapView.setIcon(bitmap);
+                mMapView.setIconVisibility(true);
+            }
+
         }
         public void onProviderDisabled(String provider) {
             // Disabled시
@@ -340,7 +456,11 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        int value =1;
         setContentView(R.layout.activity_tmap);
+         resultPoi = (TextView)findViewById(R.id.resultPoi);
+         poiedit = (EditText) findViewById(R.id.poiedit);
+         poisearch = (Button)findViewById(R.id.poisearch);
 
         lm= (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         posNow = (TextView)findViewById(R.id.nowPosition);
@@ -370,10 +490,12 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
 
         HttpConnector httpcon = new HttpConnector();
         httpcon.accessServerMap("selectposition",map,mCallback);
-
+        LinearLayout linearpass = (LinearLayout)findViewById(R.id.linearpass);
         posText= (TextView)findViewById(R.id.postest);
         disText = (TextView) findViewById(R.id.postest2);
-
+        if(value==1){
+            linearpass.setVisibility(View.GONE);
+        }
         mContext = this;
 
         mMapView = new TMapView(this);
@@ -779,7 +901,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
 
         LogManager.printLog("setLocationPoint " + Latitude + " " + Longitude);
 
-        mMapView.setLocationPoint(Latitude, Longitude);
+        mMapView.setLocationPoint(Longitude, latitude);
     }
 
     /**
@@ -1255,11 +1377,11 @@ Log.v("strId 알아보기",strID);
                         @Override
                         public void run() {
                             String result = dd+"";
-
+                            result = result.substring(0,3);
 
                             // 내용
                             Toast.makeText(TmapActivity.this,    result+"km",Toast.LENGTH_SHORT).show();
-                            result = result.substring(0,3);
+
                             double value = Double.parseDouble(result);
                             disText.setText(value+"km");
                         }
@@ -1782,6 +1904,13 @@ Log.v("strId 알아보기",strID);
         onBackPressed();
 
     }
+    public void submitData(){
+
+        DayItems dayItems = DayItems.get();
+        dayItems.setShortDistance(disText.getText()+"");
+        dayItems.setVisitPoint(posText.getText()+"");
+        onBackPressed();
+    }
 
 
     public void removePath(View view) {
@@ -1794,6 +1923,18 @@ Log.v("strId 알아보기",strID);
         Log.v("sdfsdfsdfsdf",posText.getText()+"");
         pos="";
         //disText.setText("");
+    }
+
+    public void searchClick(View view) {
+
+        String temp="";
+        if(poiedit.getText().equals(null)){
+            Toast.makeText(TmapActivity.this,"업체 정보를 입력하세요",Toast.LENGTH_LONG);
+         return;
+        }
+        temp = poiedit.getText()+"";
+        HttpConnector httpcon = new HttpConnector();
+        httpcon.accessServerGet("WGS84GEO","0964bcd8-f1f6-325c-9903-0210ac72ef61",temp,1,mCallback4);
     }
 }
 

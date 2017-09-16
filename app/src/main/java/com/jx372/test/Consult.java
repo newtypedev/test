@@ -10,14 +10,59 @@ import java.util.UUID;
 public class Consult {
 
     private UUID id;
+    private String no;
     private String title;
     private Date date;
     private boolean solved;
+    private String name;
+    private String human_name;
+    private String content;
+
 
     public Consult(){
         id = UUID.randomUUID();
         date = new Date();
 
+    }
+    public Consult(String no,String title,String content,String name,String human_name ){
+        this.no = no;
+        this.title = title;
+        this.content = content;
+        this.name = name;
+        this.human_name = human_name;
+
+    }
+
+    public String getNo() {
+        return no;
+    }
+
+    public void setNo(String no) {
+        this.no = no;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getHuman_name() {
+        return human_name;
+    }
+
+    public void setHuman_name(String human_name) {
+        this.human_name = human_name;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public Date getDate() {

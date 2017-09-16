@@ -7,6 +7,7 @@ import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -17,11 +18,12 @@ import retrofit2.http.Query;
 public interface ApiService {
    // https://api.androidhive.info/contacts/
     public static final String API_URL = "http://192.168.1.121:8080/";
+    public static final String API_URL2 = "https://apis.skplanetx.com/tmap/";
     //http://192.168.1.11:8181/
 
-//    @GET("sfa")
-//    Call<ResponseBody>getComment(@Query("id") int postId);
-//
+    @GET("pois")
+    Call<ResponseBody>getPoi(@Query("resCoordType") String req,@Query("appKey") String key,@Query("searchKeyword") String search,@Query("version") int version);
+
     @POST("sfa/m/check2")
     Call<ResponseBody> getPostComment(@Query("id") int postId);
 
@@ -75,9 +77,24 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST("sfa/m/position/")
-    Call<ResponseBody> getPostPosition(@FieldMap Map<String, String> day);
+    Call<ResponseBody> getPostPosition(@FieldMap Map<String, String> pos);
+    @FormUrlEncoded
+    @POST("sfa/m/report/insert")
+    Call<ResponseBody> getPostReportInsert(@FieldMap Map<String, String> report);
+
+    @FormUrlEncoded
+    @POST("sfa/m/report/update")
+    Call<ResponseBody> getPostReportUpdate(@FieldMap Map<String, String> report);
+
+    @FormUrlEncoded
+    @POST("sfa/m/report/")
+    Call<ResponseBody> getPostReportSelect(@FieldMap Map<String, String> report);
+
+    @FormUrlEncoded
+    @POST("sfa/m/report/delete")
+    Call<ResponseBody> getPostReportDelete(@FieldMap Map<String, String> report);
+
     @FormUrlEncoded
     @POST("sfa/m/challenge/")
-    Call<ResponseBody> getPostChallenge(@FieldMap Map<String, String> day);
-
+    Call<ResponseBody> getPostChallenge(@FieldMap Map<String, String> report);
 }
