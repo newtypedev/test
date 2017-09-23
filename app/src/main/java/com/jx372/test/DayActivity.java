@@ -4,31 +4,21 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
-
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-import com.jx372.test.tmap.LogManager;
-import com.skp.Tmap.TMapMarkerItem;
-import com.skp.Tmap.TMapPoint;
+import com.github.irshulx.Editor;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,12 +33,14 @@ import java.util.Map;
 
 public class DayActivity extends AppCompatActivity {
 
+    Editor editor;
     DayItems mdayItems;
     Calendar cal;
     int mYear, mMonth, mDay;
     TextView daytext;
     LinearLayout dayLayout;
     TextView dayContent;
+    Editor dayMemo;
     TextView dayGoalsale;
     TextView dayChallenge;
     String state="";
@@ -59,7 +51,9 @@ public class DayActivity extends AppCompatActivity {
     private Toolbar toolbar;
 
     public void showData() {
-        dayContent.setText(mdayItems.getContent());
+        dayMemo.clearAllContents();
+        dayMemo.Render(mdayItems.getContent());
+        //dayContent.setText(mdayItems.getContent());
         dayGoalsale.setText(mdayItems.getGoalsale()+"");
         distance.setText(mdayItems.getShortDistance());
         visitPoint.setText(mdayItems.getVisitPoint());
@@ -72,8 +66,12 @@ public class DayActivity extends AppCompatActivity {
 
         mdayItems.setContent(datajson.getString("content"));
         mdayItems.setGoalsale(datajson.getString("goal_sale"));
-        mdayItems.setChallenge(datajson.getString("opinion"));
+        mdayItems.setChallenge(datajson.getString("challenge_content"));
         mdayItems.setTitle(datajson.getString("title"));
+        mdayItems.setOpinion(datajson.getString("opinion"));
+        mdayItems.setShortDistance(datajson.getString("estimate_distance"));
+        mdayItems.setVisitPoint(datajson.getString("estimate_course"));
+
 
     }
 
@@ -239,13 +237,19 @@ public class DayActivity extends AppCompatActivity {
                     JSONArray datas = jsonbody.getJSONArray("data");
                     int size = datas.length();
                     ArrayList<String> spinList = new ArrayList<>();
+                    Log.v("listsize",size+"");
+                    Map map = new HashMap();
+                    Map map2 = new HashMap();
 
                     for(int i=0;i<size;i++){
+                        map.put(datas.getJSONObject(i).getString("content"),datas.getJSONObject(i).getString("challenge_no"));
+                        map2.put(datas.getJSONObject(i).getString("challenge_no"),datas.getJSONObject(i).getString("content"));
                         spinList.add(datas.getJSONObject(i).getString("content"));
 
                     }
+                    mdayItems.setSpinnerMap2(map2);
                     mdayItems.setSpinnerItem(spinList);
-
+                    mdayItems.setSpinnerMap(map);
 
                 }
                 else if(jsonbody.getString("result").equals("fail")){
@@ -292,11 +296,15 @@ public class DayActivity extends AppCompatActivity {
 //        toolbar.setTitle("Plan");
 //        setSupportActionBar(toolbar);
         dayGoalsale = (TextView) findViewById(R.id.dayGoalsale);
-        dayContent = (TextView) findViewById(R.id.daycontent);
+      //  dayContent = (TextView) findViewById(R.id.daycontent);
+        dayMemo = (Editor)findViewById(R.id.daycontent2);
         dayChallenge = (TextView) findViewById(R.id.daychallenge);
         visitPoint = (TextView)findViewById(R.id.visitPoint);
         distance =(TextView) findViewById(R.id.distance);
         mdayItems = DayItems.get();
+
+
+
         dayLayout = (LinearLayout)findViewById(R.id.daylinear);
          cal = new GregorianCalendar();
         daytext = (TextView)findViewById(R.id.daytext);
@@ -307,6 +315,8 @@ public class DayActivity extends AppCompatActivity {
 
         mDay = cal.get(Calendar.DAY_OF_MONTH);
         User user = User.get();
+        user.setId("test01");
+        user.setDept("영업 1팀");
         userId = user.getId();
         Map map = new HashMap();
         map.put("id",userId);
@@ -317,7 +327,7 @@ public class DayActivity extends AppCompatActivity {
         HttpConnector httpcon = new HttpConnector();
         httpcon.accessServerMap("dayselect",map,mCallback);
         Map map2 = new HashMap();
-        map2.put("dept","영업 1팀");
+        map2.put("dept",user.getDept());
         httpcon.accessServerMap("challenge",map2,mCallback3);
         dayLayout.setOnLongClickListener(new TextView.OnLongClickListener(){
             @Override
@@ -348,12 +358,16 @@ public class DayActivity extends AppCompatActivity {
 
             if(id == R.id.send){
 
-                Log.v("statetasteaetat",state);
+
                 map.put("date",getDay());
                 map.put("title",mdayItems.getTitle());
-                map.put("opinion",mdayItems.getChallenge());
                 map.put("content",mdayItems.getContent());
-               // map.put("goal_sale",mdayItems.getGoalsale());
+                map.put("goal_sale",mdayItems.getGoalsale());
+                map.put("challenge_content",mdayItems.getChallenge());
+                map.put("estimate_distance",mdayItems.getShortDistance());
+                map.put("estimate_course",mdayItems.getVisitPoint());
+                map.put("dept",User.get().getDept());
+            //    map.put("challenge_no","3");
 
 
                 if(state.equals("insert")){

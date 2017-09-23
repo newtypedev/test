@@ -10,10 +10,11 @@ import java.util.UUID;
 public class Consult {
 
     private UUID id;
+    private boolean solved;
     private String no;
     private String title;
     private Date date;
-    private boolean solved;
+
     private String name;
     private String human_name;
     private String content;

@@ -3,6 +3,7 @@ package com.jx372.test;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,9 +14,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.irshulx.Editor;
+import com.github.irshulx.models.EditorTextStyle;
 import com.jx372.test.tmap.TmapActivity;
-
-import java.util.ArrayList;
 
 
 public class DayModifyActivity extends AppCompatActivity{
@@ -28,7 +29,55 @@ public class DayModifyActivity extends AppCompatActivity{
     EditText goalsale;
     Spinner spin;
     String nowItem="";
+    Editor daycontent;
     int itemPos=0;
+
+    private void setUpEditor() {
+        findViewById(R.id.action_h1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                daycontent.UpdateTextStyle(EditorTextStyle.H1);
+            }
+        });
+
+        findViewById(R.id.action_h2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                daycontent.UpdateTextStyle(EditorTextStyle.H2);
+            }
+        });
+
+        findViewById(R.id.action_h3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                daycontent.UpdateTextStyle(EditorTextStyle.H3);
+            }
+        });
+
+        findViewById(R.id.action_bold).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                daycontent.UpdateTextStyle(EditorTextStyle.BOLD);
+            }
+        });
+
+        findViewById(R.id.action_Italic).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                daycontent.UpdateTextStyle(EditorTextStyle.ITALIC);
+            }
+        });
+
+
+        findViewById(R.id.action_erase).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                daycontent.clearAllContents();
+            }
+        });
+        //editor.dividerBackground=R.drawable.divider_background_dark;
+
+    }
 
     public int getItemNum(String msg){
 
@@ -43,9 +92,18 @@ public class DayModifyActivity extends AppCompatActivity{
     }
 
     public void itemUpdate(){
-      mDayItem.setContent(daymemo.getText()+"");
+        Editor editor=new Editor(this ,null);
+        String b= daycontent.getContentAsSerialized();
+        Log.v("jsonjson",b);
+        b = editor.getContentAsHTML(b);
+        b =b.replaceAll("<u>","");
+        b = b.replaceAll("</u>","");
+        Log.v("underunderlin",b);
+        mDayItem.setContent(b);
+      //mDayItem.setContent(daymemo.getText()+"");
         mDayItem.setGoalsale(goalsale.getText()+"");
         mDayItem.setChallenge(nowItem);
+
 
     }
 
@@ -85,6 +143,8 @@ public class DayModifyActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,10 +157,14 @@ public class DayModifyActivity extends AppCompatActivity{
         dtButton = (TextView) findViewById(R.id.distance);
         visitPos = (TextView) findViewById(R.id.visitPos);
         shortDis = (TextView) findViewById(R.id.shortDis);
-        daymemo = (EditText) findViewById(R.id.daymemo);
+        //daymemo = (EditText) findViewById(R.id.daymemo);
+        daycontent = (Editor)findViewById(R.id.editorday);
+        setUpEditor();
         goalsale = (EditText) findViewById(R.id.goalsale);
-
-        daymemo.setText(mDayItem.getContent());
+        daycontent.Render(mDayItem.getContent());
+        //String b = "<p><strong>글자진하게</strong></p><p>평범하게</p><p><em>기울게</em></p><p><br></p><h1>h1이다</h1><p><br></p><p><br></p><h2>h2다</h2><p><br></p><p><br></p><h3>h3다</h3><p><br></p>";
+        //daycontent.Render(b);
+      //  daymemo.setText(mDayItem.getContent());
         goalsale.setText(mDayItem.getGoalsale());
         nowItem = mDayItem.getChallenge();
         spin= (Spinner)findViewById(R.id.dayspinner);
@@ -115,18 +179,28 @@ public class DayModifyActivity extends AppCompatActivity{
 //        ent.add("");
 //        ent.add("A");
 //        ent.add("b");
+     //   String[] entries = {"","List Item A", "List Item B"};
 
-        ArrayAdapter<String> arrAdapt=
-                new ArrayAdapter<String>(this, R.layout.spinner_item, mDayItem.getSpinnerItem());
-        spin.setAdapter(arrAdapt);
-        spin.setSelection(getItemNum(nowItem));
+        if(mDayItem.getSpinnerItem()==null){
+            String[] entries = {"도전 과제 없음"};
+            ArrayAdapter<String> arrAdapt =
+                    new ArrayAdapter<String>(this, R.layout.spinner_item, entries);
+            spin.setAdapter(arrAdapt);
+        }
+        else {
+            ArrayAdapter<String> arrAdapt =
+                    new ArrayAdapter<String>(this, R.layout.spinner_item, mDayItem.getSpinnerItem());
+            spin.setAdapter(arrAdapt);
+            spin.setSelection(getItemNum(nowItem));
+        }
+
 
 //        adspin = ArrayAdapter.createFromResource(this, R.array.country,
 //                R.layout.spinner_item);
 
       //  adspin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
       //  spin.setAdapter(adspin);
-        //spin.setSelection(Integer.parseInt(mDayItem.getChallenge()));
+//        spin.setSelection(Integer.parseInt(mDayItem.getChallenge())-1);
 
         spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view,

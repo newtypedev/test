@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/main_color_grey_400"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/material_yellow_50"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+            <TextView
+
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginBottom="5dp"
+                android:layout_gravity="center"
+                android:text="긍정의 한줄"
+                android:textColor="@color/material_blue_900"
+                android:textSize="15dp" />
+
+            </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="2dp"
+                android:layout_weight="0.5" />
+
+            <TextView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:background="@color/material_light_blue_300"
+                android:gravity="right" />
+
+            <TextView
+
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="출근(km)"
+                android:textColor="#000000"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/startmile"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+            <Button
+                android:id="@+id/btnstartmile"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/photo" />
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="2dp"
+                android:layout_weight="0.5" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:orientation="horizontal"
+            android:paddingTop="3dp">
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="2dp"
+                android:layout_weight="0.5" />
+
+
+            <TextView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:background="@color/material_light_blue_300"
+                android:gravity="right" />
+
+            <TextView
+
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="퇴근(km)"
+                android:textColor="#000000"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/endmile"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+            <Button
+                android:id="@+id/btnendmile"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/photo" />
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="2dp"
+                android:layout_weight="0.5" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="#ffffff"
+            android:orientation="horizontal"
+            android:paddingTop="3dp">
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="2dp"
+                android:layout_weight="0.5" />
+
+
+            <TextView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:background="@color/material_light_blue_300"
+                android:gravity="right" />
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1.3"
+                android:gravity="center"
+                android:text="주행거리(km)"
+                android:textColor="#000000"
+                android:textSize="15dp" />
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1.5"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="2dp"
+                android:layout_weight="1.16" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

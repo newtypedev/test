@@ -1,11 +1,11 @@
 package com.jx372.test.tmap;
 
+import android.Manifest;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -19,29 +19,28 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jx372.test.Callback2;
-import com.jx372.test.CustomerActivity;
-import com.jx372.test.DayActivity;
 import com.jx372.test.DayItems;
 import com.jx372.test.HttpConnector;
 import com.jx372.test.R;
-import com.jx372.test.TmapItem;
-import com.jx372.test.fragment.WorkReportFragment;
+import com.kakao.sdk.newtoneapi.SpeechRecognizeListener;
+import com.kakao.sdk.newtoneapi.SpeechRecognizerClient;
+import com.kakao.sdk.newtoneapi.SpeechRecognizerManager;
+import com.kakao.sdk.newtoneapi.impl.util.PermissionUtils;
 import com.skp.Tmap.BizCategory;
 import com.skp.Tmap.TMapCircle;
 import com.skp.Tmap.TMapData;
@@ -63,31 +62,30 @@ import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocationChangedCallback
-{
+public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocationChangedCallback, SpeechRecognizeListener {
 
 
-    String pos ="";
-    TextView posText ;
+    private SpeechRecognizerClient client;
+    String result="";
+    String pos = "";
+    TextView posText;
     TextView disText;
-    double dd=0.0;
-    int posCount=0;
+    double dd = 0.0;
+    int posCount = 0;
     TextView posNow;
     LocationManager lm;
-    double nowLatitude=0.0;
-    double nowLongitude=0.0;
+    double nowLatitude = 0.0;
+    double nowLongitude = 0.0;
     TextView resultPoi;
     EditText poiedit;
     Button poisearch;
@@ -96,13 +94,13 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
     Callback2 mCallback4 = new Callback2() {
         @Override
         public void callback(String msg) {
-            if(msg.equals("JsonException")){
-                Toast.makeText(TmapActivity.this,msg, Toast.LENGTH_SHORT).show();
+            if (msg.equals("JsonException")) {
+                Toast.makeText(TmapActivity.this, msg, Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if(msg.equals("ConnectFail")){
-                Toast.makeText(TmapActivity.this,msg, Toast.LENGTH_SHORT).show();
+            if (msg.equals("ConnectFail")) {
+                Toast.makeText(TmapActivity.this, msg, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -113,27 +111,23 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
                 // JSONArray datas = jsonbody.getJSONArray("pois");
                 JSONArray json = jsonbody.getJSONObject("searchPoiInfo").getJSONObject("pois").getJSONArray("poi");
 
-                String s = "name : "+json.getJSONObject(0).getString("name")+
-                        "\n"+"telNo : "+json.getJSONObject(0).getString("telNo")+
-                        "\n"+"address : "+json.getJSONObject(0).getString("upperAddrName")+"  "+ json.getJSONObject(0).getString("middleAddrName")+"  "
-                        + json.getJSONObject(0).getString("lowerAddrName")+
-                        "\n"+"classification : "+json.getJSONObject(0).getString("lowerBizName")+
-                        "\n"+"explain : "+json.getJSONObject(0).getString("desc")
-                        ;
-                Log.v("결과", json.get(0)+"");
-                resultPoi.setText(s+"");
-                nowLatitude= Double.parseDouble(json.getJSONObject(0).getString("frontLat"));
-                nowLongitude =  Double.parseDouble(json.getJSONObject(0).getString("frontLon"));
-                if(!(nowLongitude==0.0)) {
+                String s = "name : " + json.getJSONObject(0).getString("name") +
+                        "\n" + "telNo : " + json.getJSONObject(0).getString("telNo") +
+                        "\n" + "address : " + json.getJSONObject(0).getString("upperAddrName") + "  " + json.getJSONObject(0).getString("middleAddrName") + "  "
+                        + json.getJSONObject(0).getString("lowerAddrName") +
+                        "\n" + "classification : " + json.getJSONObject(0).getString("lowerBizName") +
+                        "\n" + "explain : " + json.getJSONObject(0).getString("desc");
+                Log.v("결과", json.get(0) + "");
+                resultPoi.setText(s + "");
+                nowLatitude = Double.parseDouble(json.getJSONObject(0).getString("frontLat"));
+                nowLongitude = Double.parseDouble(json.getJSONObject(0).getString("frontLon"));
+                if (!(nowLongitude == 0.0)) {
                     mMapView.setLocationPoint(nowLongitude, nowLatitude);
                     mMapView.setCenterPoint(nowLongitude, nowLatitude, true);
                     Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.end);
                     mMapView.setIcon(bitmap);
                     mMapView.setIconVisibility(true);
                 }
-
-
-
 
 
             } catch (JSONException e) {
@@ -153,11 +147,10 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
         int id = item.getItemId();
 
 
-        if(id == R.id.finish){
+        if (id == R.id.finish) {
             submitData();
             onBackPressed();
-        }
-        else if(id == R.id.back){
+        } else if (id == R.id.back) {
             onBackPressed();
         }
 
@@ -170,23 +163,22 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_switch, menu);
         MenuItem network = menu.findItem(R.id.network);
-        Switch sw = (Switch)network.getActionView();
+        Switch sw = (Switch) network.getActionView();
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                String msg = (isChecked ? "NETWORK":"GPS") + "  좌표 받기"  ;
-                try{
-                    String temp = (isChecked ? "NETWORK":"GPS");
+                String msg = (isChecked ? "NETWORK" : "GPS") + "  좌표 받기";
+                try {
+                    String temp = (isChecked ? "NETWORK" : "GPS");
 
                     posNow.setText("수신중..");
                     // GPS 제공자의 정보가 바뀌면 콜백하도록 리스너 등록하기~!!!
-                    if(temp.equals("GPS")) {
+                    if (temp.equals("GPS")) {
 
                         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, // 등록할 위치제공자
                                 100, // 통지사이의 최소 시간간격 (miliSecond)
                                 1, // 통지사이의 최소 변경거리 (m)
                                 mLocationListener);
-                    }
-                    else if(temp.equals("NETWORK")) {
+                    } else if (temp.equals("NETWORK")) {
 
                         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자
                                 100, // 통지사이의 최소 시간간격 (miliSecond)
@@ -195,10 +187,10 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
                     }
 
 
-                }catch(SecurityException ex){
+                } catch (SecurityException ex) {
                 }
 
-               Toast.makeText(TmapActivity.this,msg,Toast.LENGTH_LONG).show();
+                Toast.makeText(TmapActivity.this, msg, Toast.LENGTH_LONG).show();
                 // mText.setText("선택된 네트워크 = " + (isChecked ? "WiFi":"LTE"));
             }
         });
@@ -222,12 +214,12 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
             //Network 위치제공자에 의한 위치변화
             //Network 위치는 Gps에 비해 정확도가 많이 떨어진다.
 
-           // posNow.setText("위치정보 : " + provider + "위도 : " + latitude + " 경도 : " + longitude);
+            // posNow.setText("위치정보 : " + provider + "위도 : " + latitude + " 경도 : " + longitude);
             posNow.setText("위도 : " + latitude + " 경도 : " + longitude);
             lm.removeUpdates(mLocationListener);
-            nowLatitude= latitude;
+            nowLatitude = latitude;
             nowLongitude = longitude;
-            if(!(nowLongitude==0.0)) {
+            if (!(nowLongitude == 0.0)) {
                 mMapView.setLocationPoint(nowLongitude, nowLatitude);
                 mMapView.setCenterPoint(longitude, latitude, true);
                 Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.end);
@@ -236,6 +228,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
             }
 
         }
+
         public void onProviderDisabled(String provider) {
             // Disabled시
             Log.d("test", "onProviderDisabled, provider:" + provider);
@@ -257,21 +250,20 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
     Callback2 mCallback = new Callback2() {
         @Override
         public void callback(String msg) {
-            if(msg.equals("JsonException")){
-                Toast.makeText(TmapActivity.this,msg, Toast.LENGTH_SHORT).show();
+            if (msg.equals("JsonException")) {
+                Toast.makeText(TmapActivity.this, msg, Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if(msg.equals("ConnectFail")){
-                Toast.makeText(TmapActivity.this,msg, Toast.LENGTH_SHORT).show();
+            if (msg.equals("ConnectFail")) {
+                Toast.makeText(TmapActivity.this, msg, Toast.LENGTH_SHORT).show();
                 return;
             }
 
             try {
                 JSONObject jsonbody = new JSONObject(msg);
-                Log.v("dayjson",msg);
-                if(jsonbody.getString("result").equals("success")){
-
+                Log.v("dayjson", msg);
+                if (jsonbody.getString("result").equals("success")) {
 
 
                     JSONArray datas = jsonbody.getJSONArray("data");
@@ -279,7 +271,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
                     Log.v("size", String.valueOf(size));
                     mapPosition = new ArrayList<>();
 
-                    for(int i=0;i<size;i++){
+                    for (int i = 0; i < size; i++) {
 
                         Bitmap bitmap = null;
 
@@ -288,7 +280,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
 
                         TMapMarkerItem item1 = new TMapMarkerItem();
 
-                        bitmap = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.map_pin_red);
+                        bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.map_pin_red);
 
                         item1.setTMapPoint(point);
                         item1.setName(datas.getJSONObject(i).getString("name"));
@@ -307,7 +299,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
                         item1.setCalloutRightButtonImage(bitmap_i);
 
                         String strID = String.format("pmarker%d", mMarkerID++);
-                        Log.v("strId 알아보기",strID);
+                        Log.v("strId 알아보기", strID);
                         mMapView.addMarkerItem(strID, item1);
                         mArrayMarkerID.add(strID);
 
@@ -322,13 +314,12 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
 //                    showData();
 //                    state = "update";
 
-                }
-                else if(jsonbody.getString("result").equals("fail")){
+                } else if (jsonbody.getString("result").equals("fail")) {
 //
 //                    mdayItems.initData();
 //                    showData();
 //                    state = "insert";
-                  Toast.makeText(TmapActivity.this,"데이터가 없습니다", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TmapActivity.this, "데이터가 없습니다", Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -342,13 +333,10 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
     };
 
 
-
-
     @Override
     public void onLocationChange(Location location) {
-        LogManager.printLog("onLocationChange :::> " + location.getLatitude() +  " " + location.getLongitude() + " " + location.getSpeed() + " " + location.getAccuracy());
-        if(m_bTrackingMode)
-        {
+        LogManager.printLog("onLocationChange :::> " + location.getLatitude() + " " + location.getLongitude() + " " + location.getSpeed() + " " + location.getAccuracy());
+        if (m_bTrackingMode) {
             mMapView.setLocationPoint(location.getLongitude(), location.getLatitude());
 //			mMapView.setCenterPoint(127.0624252, 37.5077583);
 //			mMapView.setCenterPoint(location.getLongitude(), location.getLatitude());
@@ -401,7 +389,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
             R.id.btnCarPath,
             R.id.btnPedestrian_Path,
             // 20170508 JWCha : 자전거 길안내 중지에 따른 조치 - START
-		/*
+        /*
 		R.id.btnBicycle_Path,
 		*/
             // 20170508 JWCha : 자전거 길안내 중지에 따른 조치 - END
@@ -421,33 +409,40 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
             R.id.btnMarkerPoint2,
     };
 
-    private 	int 		m_nCurrentZoomLevel = 0;
-    private 	double 		m_Latitude  = 0;
-    private     double  	m_Longitude = 0;
-    private 	boolean 	m_bShowMapIcon = false;
+    private int m_nCurrentZoomLevel = 0;
+    private double m_Latitude = 0;
+    private double m_Longitude = 0;
+    private boolean m_bShowMapIcon = false;
 
-    private 	boolean 	m_bTrafficeMode = false;
-    private 	boolean 	m_bSightVisible = false;
-    private 	boolean 	m_bTrackingMode = false;
+    private boolean m_bTrafficeMode = false;
+    private boolean m_bSightVisible = false;
+    private boolean m_bTrackingMode = false;
 
-    private 	boolean 	m_bOverlayMode = false;
+    private boolean m_bOverlayMode = false;
 
-    ArrayList<String>		mArrayID;
+    ArrayList<String> mArrayID;
 
-    ArrayList<String>		mArrayCircleID;
-    private static 	int 	mCircleID;
+    ArrayList<String> mArrayCircleID;
+    private static int mCircleID;
 
-    ArrayList<String>		mArrayLineID;
-    private static 	int 	mLineID;
+    ArrayList<String> mArrayLineID;
+    private static int mLineID;
 
-    ArrayList<String>		mArrayPolygonID;
-    private static  int 	mPolygonID;
+    ArrayList<String> mArrayPolygonID;
+    private static int mPolygonID;
 
-    ArrayList<String>       mArrayMarkerID;
-    private static int 		mMarkerID;
+    ArrayList<String> mArrayMarkerID;
+    private static int mMarkerID;
 
     TMapGpsManager gps = null;
 
+    private void setButtonsStatus(boolean enabled) {
+        findViewById(R.id.speechbutton).setEnabled(enabled);
+        //findViewById(R.id.uibutton).setEnabled(enabled);
+        // findViewById(R.id.restartbutton).setEnabled(!enabled);
+        findViewById(R.id.cancelbutton).setEnabled(!enabled);
+        // findViewById(R.id.stopbutton).setEnabled(!enabled);
+    }
 
     /**
      * onCreate()
@@ -456,45 +451,86 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        int value =1;
+        int value = 0;
         setContentView(R.layout.activity_tmap);
-         resultPoi = (TextView)findViewById(R.id.resultPoi);
-         poiedit = (EditText) findViewById(R.id.poiedit);
-         poisearch = (Button)findViewById(R.id.poisearch);
-
-        lm= (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        posNow = (TextView)findViewById(R.id.nowPosition);
+        resultPoi = (TextView) findViewById(R.id.resultPoi);
+        poiedit = (EditText) findViewById(R.id.poiedit);
+        poisearch = (Button) findViewById(R.id.poisearch);
 
 
+        SpeechRecognizerManager.getInstance().initializeLibrary(this);
 
-                try{
+        findViewById(R.id.speechbutton).setOnClickListener(new View.OnClickListener() {
 
-                        posNow.setText("수신중..");
-                        // GPS 제공자의 정보가 바뀌면 콜백하도록 리스너 등록하기~!!!
-                        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, // 등록할 위치제공자
-                                100, // 통지사이의 최소 시간간격 (miliSecond)
-                                1, // 통지사이의 최소 변경거리 (m)
-                                mLocationListener);
-                        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자
-                                100, // 통지사이의 최소 시간간격 (miliSecond)
-                                1, // 통지사이의 최소 변경거리 (m)
-                                mLocationListener);
+            @Override
+            public void onClick(View view) {
+                String serviceType = SpeechRecognizerClient.SERVICE_TYPE_DICTATION;
+                if (PermissionUtils.checkAudioRecordPermission(TmapActivity.this)) {
 
-                }catch(SecurityException ex){
+                    SpeechRecognizerClient.Builder builder = new SpeechRecognizerClient.Builder().
+                            setServiceType(serviceType);
+                    client = builder.build();
+
+                    client.setSpeechRecognizeListener(TmapActivity.this);
+                    client.startRecording(true);
+
+                    setButtonsStatus(false);
                 }
 
+            }
+        });
+
+
+        findViewById(R.id.cancelbutton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (client != null) {
+                    client.cancelRecording();
+                }
+
+                setButtonsStatus(true);
+
+            }
+        });
+        setButtonsStatus(true);
+
+        lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        posNow = (TextView) findViewById(R.id.nowPosition);
+
+
+        try {
+
+            posNow.setText("수신중..");
+            // GPS 제공자의 정보가 바뀌면 콜백하도록 리스너 등록하기~!!!
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, // 등록할 위치제공자
+                    100, // 통지사이의 최소 시간간격 (miliSecond)
+                    1, // 통지사이의 최소 변경거리 (m)
+                    mLocationListener);
+            lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자
+                    100, // 통지사이의 최소 시간간격 (miliSecond)
+                    1, // 통지사이의 최소 변경거리 (m)
+                    mLocationListener);
+
+        } catch (SecurityException ex) {
+        }
 
 
         Map map = new HashMap();
-        map.put("id","test01");
+        map.put("id", "test01");
 
         HttpConnector httpcon = new HttpConnector();
-        httpcon.accessServerMap("selectposition",map,mCallback);
-        LinearLayout linearpass = (LinearLayout)findViewById(R.id.linearpass);
-        posText= (TextView)findViewById(R.id.postest);
+        httpcon.accessServerMap("selectposition", map, mCallback);
+        LinearLayout linearpass = (LinearLayout) findViewById(R.id.linearpass);
+        LinearLayout linearsearch = (LinearLayout) findViewById(R.id.linearmapsearch);
+        posText = (TextView) findViewById(R.id.postest);
         disText = (TextView) findViewById(R.id.postest2);
-        if(value==1){
+        if (value == 1) {
             linearpass.setVisibility(View.GONE);
+        }
+        else{
+            linearsearch.setVisibility(View.GONE);
+            linearpass.setVisibility(View.VISIBLE);
         }
         mContext = this;
 
@@ -516,7 +552,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
         mArrayPolygonID = new ArrayList<String>();
         mPolygonID = 0;
 
-        mArrayMarkerID	= new ArrayList<String>();
+        mArrayMarkerID = new ArrayList<String>();
         mMarkerID = 0;
 
         gps = new TMapGpsManager(TmapActivity.this);
@@ -524,9 +560,9 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
         gps.setMinDistance(5);
         gps.setProvider(gps.GPS_PROVIDER);
         gps.OpenGps();
-       // TMapPoint po = gps.getLocation();
-       // Log.v("sisisisisisiblablabal",po.getLatitude()+"");
-       // mMapView.setLocationPoint(po.getLatitude(),po.getLongitude());
+        // TMapPoint po = gps.getLocation();
+        // Log.v("sisisisisisiblablabal",po.getLatitude()+"");
+        // mMapView.setLocationPoint(po.getLatitude(),po.getLongitude());
         mMapView.setTMapLogoPosition(TMapView.TMapLogoPositon.POSITION_BOTTOMRIGHT);
     }
 
@@ -546,7 +582,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
      */
     private void initView() {
         for (int btnMapView : mArrayMapButton) {
-            Button ViewButton = (Button)findViewById(btnMapView);
+            Button ViewButton = (Button) findViewById(btnMapView);
             ViewButton.setOnClickListener(this);
         }
 
@@ -592,24 +628,24 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
 
         mMapView.setOnClickListenerCallBack(new TMapView.OnClickListenerCallback() {
             @Override
-            public boolean onPressUpEvent(ArrayList<TMapMarkerItem> markerlist,ArrayList<TMapPOIItem> poilist, TMapPoint point, PointF pointf) {
+            public boolean onPressUpEvent(ArrayList<TMapMarkerItem> markerlist, ArrayList<TMapPOIItem> poilist, TMapPoint point, PointF pointf) {
                 LogManager.printLog("TmapActivity onPressUpEvent " + markerlist.size());
                 return false;
             }
 
             @Override
-            public boolean onPressEvent(ArrayList<TMapMarkerItem> markerlist,ArrayList<TMapPOIItem> poilist, TMapPoint point, PointF pointf) {
+            public boolean onPressEvent(ArrayList<TMapMarkerItem> markerlist, ArrayList<TMapPOIItem> poilist, TMapPoint point, PointF pointf) {
                 LogManager.printLog("TmapActivity onPressEvent " + markerlist.size());
 
                 for (int i = 0; i < markerlist.size(); i++) {
                     TMapMarkerItem item = markerlist.get(i);
                     LogManager.printLog("TmapActivity onPressEvent " + item.getName() + " " + item.getTMapPoint().getLatitude() + " " + item.getTMapPoint().getLongitude());
 
-                    pos =pos+ item.getName()+"->";
+                    pos = pos + item.getName() + "->";
                     posText.setText(pos);
 
 
-                    Log.v("지도위에클릭이니","sssssss");
+                    Log.v("지도위에클릭이니", "sssssss");
                 }
                 return false;
             }
@@ -617,7 +653,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
 
         mMapView.setOnLongClickListenerCallback(new TMapView.OnLongClickListenerCallback() {
             @Override
-            public void onLongPressEvent(ArrayList<TMapMarkerItem> markerlist,ArrayList<TMapPOIItem> poilist, TMapPoint point) {
+            public void onLongPressEvent(ArrayList<TMapMarkerItem> markerlist, ArrayList<TMapPOIItem> poilist, TMapPoint point) {
                 LogManager.printLog("TmapActivity onLongPressEvent " + markerlist.size());
             }
         });
@@ -634,11 +670,11 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
         mMapView.setOnClickReverseLabelListener(new TMapView.OnClickReverseLabelListenerCallback() {
             @Override
             public void onClickReverseLabelEvent(TMapLabelInfo findReverseLabel) {
-                if(findReverseLabel != null) {
+                if (findReverseLabel != null) {
                     LogManager.printLog("TmapActivity setOnClickReverseLabelListener " + findReverseLabel.id + " / " + findReverseLabel.labelLat
                             + " / " + findReverseLabel.labelLon + " / " + findReverseLabel.labelName);
 
-               //  Log.v("클릭시 현재위치 출력",findReverseLabel.labelName);
+                    //  Log.v("클릭시 현재위치 출력",findReverseLabel.labelName);
 
                 }
             }
@@ -665,9 +701,10 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
     protected void onDestroy() {
         super.onDestroy();
         gps.CloseGps();
-        if(mOverlayList != null){
+        if (mOverlayList != null) {
             mOverlayList.clear();
         }
+        SpeechRecognizerManager.getInstance().finalizeLibrary();
     }
 
     /**
@@ -675,67 +712,163 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
      */
     @Override
     public void onClick(View v) {
-        switch(v.getId()) {
-            case R.id.btnOverlay		  : 	overlay(); 				break;
-            case R.id.btnAnimateTo		  : 	animateTo(); 			break;
-            case R.id.btnZoomIn			  : 	mapZoomIn(); 			break;
-            case R.id.btnZoomOut		  : 	mapZoomOut(); 			break;
-            case R.id.btnGetZoomLevel	  :  	getZoomLevel(); 		break;
-            case R.id.btnSetZoomLevel	  :  	setZoomLevel(); 		break;
-            case R.id.btnSetMapType		  :		setMapType(); 			break;
-            case R.id.btnGetLocationPoint : 	getLocationPoint(); 	break;
-           // case R.id.btnSetLocationPoint : 	setLocationPoint(); 	break;
-            case R.id.btnSetIcon		  : 	setMapIcon(); 			break;
-            case R.id.btnSetCompassMode	  : 	setCompassMode();		break;
-            case R.id.btnGetIsCompass     :		getIsCompass();			break;
-            case R.id.btnSetTrafficInfo	  :		setTrafficeInfo();		break;
-            case R.id.btnGetIsTrafficeInfo: 	getIsTrafficeInfo();	break;
-            case R.id.btnSetSightVisible  : 	setSightVisible();		break;
-            case R.id.btnSetTrackIngMode  : 	setTrackingMode();		break;
-            case R.id.btnGetIsTracking	  : 	getIsTracking();		break;
-            case R.id.btnAddTMapCircle	  : 	addTMapCircle();		break;
-            case R.id.btnRemoveTMapCircle : 	removeTMapCircle();		break;
-            case R.id.btnMarkerPoint	  :     showMarkerPoint(); 		break;
-            case R.id.btnRemoveMarker     : 	removeMarker(); 		break;
-            case R.id.btnMoveFrontMarker  :     moveFrontMarker(); 		break;
-            case R.id.btnMoveBackMarker   :     moveBackMarker();		break;
-            case R.id.btnDrawPolyLine     :     drawLine();			 	break;
-            case R.id.btnErasePolyLine	  : 	erasePolyLine();		break;
-            case R.id.btnDrawPolygon	  : 	drawPolygon(); 			break;
-            case R.id.btnErasePolygon     :     removeTMapPolygon(); 	break;
-            case R.id.btnMapPath		  : 	drawMapPath();			break;
-            case R.id.btnRemoveMapPath    :     removeMapPath(); 		break;
-            case R.id.btnDisplayMapInfo   :     displayMapInfo(); 		break;
-            case R.id.btnNaviGuide		  :     naviGuide();			break;
-            case R.id.btnCarPath		  :     drawCarPath(); 			break;
-            case R.id.btnPedestrian_Path  :     drawPedestrianPath();   break;
+        switch (v.getId()) {
+            case R.id.btnOverlay:
+                overlay();
+                break;
+            case R.id.btnAnimateTo:
+                animateTo();
+                break;
+            case R.id.btnZoomIn:
+                mapZoomIn();
+                break;
+            case R.id.btnZoomOut:
+                mapZoomOut();
+                break;
+            case R.id.btnGetZoomLevel:
+                getZoomLevel();
+                break;
+            case R.id.btnSetZoomLevel:
+                setZoomLevel();
+                break;
+            case R.id.btnSetMapType:
+                setMapType();
+                break;
+            case R.id.btnGetLocationPoint:
+                getLocationPoint();
+                break;
+            // case R.id.btnSetLocationPoint : 	setLocationPoint(); 	break;
+            case R.id.btnSetIcon:
+                setMapIcon();
+                break;
+            case R.id.btnSetCompassMode:
+                setCompassMode();
+                break;
+            case R.id.btnGetIsCompass:
+                getIsCompass();
+                break;
+            case R.id.btnSetTrafficInfo:
+                setTrafficeInfo();
+                break;
+            case R.id.btnGetIsTrafficeInfo:
+                getIsTrafficeInfo();
+                break;
+            case R.id.btnSetSightVisible:
+                setSightVisible();
+                break;
+            case R.id.btnSetTrackIngMode:
+                setTrackingMode();
+                break;
+            case R.id.btnGetIsTracking:
+                getIsTracking();
+                break;
+            case R.id.btnAddTMapCircle:
+                addTMapCircle();
+                break;
+            case R.id.btnRemoveTMapCircle:
+                removeTMapCircle();
+                break;
+            case R.id.btnMarkerPoint:
+                showMarkerPoint();
+                break;
+            case R.id.btnRemoveMarker:
+                removeMarker();
+                break;
+            case R.id.btnMoveFrontMarker:
+                moveFrontMarker();
+                break;
+            case R.id.btnMoveBackMarker:
+                moveBackMarker();
+                break;
+            case R.id.btnDrawPolyLine:
+                drawLine();
+                break;
+            case R.id.btnErasePolyLine:
+                erasePolyLine();
+                break;
+            case R.id.btnDrawPolygon:
+                drawPolygon();
+                break;
+            case R.id.btnErasePolygon:
+                removeTMapPolygon();
+                break;
+            case R.id.btnMapPath:
+                drawMapPath();
+                break;
+            case R.id.btnRemoveMapPath:
+                removeMapPath();
+                break;
+            case R.id.btnDisplayMapInfo:
+                displayMapInfo();
+                break;
+            case R.id.btnNaviGuide:
+                naviGuide();
+                break;
+            case R.id.btnCarPath:
+                drawCarPath();
+                break;
+            case R.id.btnPedestrian_Path:
+                drawPedestrianPath();
+                break;
             // 20170508 JWCha : 자전거 길안내 중지에 따른 조치 - START
 		/*
 		case R.id.btnBicycle_Path     :     drawBicyclePath(); 	    break;
 		*/
             // 20170508 JWCha : 자전거 길안내 중지에 따른 조치 - END
-            case R.id.btnGetCenterPoint   :     getCenterPoint();		break;
-            case R.id.btnFindAllPoi		  :     findAllPoi();			break;
-            case R.id.btnConvertToAddress :     convertToAddress(); 	break;
-            case R.id.btnGetBizCategory   : 	getBizCategory(); 		break;
-            case R.id.btnGetAroundBizPoi  :     getAroundBizPoi(); 		break;
-            case R.id.btnTileType		  : 	setTileType();			break;
-            case R.id.btnInvokeRoute	  :     invokeRoute();			break;
-            case R.id.btnInvokeSetLocation: 	invokeSetLocation();    break;
-            case R.id.btnInvokeSearchPortal: 	invokeSearchProtal(); 	break;
-            case R.id.btnBicycle		  :     setBicycle();		    break;
-            case R.id.btnBicycleFacility  : 	setBicycleFacility();   break;
-            case R.id.btnCapture		  :     captureImage(); 		break;
-            case R.id.btnDisalbeZoom	  : 	disableZoom();			break;
-            case R.id.btnTimeMachine	  :   	timeMachine(); 			break;
-            case R.id.btnTMapInstall	  :     tmapInstall(); 			break;
-            case R.id.btnMarkerPoint2	  :     showMarkerPoint2(); 	break;
+            case R.id.btnGetCenterPoint:
+                getCenterPoint();
+                break;
+            case R.id.btnFindAllPoi:
+                findAllPoi();
+                break;
+            case R.id.btnConvertToAddress:
+                convertToAddress();
+                break;
+            case R.id.btnGetBizCategory:
+                getBizCategory();
+                break;
+            case R.id.btnGetAroundBizPoi:
+                getAroundBizPoi();
+                break;
+            case R.id.btnTileType:
+                setTileType();
+                break;
+            case R.id.btnInvokeRoute:
+                invokeRoute();
+                break;
+            case R.id.btnInvokeSetLocation:
+                invokeSetLocation();
+                break;
+            case R.id.btnInvokeSearchPortal:
+                invokeSearchProtal();
+                break;
+            case R.id.btnBicycle:
+                setBicycle();
+                break;
+            case R.id.btnBicycleFacility:
+                setBicycleFacility();
+                break;
+            case R.id.btnCapture:
+                captureImage();
+                break;
+            case R.id.btnDisalbeZoom:
+                disableZoom();
+                break;
+            case R.id.btnTimeMachine:
+                timeMachine();
+                break;
+            case R.id.btnTMapInstall:
+                tmapInstall();
+                break;
+            case R.id.btnMarkerPoint2:
+                showMarkerPoint2();
+                break;
         }
     }
 
     public TMapPoint randomTMapPoint() {
-        double latitude = ((double)Math.random() ) * (37.575113-37.483086) + 37.483086;
-        double longitude = ((double)Math.random() ) * (127.027359-126.878357) + 126.878357;
+        double latitude = ((double) Math.random()) * (37.575113 - 37.483086) + 37.483086;
+        double longitude = ((double) Math.random()) * (127.027359 - 126.878357) + 126.878357;
 
         latitude = Math.min(37.575113, latitude);
         latitude = Math.max(37.483086, latitude);
@@ -752,10 +885,10 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
 
     public void overlay() {
         m_bOverlayMode = !m_bOverlayMode;
-        if(m_bOverlayMode) {
+        if (m_bOverlayMode) {
             mMapView.setZoomLevel(6);
 
-            if(mOverlay == null){
+            if (mOverlay == null) {
                 mOverlay = new ImageOverlay(this, mMapView);
             }
 
@@ -763,7 +896,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
             mOverlay.setRightBottomPoint(new TMapPoint(29.2267177, 138.7206798));
             mOverlay.setImage(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.test_image));
 
-            if(mOverlayList == null){
+            if (mOverlayList == null) {
                 mOverlayList = new ArrayList<Bitmap>();
                 mOverlayList.add(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.test_image));
                 mOverlayList.add(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ani1));
@@ -791,11 +924,11 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
         int marginLeft = 7;
         int marginTop = 5;
 
-        if(width >= 1500 || height > 1500) {
+        if (width >= 1500 || height > 1500) {
             bmp2 = Bitmap.createScaledBitmap(bmp2, bmp1.getWidth() - 40, bmp1.getHeight() - 50, true);
             marginLeft = 20;
             marginTop = 10;
-        } else if(width >= 1200 || height > 1200) {
+        } else if (width >= 1200 || height > 1200) {
             bmp2 = Bitmap.createScaledBitmap(bmp2, bmp1.getWidth() - 22, bmp1.getHeight() - 35, true);
             marginLeft = 11;
             marginTop = 7;
@@ -881,7 +1014,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
         double Latitude = point.getLatitude();
         double Longitude = point.getLongitude();
 
-        m_Latitude  = Latitude;
+        m_Latitude = Latitude;
         m_Longitude = Longitude;
 
         LogManager.printLog("Latitude " + Latitude + " Longitude " + Longitude);
@@ -895,9 +1028,9 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
      * setLocationPoint
      * 현재위치로 표시될 좌표의 위도,경도를 설정한다.
      */
-    public void setLocationPoint(double latitude,double longitude) {
-        double 	Latitude  =latitude;
-        double  Longitude = longitude;
+    public void setLocationPoint(double latitude, double longitude) {
+        double Latitude = latitude;
+        double Longitude = longitude;
 
         LogManager.printLog("setLocationPoint " + Latitude + " " + Longitude);
 
@@ -912,7 +1045,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
         m_bShowMapIcon = !m_bShowMapIcon;
 
         if (m_bShowMapIcon) {
-            Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.ic_launcher);
+            Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_launcher);
             mMapView.setIcon(bitmap);
         }
         mMapView.setIconVisibility(m_bShowMapIcon);
@@ -932,7 +1065,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
      */
     public void getIsCompass() {
         Boolean bGetIsCompass = mMapView.getIsCompass();
-        Common.showAlertDialog(this, "", "현재 나침반 모드는 : " + bGetIsCompass.toString() );
+        Common.showAlertDialog(this, "", "현재 나침반 모드는 : " + bGetIsCompass.toString());
     }
 
     /**
@@ -950,7 +1083,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
      */
     public void getIsTrafficeInfo() {
         Boolean bIsTrafficeInfo = mMapView.IsTrafficInfo();
-        Common.showAlertDialog(this, "", "현재 실시간 교통정보 표출상태는  : " + bIsTrafficeInfo.toString() );
+        Common.showAlertDialog(this, "", "현재 실시간 교통정보 표출상태는  : " + bIsTrafficeInfo.toString());
     }
 
     /**
@@ -977,7 +1110,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
      */
     public void getIsTracking() {
         Boolean bIsTracking = mMapView.getIsTracking();
-        Common.showAlertDialog(this, "", "현재 트래킹모드 사용 여부  : " + bIsTracking.toString() );
+        Common.showAlertDialog(this, "", "현재 트래킹모드 사용 여부  : " + bIsTracking.toString());
     }
 
     /**
@@ -990,7 +1123,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
         circle.setRadius(300);
         circle.setLineColor(Color.BLUE);
         circle.setAreaAlpha(50);
-        circle.setCircleWidth((float)10);
+        circle.setCircleWidth((float) 10);
         circle.setRadiusVisible(true);
 
         TMapPoint point = randomTMapPoint();
@@ -1006,17 +1139,17 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
      * 지도상의 해당 서클을 제거한다.
      */
     public void removeTMapCircle() {
-        if(mArrayCircleID.size() <= 0 )
+        if (mArrayCircleID.size() <= 0)
             return;
 
-        String strCircleID = mArrayCircleID.get(mArrayCircleID.size() - 1 );
+        String strCircleID = mArrayCircleID.get(mArrayCircleID.size() - 1);
         mMapView.removeTMapCircle(strCircleID);
         mArrayCircleID.remove(mArrayCircleID.size() - 1);
     }
 
     public void showMarkerPoint2() {
         ArrayList<Bitmap> list = null;
-        for(int i = 0; i < 50; i++) {
+        for (int i = 0; i < 50; i++) {
 
             MarkerOverlay marker1 = new MarkerOverlay(this, mMapView);
             String strID = String.format("%02d", i);
@@ -1030,7 +1163,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
             }
 
             list.add(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.map_pin_red));
-            list.add(BitmapFactory.decodeResource(mContext.getResources(),R.drawable.end));
+            list.add(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.end));
 
             marker1.setAnimationIcons(list);
             mMapView.addMarkerItem2(strID, marker1);
@@ -1040,9 +1173,9 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
 
             @Override
             public void onCalloutMarker2ClickEvent(String id, TMapMarkerItem2 markerItem2) {
-                LogManager.printLog("ClickEvent " + " id " + id + " " + markerItem2.latitude + " " +  markerItem2.longitude);
+                LogManager.printLog("ClickEvent " + " id " + id + " " + markerItem2.latitude + " " + markerItem2.longitude);
 
-                String strMessage = "ClickEvent " + " id " + id + " " + markerItem2.latitude + " " +  markerItem2.longitude;
+                String strMessage = "ClickEvent " + " id " + id + " " + markerItem2.latitude + " " + markerItem2.longitude;
 
                 Common.showAlertDialog(TmapActivity.this, "TMapMarker2", strMessage);
             }
@@ -1057,11 +1190,11 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
         Bitmap bitmap = null;
 
 
-        TMapPoint point = new TMapPoint( 37.497976,127.027600);
+        TMapPoint point = new TMapPoint(37.497976, 127.027600);
 
         TMapMarkerItem item1 = new TMapMarkerItem();
 
-        bitmap = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.i_location);
+        bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.i_location);
 
         item1.setTMapPoint(point);
         item1.setName("동작대리점");
@@ -1070,7 +1203,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
         item1.setIcon(bitmap);
         LogManager.printLog("bitmap " + bitmap.getWidth() + " " + bitmap.getHeight());
 
-        bitmap = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.i_location);
+        bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.i_location);
         item1.setCalloutTitle("동작대리점");
 //        item1.setCalloutSubTitle("을지로입구역 500M");
         item1.setCanShowCallout(true);
@@ -1081,7 +1214,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
         item1.setCalloutRightButtonImage(bitmap_i);
 
         String strID = String.format("pmarker%d", mMarkerID++);
-Log.v("strId 알아보기",strID);
+        Log.v("strId 알아보기", strID);
         mMapView.addMarkerItem(strID, item1);
         mArrayMarkerID.add(strID);
 
@@ -1092,14 +1225,14 @@ Log.v("strId 알아보기",strID);
         item2.setTMapPoint(point);
         item2.setName("청호타워");
         item2.setVisible(item2.VISIBLE);
-       item2.setCalloutTitle("청호타워");
+        item2.setCalloutTitle("청호타워");
 
         item2.setCanShowCallout(true);
 
         bitmap_i = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.i_go);
         item2.setCalloutRightButtonImage(bitmap_i);
 
-        bitmap = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.i_location);
+        bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.i_location);
         item2.setIcon(bitmap);
 
         strID = String.format("pmarker%d", mMarkerID++);
@@ -1123,7 +1256,7 @@ Log.v("strId 알아보기",strID);
         bitmap_i = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.i_go);
         item2.setCalloutRightButtonImage(bitmap_i);
 
-        bitmap = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.map_pin_red);
+        bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.map_pin_red);
         item2.setIcon(bitmap);
 
         strID = String.format("pmarker%d", mMarkerID++);
@@ -1147,7 +1280,7 @@ Log.v("strId 알아보기",strID);
         item2.setCalloutRightButtonImage(bitmap_i);
 
 
-        bitmap = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.end);
+        bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.end);
         item2.setIcon(bitmap);
 
         strID = String.format("pmarker%d", mMarkerID++);
@@ -1155,7 +1288,7 @@ Log.v("strId 알아보기",strID);
         mMapView.addMarkerItem(strID, item2);
         mArrayMarkerID.add(strID);
 
-        for(int i = 4; i < 10; i++) {
+        for (int i = 4; i < 10; i++) {
             TMapMarkerItem item3 = new TMapMarkerItem();
 
             item3.setID(strID);
@@ -1174,17 +1307,17 @@ Log.v("strId 알아보기",strID);
     }
 
     public void removeMarker() {
-        Log.v("remove","들어옴222");
+        Log.v("remove", "들어옴222");
 
 
-        String temp="";
-        if(!(mMarkerID==0)) {
+        String temp = "";
+        if (!(mMarkerID == 0)) {
             for (int i = 0; i < mMarkerID; i++) {
                 temp = "pmarker" + i;
                 mMapView.removeMarkerItem(temp);
             }
         }
-        mMarkerID=0;
+        mMarkerID = 0;
 
 //        if(mArrayMarkerID.size() <= 0 )
 //            return;
@@ -1238,10 +1371,10 @@ Log.v("strId 알아보기",strID);
      * 지도에 라인을 제거한다.
      */
     public void erasePolyLine() {
-        if(mArrayLineID.size() <= 0)
+        if (mArrayLineID.size() <= 0)
             return;
 
-        String strLineID = mArrayLineID.get(mArrayLineID.size() - 1 );
+        String strLineID = mArrayLineID.get(mArrayLineID.size() - 1);
         mMapView.removeTMapPolyLine(strLineID);
         mArrayLineID.remove(mArrayLineID.size() - 1);
     }
@@ -1253,13 +1386,13 @@ Log.v("strId 알아보기",strID);
     public void drawPolygon() {
         int Min = 3;
         int Max = 10;
-        int rndNum = (int)(Math.random() * ( Max - Min ));
+        int rndNum = (int) (Math.random() * (Max - Min));
 
         LogManager.printLog("drawPolygon" + rndNum);
 
         TMapPolygon polygon = new TMapPolygon();
         polygon.setLineColor(Color.BLUE);
-        polygon.setPolygonWidth((float)4);
+        polygon.setPolygonWidth((float) 4);
         polygon.setAreaAlpha(2);
 
         TMapPoint point = null;
@@ -1283,10 +1416,10 @@ Log.v("strId 알아보기",strID);
      * 지도에 그려진 폴리곤을 제거한다.
      */
     public void removeTMapPolygon() {
-        if(mArrayPolygonID.size() <= 0)
+        if (mArrayPolygonID.size() <= 0)
             return;
 
-        String strPolygonID = mArrayPolygonID.get(mArrayPolygonID.size() - 1 );
+        String strPolygonID = mArrayPolygonID.get(mArrayPolygonID.size() - 1);
 
         LogManager.printLog("erasePolygon " + strPolygonID);
 
@@ -1298,15 +1431,13 @@ Log.v("strId 알아보기",strID);
      * drawMapPath
      * 지도에 시작-종료 점에 대해서 경로를 표시한다.
      */
-    public ArrayList splitString(String data){
+    public ArrayList splitString(String data) {
 
         ArrayList<String> ar = new ArrayList<>();
 
-        if(data.equals("")){
+        if (data.equals("")) {
 
-        }
-
-        else {
+        } else {
 
 
             String arr[];
@@ -1324,17 +1455,17 @@ Log.v("strId 알아보기",strID);
 
         ArrayList<TMapPoint> pathList = new ArrayList<>();
         ArrayList<String> posList = splitString(pos);
-        String temp="";
+        String temp = "";
         TMapPoint point;
-        for(int i=0;i<posList.size();i++){
+        for (int i = 0; i < posList.size(); i++) {
             temp = posList.get(i);
 
-            for (int j = 0; j < posCount; j++){
+            for (int j = 0; j < posCount; j++) {
 
-                if(temp.equals(mMapView.getMarkerItemFromID("pmarker"+j).getName())){
+                if (temp.equals(mMapView.getMarkerItemFromID("pmarker" + j).getName())) {
 
 
-                    point = new TMapPoint(mMapView.getMarkerItemFromID("pmarker"+j).getTMapPoint().getLatitude(),mMapView.getMarkerItemFromID("pmarker"+j).getTMapPoint().getLongitude());
+                    point = new TMapPoint(mMapView.getMarkerItemFromID("pmarker" + j).getTMapPoint().getLatitude(), mMapView.getMarkerItemFromID("pmarker" + j).getTMapPoint().getLongitude());
                     pathList.add(point);
                 }
 
@@ -1343,27 +1474,25 @@ Log.v("strId 알아보기",strID);
         }
         TMapData tmapdata = new TMapData();
 
-        if(nowLatitude==0.0 || nowLongitude==0.0)return;
+        if (nowLatitude == 0.0 || nowLongitude == 0.0) return;
 
-        if(pathList.size()<1){
-           return;
-       }
-
-       else if(pathList.size()==1){
+        if (pathList.size() < 1) {
+            return;
+        } else if (pathList.size() == 1) {
 //            TMapPoint startPoint = pathList.get(0);
 //            TMapPoint endPoint = pathList.get(1);
 
-            TMapPoint startPoint = new TMapPoint(nowLatitude,nowLongitude);
+            TMapPoint startPoint = new TMapPoint(nowLatitude, nowLongitude);
             TMapPoint endPoint = pathList.get(0);
 
-            tmapdata.findPathData(startPoint,endPoint,new TMapData.FindPathDataListenerCallback() {
+            tmapdata.findPathData(startPoint, endPoint, new TMapData.FindPathDataListenerCallback() {
                 @Override
                 public void onFindPathData(TMapPolyLine polyLine) {
                     mMapView.addTMapPath(polyLine);
 
                     double dis = polyLine.getDistance();
 
-                    dd = dis/1000;
+                    dd = dis / 1000;
 
 //                try {
 //
@@ -1376,14 +1505,14 @@ Log.v("strId 알아보기",strID);
                     mHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            String result = dd+"";
-                            result = result.substring(0,3);
+                             result = dd + "";
+                            result = result.substring(0, 3);
 
                             // 내용
-                            Toast.makeText(TmapActivity.this,    result+"km",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TmapActivity.this, result + "km", Toast.LENGTH_SHORT).show();
 
                             double value = Double.parseDouble(result);
-                            disText.setText(value+"km");
+                            disText.setText(value + "km");
                         }
                     }, 1000);
 
@@ -1393,32 +1522,28 @@ Log.v("strId 알아보기",strID);
 //                posText.setText(pos);
 
 
-
-                    Log.v("disdisdistance",polyLine.getDistance()+"");
+                    Log.v("disdisdistance", polyLine.getDistance() + "");
                 }
             });
-        }
-
-        else if(pathList.size()>1){
-            TMapPoint startPoint =  new TMapPoint(nowLatitude,nowLongitude);
-            TMapPoint endPoint = pathList.get(pathList.size()-1);
+        } else if (pathList.size() > 1) {
+            TMapPoint startPoint = new TMapPoint(nowLatitude, nowLongitude);
+            TMapPoint endPoint = pathList.get(pathList.size() - 1);
             ArrayList<TMapPoint> pointList = new ArrayList<>();
 
-            for(int i=0;i<pathList.size()-1;i++){
+            for (int i = 0; i < pathList.size() - 1; i++) {
                 TMapPoint Point = pathList.get(i);
                 pointList.add(Point);
             }
 
 
-
-            tmapdata.findMultiPointPathData(startPoint,endPoint,pointList,0, new TMapData.FindPathDataListenerCallback() {
+            tmapdata.findMultiPointPathData(startPoint, endPoint, pointList, 0, new TMapData.FindPathDataListenerCallback() {
                 @Override
                 public void onFindPathData(TMapPolyLine polyLine) {
                     mMapView.addTMapPath(polyLine);
 
                     double dis = polyLine.getDistance();
 
-                    dd = dis/1000;
+                    dd = dis / 1000;
 
 //                try {
 //
@@ -1431,11 +1556,12 @@ Log.v("strId 알아보기",strID);
                     mHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            String result = dd+"";
+                            String result = dd + "";
+                            result = result.substring(0, 3);
 
                             // 내용
-                            Toast.makeText(TmapActivity.this,    result.substring(0,3)+"km",Toast.LENGTH_SHORT).show();
-                            disText.setText(result.substring(0,3)+"km");
+                            Toast.makeText(TmapActivity.this, result+ "km", Toast.LENGTH_SHORT).show();
+                            disText.setText(result.substring(0, 3) + "km");
                         }
                     }, 1000);
 
@@ -1445,11 +1571,10 @@ Log.v("strId 알아보기",strID);
 //                posText.setText(pos);
 
 
-
-                    Log.v("disdisdistance",polyLine.getDistance()+"");
+                    Log.v("disdisdistance", polyLine.getDistance() + "");
                 }
             });
-            }
+        }
 
 
 //        for (int i = 0; i < posCount; i++) {
@@ -1467,11 +1592,6 @@ Log.v("strId 알아보기",strID);
 //        TMapMarkerItem t = mMapView.getMarkerItemFromID("pmarker1");
 //
 //        Log.v("tmpowiejfojsdlfo",t.getTMapPoint().getLatitude()+"");
-
-
-
-
-
 
 
         //---------------------------------------------------------
@@ -1495,7 +1615,7 @@ Log.v("strId 알아보기",strID);
 //        });
     }
 
-    private String getContentFromNode(Element item, String tagName){
+    private String getContentFromNode(Element item, String tagName) {
         NodeList list = item.getElementsByTagName(tagName);
         if (list.getLength() > 0) {
             if (list.item(0).getFirstChild() != null) {
@@ -1531,7 +1651,7 @@ Log.v("strId 알아보기",strID);
         String strInfo = "Center Latitude" + info.getTMapPoint().getLatitude() + "Center Longitude" + info.getTMapPoint().getLongitude() +
                 "Level " + info.getTMapZoomLevel();
 
-        Common.showAlertDialog(this, "", strInfo );
+        Common.showAlertDialog(this, "", strInfo);
     }
 
     /**
@@ -1616,7 +1736,7 @@ Log.v("strId 알아보기",strID);
     public void getCenterPoint() {
         TMapPoint point = mMapView.getCenterPoint();
 
-        Common.showAlertDialog(this, "", "지도의 중심 좌표는 " + point.getLatitude() + " " + point.getLongitude() );
+        Common.showAlertDialog(this, "", "지도의 중심 좌표는 " + point.getLatitude() + " " + point.getLongitude());
     }
 
     /**
@@ -1641,10 +1761,10 @@ Log.v("strId 알아보기",strID);
                     @Override
                     public void onFindAllPOI(ArrayList<TMapPOIItem> poiItem) {
                         for (int i = 0; i < poiItem.size(); i++) {
-                            TMapPOIItem  item = poiItem.get(i);
+                            TMapPOIItem item = poiItem.get(i);
 
                             LogManager.printLog("POI Name: " + item.getPOIName().toString() + ", " +
-                                    "Address: " + item.getPOIAddress().replace("null", "")  + ", " +
+                                    "Address: " + item.getPOIAddress().replace("null", "") + ", " +
                                     "Point: " + item.getPOIPoint().toString());
                         }
                     }
@@ -1715,7 +1835,7 @@ Log.v("strId 알아보기",strID);
             public void onGetBizCategory(ArrayList<BizCategory> poiItem) {
                 for (int i = 0; i < poiItem.size(); i++) {
                     BizCategory item = poiItem.get(i);
-                    LogManager.printLog("UpperBizCode " + item.upperBizCode + " " + "UpperBizName " + item.upperBizName );
+                    LogManager.printLog("UpperBizCode " + item.upperBizCode + " " + "UpperBizName " + item.upperBizName);
                     LogManager.printLog("MiddleBizcode " + item.middleBizCode + " " + "MiddleBizName " + item.middleBizName);
                 }
             }
@@ -1769,13 +1889,13 @@ Log.v("strId 알아보기",strID);
         final TMapPoint point = mMapView.getCenterPoint();
         TMapData tmapdata = new TMapData();
 
-        if(mMapView.isValidTMapPoint(point)) {
+        if (mMapView.isValidTMapPoint(point)) {
             tmapdata.convertGpsToAddress(point.getLatitude(), point.getLongitude(), new TMapData.ConvertGPSToAddressListenerCallback() {
                 @Override
                 public void onConvertToGPSToAddress(String strAddress) {
                     TMapTapi tmaptapi = new TMapTapi(TmapActivity.this);
-                    float fY = (float)point.getLatitude();
-                    float fX = (float)point.getLongitude();
+                    float fY = (float) point.getLatitude();
+                    float fX = (float) point.getLongitude();
                     tmaptapi.invokeRoute(strAddress, fX, fY);
                 }
             });
@@ -1891,7 +2011,7 @@ Log.v("strId 알아보기",strID);
         pathInfo.put("type", "arrival");
 
         Date currentTime = new Date();
-        tmapdata.findTimeMachineCarPath(pathInfo,  currentTime, null);
+        tmapdata.findTimeMachineCarPath(pathInfo, currentTime, null);
     }
 
 
@@ -1899,42 +2019,202 @@ Log.v("strId 알아보기",strID);
 
 
         DayItems dayItems = DayItems.get();
-        dayItems.setShortDistance(disText.getText()+"");
-        dayItems.setVisitPoint(posText.getText()+"");
+        dayItems.setShortDistance(disText.getText() + "");
+        dayItems.setVisitPoint(posText.getText() + "");
         onBackPressed();
 
     }
-    public void submitData(){
+
+    public void submitData() {
 
         DayItems dayItems = DayItems.get();
-        dayItems.setShortDistance(disText.getText()+"");
-        dayItems.setVisitPoint(posText.getText()+"");
+        dayItems.setShortDistance(result);
+        dayItems.setVisitPoint(posText.getText() + "");
         onBackPressed();
     }
 
 
     public void removePath(View view) {
-    Log.v("경로검색 들어옴","ㅇㅇ");
+        Log.v("경로검색 들어옴", "ㅇㅇ");
         removeMapPath();
-        pos="->";
+        pos = "->";
         disText.setText("0km");
 
         posText.setText(pos);
-        Log.v("sdfsdfsdfsdf",posText.getText()+"");
-        pos="";
+        Log.v("sdfsdfsdfsdf", posText.getText() + "");
+        pos = "";
         //disText.setText("");
     }
 
     public void searchClick(View view) {
 
-        String temp="";
-        if(poiedit.getText().equals(null)){
-            Toast.makeText(TmapActivity.this,"업체 정보를 입력하세요",Toast.LENGTH_LONG);
-         return;
+        String temp = "";
+        if (poiedit.getText().equals(null)) {
+            Toast.makeText(TmapActivity.this, "업체 정보를 입력하세요", Toast.LENGTH_LONG);
+            return;
         }
-        temp = poiedit.getText()+"";
+        temp = poiedit.getText() + "";
         HttpConnector httpcon = new HttpConnector();
-        httpcon.accessServerGet("WGS84GEO","0964bcd8-f1f6-325c-9903-0210ac72ef61",temp,1,mCallback4);
+        httpcon.accessServerGet("WGS84GEO", "0964bcd8-f1f6-325c-9903-0210ac72ef61", temp, 1, mCallback4);
+    }
+
+    @Override
+    public void onReady() {
+
+    }
+
+    @Override
+    public void onBeginningOfSpeech() {
+
+    }
+
+    @Override
+    public void onEndOfSpeech() {
+
+    }
+
+    @Override
+    public void onError(int errorCode, String errorMsg) {
+        Log.e("SpeechSampleActivity", "onError");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                setButtonsStatus(true);
+            }
+        });
+
+        client = null;
+    }
+
+    @Override
+    public void onPartialResult(String partialResult) {
+
+    }
+
+    @Override
+    public void onResults(Bundle results) {
+        final StringBuilder builder = new StringBuilder();
+        Log.i("SpeechSampleActivity", "onResults");
+
+        ArrayList<String> texts = results.getStringArrayList(SpeechRecognizerClient.KEY_RECOGNITION_RESULTS);
+        ArrayList<Integer> confs = results.getIntegerArrayList(SpeechRecognizerClient.KEY_CONFIDENCE_VALUES);
+
+        for (int i = 0; i < texts.size(); i++) {
+
+            builder.append(texts.get(i));
+            builder.append(" (");
+            builder.append(confs.get(i).intValue());
+            builder.append(")\n");
+        }
+        final String temp = texts.get(0).trim().replace(" ","");
+        Log.v("첫번째", temp);
+
+        String arr[] = {"동작대리점","강남대리점","gs25사당점","gs25사당드림점"};
+
+        // Toast.makeText(SpeechSampleActivity.this,temp, Toast.LENGTH_LONG).show();
+
+
+        if(  temp.substring(temp.length()-2,temp.length()).equals("연결")) {
+            for (int i = 0; i < arr.length; i++) {
+                if (temp.contains(arr[i]) /*temp.equals("동작대리점연결")*/) {
+
+
+
+               Log.v("연결", "성공성공");
+                Uri number;
+                Intent intent;
+                number = Uri.parse("tel:" + 114);
+                intent = new Intent(Intent.ACTION_CALL, number);
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+                    return;
+                }
+                startActivity(intent);
+
+
+//                    nowLatitude = 37.541642248630524;
+//                    nowLongitude = 126.99599611759186;
+//                    if (!(nowLongitude == 0.0)) {
+//                        mMapView.setLocationPoint(nowLongitude, nowLatitude);
+//                        mMapView.setCenterPoint(nowLongitude, nowLatitude, true);
+//                        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.end);
+//                        mMapView.setIcon(bitmap);
+//                        mMapView.setIconVisibility(true);
+//                        mMapView.setZoom(19);
+//                    }
+
+
+                    if (client != null) {
+                        client.cancelRecording();
+                    }
+
+                    setButtonsStatus(true);
+                }
+            }
+
+        }
+        if(  temp.substring(temp.length()-2,temp.length()).equals("검색")) {
+            for (int i = 0; i < arr.length; i++) {
+                if (temp.contains(arr[i]) /*temp.equals("동작대리점연결")*/) {
+
+
+
+          /*      Log.v("연결", "성공성공");
+                Uri number;
+                Intent intent;
+                number = Uri.parse("tel:" + 114);
+                intent = new Intent(Intent.ACTION_CALL, number);
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+                    return;
+                }
+                startActivity(intent);*/
+
+
+                    nowLatitude = 37.541642248630524;
+                    nowLongitude = 126.99599611759186;
+                    if (!(nowLongitude == 0.0)) {
+                        mMapView.setLocationPoint(nowLongitude, nowLatitude);
+                        mMapView.setCenterPoint(nowLongitude, nowLatitude, true);
+                        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.end);
+                        mMapView.setIcon(bitmap);
+                        mMapView.setIconVisibility(true);
+                    }
+
+
+                    if (client != null) {
+                        client.cancelRecording();
+                    }
+
+                    setButtonsStatus(true);
+                }
+            }
+
+        }
+
+       // Toast.makeText(this,"인식 실패", Toast.LENGTH_LONG).show();
+        if (client != null) {
+            client.cancelRecording();
+        }
+
+        setButtonsStatus(true);
+
+
+
+
+        client = null;
+
+    }
+
+    @Override
+    public void onAudioLevel(float audioLevel) {
+
+    }
+
+    @Override
+    public void onFinished() {
+        Log.i("SpeechSampleActivity", "onFinished");
+
     }
 }
 

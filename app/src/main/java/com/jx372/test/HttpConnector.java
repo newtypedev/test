@@ -1,16 +1,13 @@
 package com.jx372.test;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,6 +23,41 @@ public class HttpConnector {
     Retrofit retrofit;
     ApiService apiService;
      String resultJson="";
+
+    public String accessPhoto(String url, MultipartBody.Part body,RequestBody name, final Callback2 callback) {
+
+
+        retrofit = new Retrofit.Builder().baseUrl(ApiService.API_URL).build();
+        apiService = retrofit.create(ApiService.class);
+
+        Map map = new HashMap();
+        map.put("date","20130514");
+        retrofit2.Call<okhttp3.ResponseBody> req = apiService.postImage(body, name,90302,"test01");
+        req.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                Log.v("접속 성공","굳굳");
+
+
+                String json = response.body()+"";
+                Log.v("jsonjson",json);
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.v("받음","끝");
+
+                t.printStackTrace();
+            }
+        });
+
+
+        return "111";
+    }
+
+
 
 
 
@@ -77,6 +109,7 @@ public class HttpConnector {
         else if(url.equals("challenge")){
             comment2 = apiService.getPostChallenge(map);
         }
+
 
 
 

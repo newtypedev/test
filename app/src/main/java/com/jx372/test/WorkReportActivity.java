@@ -1,12 +1,7 @@
 package com.jx372.test;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.ColorRes;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -14,26 +9,15 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jx372.test.fragment.ConsultFragment;
-import com.jx372.test.fragment.TabMediaFragment;
-import com.jx372.test.fragment.TabShopFragment;
-import com.jx372.test.fragment.TabSocialFragment;
-import com.jx372.test.fragment.TabTravelFragment;
-import com.jx372.test.fragment.TabUniversalFragment;
 import com.jx372.test.fragment.WorkReportFragment;
-import com.jx372.test.tmap.LogManager;
-import com.jx372.test.tmap.TmapActivity;
 import com.jx372.test.view.PagerSlidingTabStrip;
-import com.skp.Tmap.TMapMarkerItem;
-import com.skp.Tmap.TMapPoint;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import static com.jx372.test.R.id.activity_tab_universal_pager;
 import static com.jx372.test.R.id.activity_tab_universal_pager2;
 
 /**
@@ -258,6 +241,9 @@ public class WorkReportActivity extends AppCompatActivity {
             Intent i = new Intent(this,ConsultActivity.class);
             startActivity(i);
         }
+        else if(id == R.id.nextreport){
+
+        }
 
 
         // itemUpdate();
@@ -357,6 +343,7 @@ public class WorkReportActivity extends AppCompatActivity {
         private final ArrayList<String> tabNames = new ArrayList<String>() {{
             add("업무보고");
             add("상담일지");
+            add("첨부파일");
 
         }};
 

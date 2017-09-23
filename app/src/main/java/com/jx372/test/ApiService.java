@@ -2,13 +2,17 @@ package com.jx372.test;
 
 import java.util.Map;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 /**
@@ -17,9 +21,19 @@ import retrofit2.http.Query;
 
 public interface ApiService {
    // https://api.androidhive.info/contacts/
-    public static final String API_URL = "http://192.168.1.121:8080/";
+ //localhost:8080/sfa/
+ //http://192.168.1.121:8080/116
+    public static final String API_URL = "http://192.168.1.116:8080/";
     public static final String API_URL2 = "https://apis.skplanetx.com/tmap/";
     //http://192.168.1.11:8181/
+
+    @Multipart
+    @POST("sfa/m/upload/insert")
+    Call<ResponseBody> postImage(@Part MultipartBody.Part image, @Part("file") RequestBody file, @Query("start_gauge") int start,@Query("id") String id);
+
+ @FormUrlEncoded
+ @POST("sfa/m/upload/insert")
+ Call<ResponseBody> postImage2(@Part MultipartBody.Part image, @Part("file") RequestBody file, @Query("date") int date);
 
     @GET("pois")
     Call<ResponseBody>getPoi(@Query("resCoordType") String req,@Query("appKey") String key,@Query("searchKeyword") String search,@Query("version") int version);

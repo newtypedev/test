@@ -1,14 +1,13 @@
 package com.jx372.test;
 
-import java.util.ArrayList;
-
 /**
  * Created by Dell on 2017-08-26.
  */
 
 public class User {
     private static User user;
-    private String id;
+    private String id="test01";
+    private String dept="영업 1팀";
 
 
     public static User get() {
@@ -19,6 +18,14 @@ public class User {
         }
 
         return user;
+    }
+
+    public String getDept() {
+        return dept;
+    }
+
+    public void setDept(String dept) {
+        this.dept = dept;
     }
 
     public String getId() {

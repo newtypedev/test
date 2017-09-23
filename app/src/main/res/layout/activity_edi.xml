@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ScrollView3"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:layout_alignParentStart="true">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.github.irshulx.Editor
+        android:layout_width="match_parent"
+        android:id="@+id/renderer"
+        app:render_type="Renderer"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"/>
+
+    <com.github.irshulx.Editor
+        android:id="@+id/editor"
+        android:layout_width="match_parent"
+        android:layout_height="292dp"
+        app:placeholder="Start writing here..."
+        app:render_type="Editor"
+        android:layout_weight="0.57" />
+
+    <Button
+        android:onClick="send"
+        android:text="보내기"
+        android:id="@+id/send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:onClick="take"
+        android:text="받기"
+        android:id="@+id/take"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+    </ScrollView>

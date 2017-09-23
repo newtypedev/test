@@ -2,6 +2,7 @@
 <resources>
 
 
+    <string name="kakao_app_key">8338b6a7ca17e2e3ac9ce610aea67421</string>
 
     <string name="overlay">overlay</string>
     <string name="animateTo">animateTo</string>

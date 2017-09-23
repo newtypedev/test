@@ -236,14 +236,16 @@
                     android:orientation="vertical"
                     android:paddingTop="20dp">
 
-                    <TextView
-
-                        android:id="@+id/daycontent"
+                    <com.github.irshulx.Editor
                         android:layout_width="match_parent"
+                        android:id="@+id/daycontent2"
+                        app:render_type="Renderer"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:minHeight="300dp"
                         android:layout_height="wrap_content"
-                        android:minHeight="500dp"
-                        android:textColor="#000000"
-                        android:textSize="15dp" />
+                        android:paddingBottom="10dp"
+                        />
 
                 </LinearLayout>
 
