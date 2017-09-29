@@ -3,34 +3,26 @@ package com.jx372.test;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 public class ConsultActivity extends AppCompatActivity {
 
 
     public static final String CRIME_ID="";
-
+    private  UUID consultId;
     private Consult consult;
     private EditText titleField;
     private Button dateButton;
     private CheckBox solvedCheckBox;
-    private  UUID consultId;
+
     private String state="";
 
 

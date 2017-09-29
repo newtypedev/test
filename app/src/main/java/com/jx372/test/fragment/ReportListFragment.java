@@ -88,7 +88,7 @@ public class ReportListFragment extends Fragment {
         return view;
     }
 
-    private void updateUI(){
+    public void updateUI(){
         ReportList reportList = ReportList.get(getActivity());
         List<ReportListItem> consults = reportList.getReports();
         if(adapter == null) {
@@ -125,21 +125,21 @@ public class ReportListFragment extends Fragment {
             solveCheckbox.setChecked(report.isSolved());
             Log.v("bunhoho",report.getTitle());
 
-            if(report.getOpinion()==0) {
-                cardview.setCardBackgroundColor(getActivity().getResources().getColor(R.color.material_green_100));
-            }
-            else if(report.getOpinion()==1) {
-                cardview.setCardBackgroundColor(getActivity().getResources().getColor(R.color.material_red_100));
-            }
-            else if(report.getOpinion()==2) {
-                cardview.setCardBackgroundColor(getActivity().getResources().getColor(R.color.material_red_100));
-            }
-            else if(report.getOpinion()==3) {
-                cardview.setCardBackgroundColor(getActivity().getResources().getColor(R.color.material_blue_100));
-            }
-            else{
-                cardview.setCardBackgroundColor(getActivity().getResources().getColor(R.color.main_color_grey_300));
-            }
+//            if(report.getOpinion()==0) {
+//                cardview.setCardBackgroundColor(getActivity().getResources().getColor(R.color.material_green_100));
+//            }
+//            else if(report.getOpinion()==1) {
+//                cardview.setCardBackgroundColor(getActivity().getResources().getColor(R.color.material_red_100));
+//            }
+//            else if(report.getOpinion()==2) {
+//                cardview.setCardBackgroundColor(getActivity().getResources().getColor(R.color.material_red_100));
+//            }
+//            else if(report.getOpinion()==3) {
+//                cardview.setCardBackgroundColor(getActivity().getResources().getColor(R.color.material_blue_100));
+//            }
+//            else{
+//                cardview.setCardBackgroundColor(getActivity().getResources().getColor(R.color.main_color_grey_300));
+//            }
 
         }
 

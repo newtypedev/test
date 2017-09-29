@@ -8,6 +8,7 @@ public class User {
     private static User user;
     private String id="test01";
     private String dept="영업 1팀";
+    private String tempDate="";
 
 
     public static User get() {
@@ -18,6 +19,14 @@ public class User {
         }
 
         return user;
+    }
+
+    public String getTempDate() {
+        return tempDate;
+    }
+
+    public void setTempDate(String tempDate) {
+        this.tempDate = tempDate;
     }
 
     public String getDept() {

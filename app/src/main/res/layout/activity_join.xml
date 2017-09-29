@@ -232,6 +232,64 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:paddingTop="20dp"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_weight="1"
+            android:text="이메일"/>
+
+        <EditText
+            android:hint=" Email"
+            android:id="@+id/emailedit"
+            android:layout_width="0dip"
+            android:layout_height="30dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="3"
+            android:background="@drawable/bg_edit_join"
+            android:cursorVisible="true"
+            android:drawableBottom="@android:color/transparent"
+            android:ems="10"
+            android:inputType="textNoSuggestions"
+            android:textColor="@color/black"
+            android:textColorHint="@color/main_color_grey_500"
+            android:textSize="15dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"/>
+
+        <com.jx372.test.font.RobotoTextView
+            android:id="@+id/emailcheck"
+            android:layout_width="0dip"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_expandable_shop"
+            android:gravity="center"
+            android:minHeight="36dp"
+            android:minWidth="64dp"
+            android:paddingEnd="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingStart="8dp"
+            android:text="CHECK"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:typeface="robotoMedium"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"/>
+
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:paddingTop="20dp"

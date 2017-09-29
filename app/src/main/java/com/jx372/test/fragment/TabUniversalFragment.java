@@ -2,13 +2,12 @@ package com.jx372.test.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.jx372.test.R;
 
 public class TabUniversalFragment extends Fragment implements OnClickListener {
@@ -38,7 +37,7 @@ public class TabUniversalFragment extends Fragment implements OnClickListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.activity_splash5,
+		View rootView = inflater.inflate(R.layout.fragment_mypage,
 				container, false);
 
 		return rootView;

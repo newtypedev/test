@@ -32,11 +32,11 @@ public class LoginActivity extends AppCompatActivity {
     ApiService apiService;
     int messageResId = 0;
     int messageResId2 = 0;
-
+    MyFirebaseInstanceIDService service;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+         service = new MyFirebaseInstanceIDService(LoginActivity.this);
 
         // start splash
         Intent intent = new Intent(this,SplashScreensActivity.class);
@@ -78,9 +78,11 @@ public class LoginActivity extends AppCompatActivity {
                     return;
 
                 }
+
                 Map map = new HashMap();
                 map.put("id",mid.getText().toString());
                 map.put("passwd",passwd.getText().toString());
+                map.put("Token",service.getToken());
 
                 Call<ResponseBody> comment2 = apiService.getPostAuth(map);
                 comment2.enqueue(new Callback<ResponseBody>() {

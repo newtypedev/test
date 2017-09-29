@@ -13,9 +13,10 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.github.irshulx.Editor;
 import com.jx372.test.Consult;
-import com.jx372.test.ConsultActivity;
 import com.jx372.test.ConsultList;
+import com.jx372.test.ConsultModifyActivity;
 import com.jx372.test.R;
 
 import java.util.List;
@@ -91,18 +92,24 @@ public class ConsultFragment extends Fragment{
 
         return view;
     }
+    public void updateUI(){
 
-    private void updateUI(){
+        TextView temp =(TextView)getActivity().findViewById(R.id.reportcount);
+
         ConsultList consultList = ConsultList.get(getActivity());
         List<Consult> consults = consultList.getConsults();
+
+        temp.setText("Total "+consults.size()+"");
         if(adapter == null) {
             adapter = new ConsultAdapter(consults);
             consultRecyclerView.setAdapter(adapter);
+            Log.v("널실행이다","프래그");
         }
         else{
             adapter.notifyDataSetChanged();
         }
     }
+
 
     private class ConsultHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
@@ -110,12 +117,21 @@ public class ConsultFragment extends Fragment{
         private TextView dateTextView;
         private CheckBox solveCheckbox;
         private Consult consult;
+        private TextView customerName;
+        private TextView customerCode;
+        private TextView chiefName;
+        private TextView customerAddress;
+        private TextView consultTitle;
+        private Editor consultmemo;
         public ConsultHolder(View itemView) {
             super(itemView);
+            consultmemo = (Editor) itemView.findViewById(R.id.consultmemoview) ;
+            customerName = (TextView) itemView.findViewById(R.id.customerName);
+            customerCode = (TextView) itemView.findViewById(R.id.customerCode);
+            chiefName = (TextView) itemView.findViewById(R.id.chiefName);
+            customerAddress = (TextView) itemView.findViewById(R.id.customerAddress);
+            consultTitle = (TextView) itemView.findViewById(R.id.consultTitle);
 
-            titleTextView = (TextView) itemView.findViewById(R.id.titleText);
-            dateTextView = (TextView) itemView.findViewById(R.id.dataText);
-            solveCheckbox = (CheckBox) itemView.findViewById(R.id.checkSolve);
 
             itemView.setOnClickListener(this);
 
@@ -123,10 +139,12 @@ public class ConsultFragment extends Fragment{
 
         public void bindCrime(Consult consult){
             this.consult = consult;
-            titleTextView.setText(consult.getTitle());
-            dateTextView.setText(consult.getDate().toString());
-            solveCheckbox.setChecked(consult.isSolved());
-
+            this.consultmemo.clearAllContents();
+            consultmemo.Render(consult.getContent());
+            customerName.setText(consult.getName());
+            customerCode.setText(consult.getCode());
+            chiefName.setText(consult.getManager_name());
+            consultTitle.setText(consult.getTitle());
 
         }
 
@@ -135,7 +153,7 @@ public class ConsultFragment extends Fragment{
 
             //   Toast.makeText(getActivity(),crime.getTitle()+"",Toast.LENGTH_LONG).show();
 
-            Intent intent = ConsultActivity.newIntent(getActivity(),consult.getId());
+            Intent intent = ConsultModifyActivity.newIntent(getActivity(),consult.getId());
             startActivity(intent);
         }
     }
@@ -144,8 +162,8 @@ public class ConsultFragment extends Fragment{
 
         private List<Consult> consults;
 
-        public ConsultAdapter(List<Consult> crimes){
-            this.consults = crimes;
+        public ConsultAdapter(List<Consult> consults){
+            this.consults = consults;
         }
 
         @Override

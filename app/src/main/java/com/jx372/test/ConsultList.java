@@ -22,6 +22,11 @@ public class ConsultList {
         }
         return consultList;
     }
+    public void cleanList(){
+
+
+        consults.clear();
+    }
 
     private ConsultList(Context context){
         consults = new ArrayList<>();
@@ -47,10 +52,10 @@ public class ConsultList {
     }
 
     public void addConsult(Consult c){
-        Consult consult = new Consult();
+
       // consult.setTitle(s);
        // consult.setSolved(b);
-        consults.add(consult);
+        consults.add(c);
     }
 
     public void addItem(String s,boolean b){

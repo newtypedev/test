@@ -58,6 +58,9 @@ public class MileageActivity extends AppCompatActivity implements View.OnClickLi
     private static boolean state;
     Bitmap photo;
 
+
+
+
     Callback2 mCallback2 = new Callback2() {
         @Override
         public void callback(String msg) {
@@ -177,9 +180,15 @@ public class MileageActivity extends AppCompatActivity implements View.OnClickLi
 
         //Tesseract API
         String lang = "eng";
+        Log.v("and버전",android.os.Build.VERSION.SDK_INT+"");
+        if(android.os.Build.VERSION.SDK_INT < 23){
+            mTess = new TessBaseAPI();
+            mTess.init(datapath, lang);
 
-        mTess = new TessBaseAPI();
-        mTess.init(datapath, lang);
+        }
+
+
+
 
 
         mButton.setOnClickListener(this);
@@ -195,10 +204,15 @@ public class MileageActivity extends AppCompatActivity implements View.OnClickLi
 
     public void processImage2() {
         String OCRresult = null;
-        mTess.setImage(photo);
-        OCRresult = mTess.getUTF8Text();
-        EditText ocrEdit = (EditText) findViewById(R.id.ocrTextedit);
-        ocrEdit.setText(OCRresult);
+        if(android.os.Build.VERSION.SDK_INT < 23){
+            mTess.setImage(photo);
+            OCRresult = mTess.getUTF8Text();
+            EditText ocrEdit = (EditText) findViewById(R.id.ocrTextedit);
+            ocrEdit.setText(OCRresult);
+
+        }
+
+
     }
 
     //copy file to device
@@ -264,7 +278,28 @@ public class MileageActivity extends AppCompatActivity implements View.OnClickLi
         intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
         // 특정기기에서 사진을 저장못하는 문제가 있어 다음을 주석처리 합니다.
         //intent.putExtra("return-data", true);
-        startActivityForResult(intent, PICK_FROM_CAMERA);
+        if(android.os.Build.VERSION.SDK_INT < 23){
+            startActivityForResult(intent, PICK_FROM_CAMERA);
+
+        }
+        else{
+//             intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//            File folder = new File(Environment.getExternalStorageDirectory() + "/test/");
+//            File tempFile = new File(Environment.getExternalStorageDirectory() + "/test/");
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                Uri photoURI = FileProvider.getUriForFile(MileageActivity.this,
+//                        "com.jx372.test", tempFile);
+//                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//            } else {
+//                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(url)));
+//            }
+//
+//            startActivityForResult(intent, CAMERA);
+doTakeAlbumAction();
+
+
+        }
+
     }
 
     /**

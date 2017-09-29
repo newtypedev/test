@@ -1,15 +1,9 @@
 package com.jx372.test;
 
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,14 +15,9 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class JoinActivity extends AppCompatActivity {
@@ -43,6 +32,7 @@ public class JoinActivity extends AppCompatActivity {
     String grade="";
     String joinId="";
     String jsonTest="";
+    EditText email;
     public class HttpMessage{
          String temp;
         public void HttpMessage(String msg){
@@ -70,12 +60,12 @@ Callback2 mCallback = new Callback2() {
             JSONObject jsonbody = new JSONObject(msg);
             if(jsonbody.getString("result").equals("success")){
                 textId.setFocusable(false);
-                Toast.makeText(JoinActivity.this,"사용 가능한 ID 입니다", Toast.LENGTH_SHORT).show();
+                Toast.makeText(JoinActivity.this,jsonbody.getString("data"), Toast.LENGTH_SHORT).show();
                 checkState = true;
                 joinId = ((EditText) findViewById(R.id.joinId)).getText().toString();
             }
             else if(jsonbody.getString("result").equals("fail")){
-                Toast.makeText(JoinActivity.this,"이미 존재하는 ID 입니다", Toast.LENGTH_SHORT).show();
+                Toast.makeText(JoinActivity.this,jsonbody.getString("data"), Toast.LENGTH_SHORT).show();
 
             }
         } catch (JSONException e) {
@@ -140,7 +130,7 @@ Callback2 mCallback = new Callback2() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("팀원등록");
 
-
+email = (EditText) findViewById(R.id.emailedit);
         textId = (EditText) findViewById(R.id.joinId);
         final TextView checkView = (TextView)findViewById(R.id.joinCheck);
         findViewById(R.id.joinCheck).setOnClickListener(new View.OnClickListener(){
@@ -192,6 +182,10 @@ Callback2 mCallback = new Callback2() {
 //
 
 
+
+
+
+
                 Map map = new HashMap();
                 map.put("id",textId.getText().toString());
 
@@ -204,7 +198,18 @@ Callback2 mCallback = new Callback2() {
 
 
 
-               // editText.setFocusable(false);
+
+
+
+
+
+
+
+
+
+
+
+                // editText.setFocusable(false);
 
                // editText.setClickable(false);
 
@@ -218,7 +223,95 @@ Callback2 mCallback = new Callback2() {
             }
         });
 
+        findViewById(R.id.emailcheck).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
 
+//
+//                retrofit = new Retrofit.Builder().baseUrl(ApiService.API_URL).build();
+//                apiService = retrofit.create(ApiService.class);
+//
+//                Call<ResponseBody> comment2 = apiService.getPostIdStr(textId.getText().toString());
+//                comment2.enqueue(new Callback<ResponseBody>() {
+//                    @Override
+//                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                        try {
+//                            String json =  response.body().string();
+//                            JSONObject jsonbody = new JSONObject(json);
+//
+//
+//                            if(jsonbody.getString("result").equals("success")){
+//                                checkView.setVisibility(View.INVISIBLE);
+//                        textId.setFocusable(false);
+//
+//                        Toast.makeText(JoinActivity.this,"사용 가능한 ID 입니다", Toast.LENGTH_SHORT).show();
+//                    }
+//                    else{
+//                        Toast.makeText(JoinActivity.this,"이미 존재하는 ID 입니다", Toast.LENGTH_SHORT).show();
+//
+//                    }
+//
+//
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                            Toast.makeText(JoinActivity.this,"IOException!!",Toast.LENGTH_SHORT).show();
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                            Toast.makeText(JoinActivity.this,"JSONException!!",Toast.LENGTH_SHORT).show();
+//                        }
+//
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                        Toast.makeText(JoinActivity.this,"서버와 연결이 되지 않습니다",Toast.LENGTH_SHORT).show();
+//
+//                    }
+//                });
+//
+//
+
+
+
+
+
+
+                Map map = new HashMap();
+                map.put("email",email.getText().toString());
+
+
+
+
+                HttpConnector httpcon = new HttpConnector();
+                httpcon.accessServerMap("checkemail",map,mCallback);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                // editText.setFocusable(false);
+
+                // editText.setClickable(false);
+
+
+
+
+                // textId.setClickable(false);
+
+
+
+            }
+        });
 
 
 
@@ -284,12 +377,14 @@ Callback2 mCallback = new Callback2() {
                // String id =((EditText) findViewById(R.id.joinId)).getText().toString();
                String passwd = ((EditText) findViewById(R.id.joinPasswd)).getText().toString();
                 String name =((EditText) findViewById(R.id.joinName)).getText().toString();
+                    String email = ((EditText)findViewById(R.id.emailedit)).getText().toString();
                 Map map = new HashMap();
                 map.put("id",joinId);
                 map.put("passwd",passwd);
                 map.put("name",name);
                 map.put("dept",dept);
                 map.put("grade",grade);
+                    map.put("email",email);
 
                 HttpConnector httpcon = new HttpConnector();
                 String result = httpcon.accessServerMap("join",map,mCallback2);}

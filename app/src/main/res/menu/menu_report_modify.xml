@@ -8,6 +8,9 @@
         android:gravity="left">
 
     </item>
+    <item android:id="@+id/reportdelete"
+        android:title="삭제"
+        app:showAsAction="always|withText"/>
     <item android:id="@+id/reportfinish"
         android:title="완료"
         app:showAsAction="always|withText"/>

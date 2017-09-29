@@ -1,113 +1,155 @@
 package com.jx372.test;
 
+import java.util.UUID;
+
 /**
  * Created by pys on 2017. 9. 13..
  */
 
 public class ReportItems {
 
-    private static ReportItems sReportItems;
-    private static String salesAccount = "";
-    private static String targetFigure = "";
-    private static String achiveRate = "";
-    private static String startDistance = "";
-    private static String endDistance = "";
-    private static String driveDis = "";
-    private static String content = "";
-    private static String opinion = "";
-    private static String title="";
-    private static String approval="";
+    //private  ReportItems sReportItems;
+    private String reportNo="";
+
+    private  String salesAccount = "";
+    private  String targetFigure = "";
+    private  String achiveRate = "";
+    private  String startDistance = "";
+    private  String endDistance = "";
+    private  String driveDis = "";
+    private  String content = "";
+    private  String opinion = "";
+    private  String title="";
+    private  String approval="";
+    private String startGauge="";
+    private String endGauge = "";
+    private String mileleage="";
+    private  UUID id;
+
+    public ReportItems(String reportNo,String title,String reportSale,String content,String achiveRank,String approval,String opinion,String goalSale
+    ,String startGauge,String endGauge,String mile){
+        this.reportNo = reportNo;
+        this.id = UUID.randomUUID();
+        this.title = title;
+        this.salesAccount = reportSale;
+        this.content = content;
+        this.achiveRate = achiveRank;
+        this.approval = approval;
+        this.opinion = opinion;
+        this.targetFigure = goalSale;
+        this.startGauge = startGauge;
+        this.endGauge = endGauge;
+        this.mileleage = mile;
 
 
+    }
+    public ReportItems(){
+        id = UUID.randomUUID();
+        // date = new Date();
 
-
-    public static ReportItems get() {
-
-        if (sReportItems == null) {
-            sReportItems = new ReportItems();
-
-        }
-
-        return sReportItems;
     }
 
-    public static String getTitle() {
-        return title;
+    public  UUID getId() {
+        return id;
     }
 
-    public static void setTitle(String title) {
-        ReportItems.title = title;
+
+    //    public static ReportItems get() {
+//
+//        if (sReportItems == null) {
+//            sReportItems = new ReportItems();
+//
+//        }
+//
+//        return sReportItems;
+//    }
+
+
+    public String getReportNo() {
+        return reportNo;
     }
 
-    public static String getApproval() {
-        return approval;
+    public void setReportNo(String reportNo) {
+        this.reportNo = reportNo;
     }
 
-    public static void setApproval(String approval) {
-        ReportItems.approval = approval;
-    }
-
-    public static String getSalesAccount() {
+    public String getSalesAccount() {
         return salesAccount;
     }
 
-    public static void setSalesAccount(String salesAccount) {
-        ReportItems.salesAccount = salesAccount;
+    public void setSalesAccount(String salesAccount) {
+        this.salesAccount = salesAccount;
     }
 
-    public static String getTargetFigure() {
+    public String getTargetFigure() {
         return targetFigure;
     }
 
-    public static void setTargetFigure(String targetFigure) {
-        ReportItems.targetFigure = targetFigure;
+    public void setTargetFigure(String targetFigure) {
+        this.targetFigure = targetFigure;
     }
 
-    public static String getAchiveRate() {
+    public String getAchiveRate() {
         return achiveRate;
     }
 
-    public static void setAchiveRate(String achiveRate) {
-        ReportItems.achiveRate = achiveRate;
+    public void setAchiveRate(String achiveRate) {
+        this.achiveRate = achiveRate;
     }
 
-    public static String getStartDistance() {
+    public String getStartDistance() {
         return startDistance;
     }
 
-    public static void setStartDistance(String startDistance) {
-        ReportItems.startDistance = startDistance;
+    public void setStartDistance(String startDistance) {
+        this.startDistance = startDistance;
     }
 
-    public static String getEndDistance() {
+    public String getEndDistance() {
         return endDistance;
     }
 
-    public static void setEndDistance(String endDistance) {
-        ReportItems.endDistance = endDistance;
+    public void setEndDistance(String endDistance) {
+        this.endDistance = endDistance;
     }
 
-    public static String getDriveDis() {
+    public String getDriveDis() {
         return driveDis;
     }
 
-    public static void setDriveDis(String driveDis) {
-        ReportItems.driveDis = driveDis;
+    public void setDriveDis(String driveDis) {
+        this.driveDis = driveDis;
     }
 
-    public static String getContent() {
+    public String getContent() {
         return content;
     }
 
-    public static void setContent(String content) {
-        ReportItems.content = content;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public static String getOpinion() {
+    public String getOpinion() {
         return opinion;
     }
 
-    public static void setOpinion(String opinion) {
-        ReportItems.opinion = opinion;
+    public void setOpinion(String opinion) {
+        this.opinion = opinion;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getApproval() {
+        return approval;
+    }
+
+    public void setApproval(String approval) {
+        this.approval = approval;
     }
 }

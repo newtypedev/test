@@ -24,7 +24,8 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
+    compile 'com.google.firebase:firebase-messaging:10.0.1'
+    compile 'gun0912.ted:tedpermission:2.0.3'
     compile 'com.kakao.sdk:newtone:6.0.1'
     compile 'com.android.support:appcompat-v7:25.1.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -36,5 +37,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.1.1'
     compile 'com.github.irshulx:laser-native-editor:2.0.0'
     compile project(':tess-two')
-
 }
+apply plugin: 'com.google.gms.google-services'

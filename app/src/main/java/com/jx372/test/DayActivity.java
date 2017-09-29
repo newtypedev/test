@@ -238,18 +238,17 @@ public class DayActivity extends AppCompatActivity {
                     int size = datas.length();
                     ArrayList<String> spinList = new ArrayList<>();
                     Log.v("listsize",size+"");
-                    Map map = new HashMap();
-                    Map map2 = new HashMap();
+                  //  Map map = new HashMap();
+                  //  Map map2 = new HashMap();
 
                     for(int i=0;i<size;i++){
-                        map.put(datas.getJSONObject(i).getString("content"),datas.getJSONObject(i).getString("challenge_no"));
-                        map2.put(datas.getJSONObject(i).getString("challenge_no"),datas.getJSONObject(i).getString("content"));
+
                         spinList.add(datas.getJSONObject(i).getString("content"));
 
                     }
-                    mdayItems.setSpinnerMap2(map2);
+                 //   mdayItems.setSpinnerMap2(map2);
                     mdayItems.setSpinnerItem(spinList);
-                    mdayItems.setSpinnerMap(map);
+                   // mdayItems.setSpinnerMap(map);
 
                 }
                 else if(jsonbody.getString("result").equals("fail")){

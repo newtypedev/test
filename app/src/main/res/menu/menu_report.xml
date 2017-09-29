@@ -3,9 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <item android:id="@+id/nextreport"
-        android:title="미정"
+    <item android:id="@+id/writereport"
+        android:title="작성"
+        android:icon="@drawable/ic_action_add2"
         app:showAsAction="always|withText"/>
+
     <item android:id="@+id/previous"
         android:title="이전"
         app:showAsAction="always|withText"/>

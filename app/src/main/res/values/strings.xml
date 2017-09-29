@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-
+    <string name="rationale_title">Permission required</string>
+    <string name="rationale_message">we need permission for read <b>contact</b> and find your <b>location</b></string>
     <string name="kakao_app_key">8338b6a7ca17e2e3ac9ce610aea67421</string>
 
     <string name="overlay">overlay</string>
@@ -121,11 +122,11 @@
     <string name="drawer_title_parallax">Parallax</string>
     <string name="drawer_title_dialogs">Dialogs</string>
     <string name="drawer_title_tabs">Tabs</string>
-    <string name="drawer_title_wizards">Wizards</string>
+    <string name="drawer_title_wizards">업체검색</string>
     <string name="drawer_title_linked_in">팀원등록</string>
     <string name="drawer_title_blog">주간계획</string>
     <string name="drawer_title_git_hub">일일계획</string>
-    <string name="drawer_title_instagram">기획서작성</string>
+    <string name="drawer_title_instagram">업무보고</string>
 
     <string name="fontello_logo">&#xe8ad;</string>
     <string name="fontello_search">&#xea01;</string>

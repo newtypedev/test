@@ -64,6 +64,7 @@ public class HttpConnector {
 
     public String accessServerMap(String url, Map map, final Callback2 callback) {
 
+
         retrofit = new Retrofit.Builder().baseUrl(ApiService.API_URL).build();
         apiService = retrofit.create(ApiService.class);
         Call<ResponseBody> comment2 = apiService.getPostJoin(map);
@@ -108,6 +109,37 @@ public class HttpConnector {
         }
         else if(url.equals("challenge")){
             comment2 = apiService.getPostChallenge(map);
+        }
+        else if(url.equals("reportselect")){
+            comment2 = apiService.getPostReportSelect(map);
+        }
+        else if(url.equals("reportinsert")){
+            comment2 = apiService.getPostReportInsert(map);
+        }
+        else if(url.equals("reportupdate")){
+            comment2 = apiService.getPostReportUpdate(map);
+        }
+        else if(url.equals("consultselect")){
+            comment2 = apiService.getPostAdviceSelect(map);
+        }
+        else if(url.equals("consultinsert")){
+            comment2 = apiService.getPostAdviceInsert(map);
+        }
+        else if(url.equals("consultupdate")){
+            comment2 = apiService.getPostAdviceUpdate(map);
+        }
+        else if(url.equals("consultdelete")){
+            comment2 = apiService.getPostAdviceDelete(map);
+        }
+
+        else if(url.equals("checkemail")){
+            comment2 = apiService.getPostEmailCheck(map);
+        }
+        else if(url.equals("getPo")){
+            comment2 = apiService.getPo(map,1,"0964bcd8-f1f6-325c-9903-0210ac72ef61");
+        }
+        else if(url.equals("customerselect")){
+            comment2 = apiService.getPostCustomerSelect(map);
         }
 
 

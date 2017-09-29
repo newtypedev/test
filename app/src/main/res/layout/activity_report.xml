@@ -25,13 +25,14 @@
         android:layout_height="30dp" />
 
     <TextView
+        android:id="@+id/reportcount"
         android:background="@drawable/shape_accept"
         android:layout_width="0dip"
         android:layout_weight="1"
-        android:text="승인"
+        android:text=""
         android:layout_gravity="center"
         android:gravity="center"
-        android:textColor="@color/material_green_800"
+        android:textColor="@color/material_light_blue_800"
         android:textSize="15dp"
 
         android:layout_height="30dp" />

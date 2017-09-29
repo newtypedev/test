@@ -5,14 +5,16 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_OWNER_DATA"></uses-permission>
-    <uses-permission android:name="android.permission.READ_OWNER_DATA"></uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+
 
     <application
         android:allowBackup="true"
@@ -21,6 +23,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+
+
+
+        <service
+            android:name=".MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
@@ -30,9 +57,17 @@
             >
 
 
+
+
         </activity>
 
         <activity android:name=".EditActivity">
+
+        </activity>
+
+        <activity
+            android:theme="@style/AppTheme3"
+            android:name=".ConsultModifyActivity">
 
         </activity>
         <activity
@@ -41,7 +76,12 @@
 
 
         </activity>
+        <activity
+            android:theme="@style/AppTheme3"
+            android:name=".GcmTest">
 
+
+        </activity>
 
         <activity
             android:theme="@style/AppTheme3"
@@ -54,10 +94,10 @@
             android:theme="@style/AppTheme"></activity>
 
         <activity android:name=".DayModifyActivity"
-            android:theme="@style/AppTheme3">
+        android:theme="@style/AppTheme3">
 
 
-        </activity>
+    </activity>
 
         <activity android:name=".DayActivity"
             android:theme="@style/AppTheme3"
@@ -74,17 +114,16 @@
         <activity android:name=".WorkReportActivity"
             android:theme="@style/AppTheme3">
 
-
         </activity>
 
         <activity android:name=".LoginActivity"
                   android:theme="@style/LoginActivityTheme">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
 
         </activity>
         <activity android:name=".ReportListActivity"
@@ -95,7 +134,6 @@
 
 
         <activity android:name=".MainActivity">
-
 
         </activity>
         <activity android:name=".JoinActivity"

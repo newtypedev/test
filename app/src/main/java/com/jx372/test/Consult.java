@@ -15,22 +15,24 @@ public class Consult {
     private String title;
     private Date date;
 
-    private String name;
-    private String human_name;
     private String content;
-
+    private String manager_name;
+    private String code;
+    private String name;
 
     public Consult(){
         id = UUID.randomUUID();
         date = new Date();
 
     }
-    public Consult(String no,String title,String content,String name,String human_name ){
+    public Consult(String no,String title,String content,String manager_name,String code,String name ){
+        id = UUID.randomUUID();
         this.no = no;
         this.title = title;
         this.content = content;
         this.name = name;
-        this.human_name = human_name;
+        this.manager_name = manager_name;
+        this.code = code;
 
     }
 
@@ -50,12 +52,20 @@ public class Consult {
         this.name = name;
     }
 
-    public String getHuman_name() {
-        return human_name;
+    public String getManager_name() {
+        return manager_name;
     }
 
-    public void setHuman_name(String human_name) {
-        this.human_name = human_name;
+    public void setManager_name(String manager_name) {
+        this.manager_name = manager_name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getContent() {

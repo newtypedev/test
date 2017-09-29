@@ -37,6 +37,7 @@ import com.jx372.test.Callback2;
 import com.jx372.test.DayItems;
 import com.jx372.test.HttpConnector;
 import com.jx372.test.R;
+import com.jx372.test.User;
 import com.kakao.sdk.newtoneapi.SpeechRecognizeListener;
 import com.kakao.sdk.newtoneapi.SpeechRecognizerClient;
 import com.kakao.sdk.newtoneapi.SpeechRecognizerManager;
@@ -221,7 +222,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
             nowLongitude = longitude;
             if (!(nowLongitude == 0.0)) {
                 mMapView.setLocationPoint(nowLongitude, nowLatitude);
-                mMapView.setCenterPoint(longitude, latitude, true);
+                mMapView.setCenterPoint(nowLongitude, nowLatitude, true);
                 Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.end);
                 mMapView.setIcon(bitmap);
                 mMapView.setIconVisibility(true);
@@ -450,7 +451,6 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         int value = 0;
         setContentView(R.layout.activity_tmap);
         resultPoi = (TextView) findViewById(R.id.resultPoi);
@@ -513,11 +513,13 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
                     mLocationListener);
 
         } catch (SecurityException ex) {
+
+            Toast.makeText(TmapActivity.this,"수신 에러",Toast.LENGTH_LONG).show();
         }
 
 
         Map map = new HashMap();
-        map.put("id", "test01");
+        map.put("id", User.get().getId());
 
         HttpConnector httpcon = new HttpConnector();
         httpcon.accessServerMap("selectposition", map, mCallback);
@@ -1556,7 +1558,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
                     mHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            String result = dd + "";
+                             result = dd + "";
                             result = result.substring(0, 3);
 
                             // 내용

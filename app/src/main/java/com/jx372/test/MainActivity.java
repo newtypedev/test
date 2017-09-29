@@ -1,7 +1,9 @@
 package com.jx372.test;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -11,7 +13,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -24,12 +25,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jx372.test.fragment.JoinFragment;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 import com.jx372.test.fragment.TabMediaFragment;
 import com.jx372.test.fragment.TabShopFragment;
 import com.jx372.test.fragment.TabSocialFragment;
 import com.jx372.test.fragment.TabTravelFragment;
 import com.jx372.test.fragment.TabUniversalFragment;
+import com.jx372.test.tmap.TmapActivity;
 import com.jx372.test.util.ImageUtil;
 import com.jx372.test.view.PagerSlidingTabStrip;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -62,15 +65,57 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager pager;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
 
         ActionBar actionBar = getSupportActionBar();
         ImageLoader imageLoader = ImageLoader.getInstance();
         if (!imageLoader.isInited()) {
             imageLoader.init(ImageLoaderConfiguration.createDefault(this));
         }
+
+
+
+
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                Toast.makeText(MainActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                Toast.makeText(MainActivity.this, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT)
+                        .show();
+            }
+
+
+        };
+
+
+        TedPermission.with(this)
+                .setPermissionListener(permissionlistener)
+                .setRationaleTitle(R.string.rationale_title)
+                .setRationaleMessage(R.string.rationale_message)
+                .setDeniedTitle("Permission denied")
+                .setDeniedMessage(
+                        "If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                .setGotoSettingButtonText("bla bla")
+                .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.CAMERA, android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .check();
+
+
+
+
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Tabs universal");
@@ -198,6 +243,11 @@ public class MainActivity extends AppCompatActivity {
                 R.string.drawer_title_instagram,
                 DrawerItem.DRAWER_ITEM_TAG_INSTAGRAM));
 
+        mDrawerItems.add(new DrawerItem(R.string.drawer_icon_wizards,
+                R.string.drawer_title_wizards,
+                DrawerItem.DRAWER_ITEM_TAG_TABS));
+
+
     }
 
 
@@ -224,6 +274,13 @@ public class MainActivity extends AppCompatActivity {
 
         System.out.println("=======>menu"+itemId);
 
+        if(itemId == R.id.logout){
+
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+
+        }
         if(itemId == android.R.id.home){
             System.out.println("============>home button clicked");
         }
@@ -263,21 +320,35 @@ if(position==1) {
     startActivity(i);
 //        getSupportFragmentManager().beginTransaction().add( R.id.content_frame, new JoinFragment()).commit();
 //        findViewById(R.id.activity_tab_universal_tabs).setVisibility(View.GONE);
-    getSupportActionBar().setTitle("팀원등록");
+   // getSupportActionBar().setTitle("팀원등록");
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 }
 else if(position==2){
     Intent i = new Intent(this, WeekPlanActivity.class);
     startActivity(i);
-    getSupportActionBar().setTitle("주간계획작성");
+   // getSupportActionBar().setTitle("주간계획작성");
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 }
 else if(position==3){
     Intent i = new Intent(this, DayActivity.class);
     startActivity(i);
-    getSupportActionBar().setTitle("일일계획작성");
+    //getSupportActionBar().setTitle("일일계획작성");
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 }
+else if(position==4){
+    Intent i = new Intent(this, WorkReportActivity.class);
+    startActivity(i);
+    //getSupportActionBar().setTitle("업무보고");
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+}
+else if(position==5){
+    Intent i = new Intent(this, TmapActivity.class);
+    startActivity(i);
+    //getSupportActionBar().setTitle("업무보고");
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+}
+
+
         mDrawerList.setItemChecked(position, true);
         setTitle(mDrawerItems.get(position - 1).getTitle());
         mDrawerLayout.closeDrawer(mDrawerList);
@@ -330,7 +401,7 @@ else if(position==3){
             add("주간계획");
             add("업무보고");
             add("업체관리");
-            add("제품검색");
+            add("마이페이지");
         }};
 
         public MyPagerAdapter(FragmentManager fm) {

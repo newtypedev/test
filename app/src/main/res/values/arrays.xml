@@ -69,13 +69,13 @@
 	</string-array>
 	<string-array
 		name="fruits">
-		<item>영업1팀</item>
-		<item>영업2팀</item>
-		<item>영업3팀</item>
-		<item>영업4팀</item>
-		<item>영업5팀</item>
-		<item>영업6팀</item>
-		<item>영업7팀</item>
+		<item>영업 1팀</item>
+		<item>영업 2팀</item>
+		<item>영업 3팀</item>
+		<item>영업 4팀</item>
+		<item>영업 5팀</item>
+		<item>영업 6팀</item>
+		<item>영업 7팀</item>
 	</string-array>
 	<string-array name="level">
 		<item>사원</item>

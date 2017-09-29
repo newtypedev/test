@@ -182,7 +182,7 @@ public class DayModifyActivity extends AppCompatActivity{
      //   String[] entries = {"","List Item A", "List Item B"};
 
         if(mDayItem.getSpinnerItem()==null){
-            String[] entries = {"도전 과제 없음"};
+            String[] entries = {"도전과제 없음"};
             ArrayAdapter<String> arrAdapt =
                     new ArrayAdapter<String>(this, R.layout.spinner_item, entries);
             spin.setAdapter(arrAdapt);
