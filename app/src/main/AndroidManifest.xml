@@ -90,6 +90,7 @@
 
         </activity>
 
+
         <activity android:name=".ConsultActivity"
             android:theme="@style/AppTheme"></activity>
 
@@ -118,12 +119,12 @@
 
         <activity android:name=".LoginActivity"
                   android:theme="@style/LoginActivityTheme">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
 
         </activity>
         <activity android:name=".ReportListActivity"
@@ -132,17 +133,27 @@
 
         </activity>
 
+        <activity
+            android:theme="@style/AppTheme3"
+            android:name=".LeaderMainActivity">
 
+
+        </activity>
+
+<activity
+    android:theme="@style/AppTheme3"
+    android:name=".customermanagement.CustomerModifyActivity">
+
+
+
+</activity>
         <activity android:name=".MainActivity">
 
         </activity>
         <activity android:name=".JoinActivity"
                   android:theme="@style/AppTheme3">
 
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity">
-            </meta-data>
+
 
         </activity>
         <activity android:name=".SplashScreensActivity"></activity>

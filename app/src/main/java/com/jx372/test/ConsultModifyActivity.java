@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.github.irshulx.Editor;
 import com.github.irshulx.models.EditorTextStyle;
+import com.jx372.test.customermanagement.Customer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,14 +70,20 @@ public class ConsultModifyActivity extends AppCompatActivity {
                     JSONArray datas = jsonbody.getJSONArray("data");
                     int size = datas.length();
                     Log.v("size", String.valueOf(size));
+                    Log.v("sizecontent", datas+"");
                     customerList = new ArrayList<>();
+                    customerNameList = new CharSequence[size];
 
                     for (int i = 0; i < size; i++) {
 
-                    Customer c = new Customer(datas.getJSONObject(i).getString("code"),datas.getJSONObject(i).getString("name"));
-                        customerList.add(c);
-                        customerNameList[i] = datas.getJSONObject(i).getString("name");
+                    Customer c = new Customer(datas.getJSONObject(i).getString("customer_code"),
+                            datas.getJSONObject(i).getString("name"),
+                            datas.getJSONObject(i).getString("manager_name"),
+                            datas.getJSONObject(i).getString("address"));
 
+                        customerList.add(c);
+                       customerNameList[i] = datas.getJSONObject(i).getString("name");
+                        Log.v("customer들어오니",datas.getJSONObject(i).getString("name"));
                     }
 
 
@@ -176,7 +183,7 @@ public class ConsultModifyActivity extends AppCompatActivity {
                                 datas.getJSONObject(i).getString("title"),
                                 datas.getJSONObject(i).getString("content"),
                                 datas.getJSONObject(i).getString("manager_name"),
-                                datas.getJSONObject(i).getString("code"),
+                                datas.getJSONObject(i).getString("customer_code"),
                                 datas.getJSONObject(i).getString("name")
                         );
                         ConsultList.get(ConsultModifyActivity.this).addConsult(c);
@@ -219,6 +226,7 @@ public class ConsultModifyActivity extends AppCompatActivity {
     Callback2 mCallback2 = new Callback2() {
         @Override
         public void callback(String msg) {
+
             if(msg.equals("JsonException")){
                 Toast.makeText(ConsultModifyActivity.this,msg, Toast.LENGTH_SHORT).show();
                 return;
@@ -345,12 +353,13 @@ public class ConsultModifyActivity extends AppCompatActivity {
 
                 Map map = new HashMap();
                 map.put("id", User.get().getId());
-                map.put("title", "상담일지");
+                map.put("title", consultTitle.getText()+"");
                 map.put("date", User.get().getTempDate());
                 map.put("content", b);
-                map.put("manager_name", "최경호");
-                map.put("code", "A_001");
-                map.put("name", "동작대리점");
+                map.put("manager_name", chiefName.getText()+"");
+                map.put("customer_code", customerCode.getText()+"");
+                Log.v("codetest",customerCode.getText()+"");
+                map.put("name", customerName.getText()+"");
                 httpcon.accessServerMap("consultinsert", map, mCallback2);
                 //itemUpdate();
                 //onBackPressed();
@@ -374,9 +383,9 @@ public class ConsultModifyActivity extends AppCompatActivity {
                 map.put("date", User.get().getTempDate());
                 map.put("title", "업무보고");
                 map.put("content", b);
-                map.put("manager_name", "최경호");
-                map.put("code", "A_001");
-                map.put("name", "동작대리점");
+                map.put("manager_name", chiefName.getText()+"");
+                map.put("customer_code", customerCode.getText()+"");
+                map.put("name", customerName.getText()+"");
                 httpcon.accessServerMap("consultupdate", map, mCallback2);
                 //itemUpdate();
                 //onBackPressed();
@@ -395,6 +404,10 @@ public class ConsultModifyActivity extends AppCompatActivity {
             map.put("date", User.get().getTempDate());
             map.put("advice_no",consult.getNo());
             httpcon.accessServerMap("consultdelete", map, mCallback4);
+        }
+
+        else if(item.getItemId() == R.id.back){
+            onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -434,7 +447,7 @@ public class ConsultModifyActivity extends AppCompatActivity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(ConsultModifyActivity.this);
 
-                builder.setTitle("제목");
+                builder.setTitle("고객리스트");
 
                 builder.setItems(customerNameList, new DialogInterface.OnClickListener() {
 
@@ -442,27 +455,34 @@ public class ConsultModifyActivity extends AppCompatActivity {
 
                     public void onClick(DialogInterface dialog, int which) {
 
-                        switch(which)
 
-                        {
+                        Customer c = customerList.get(which);
+                        customerName.setText(c.getName());
+                        customerCode.setText(c.getCode());
+                        customerAddress.setText(c.getAddress());
+                        chiefName.setText(c.getManager());
 
-                            case 0:
-
-                                // 내정보
-
-                                Toast.makeText(ConsultModifyActivity.this, "내정보", Toast.LENGTH_SHORT).show();
-
-                                break;
-
-                            case 1:
-
-                                // 로그아웃
-
-                                Toast.makeText(ConsultModifyActivity.this, "로그아웃", Toast.LENGTH_SHORT).show();
-
-                                break;
-
-                        }
+//                        switch(which)
+//
+//                        {
+//
+//                            case 0:
+//
+//                                // 내정보
+//
+//                                Toast.makeText(ConsultModifyActivity.this, "내정보", Toast.LENGTH_SHORT).show();
+//
+//                                break;
+//
+//                            case 1:
+//
+//                                // 로그아웃
+//
+//                                Toast.makeText(ConsultModifyActivity.this, "로그아웃", Toast.LENGTH_SHORT).show();
+//
+//                                break;
+//
+//                        }
 
                         dialog.dismiss();
 
@@ -482,6 +502,10 @@ public class ConsultModifyActivity extends AppCompatActivity {
             Log.v("크라임", consultId + "");
             consult = ConsultList.get(this).getConsults(consultId);
             consultmemo.Render(consult.getContent());
+            customerName.setText(consult.getName());
+            customerCode.setText(consult.getCode());
+            chiefName.setText(consult.getManager());
+            consultTitle.setText(consult.getTitle());
 
             Log.v("크라임", consult.getContent() + "");
         }

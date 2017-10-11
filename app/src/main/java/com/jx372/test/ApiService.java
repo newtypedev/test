@@ -23,6 +23,8 @@ public interface ApiService {
    // https://api.androidhive.info/contacts/
  //localhost:8080/sfa/
  //http://192.168.1.121:8080/116
+    //http://192.168.0.17:8080/
+
     public static final String API_URL = "http://192.168.1.121:8080/";
     public static final String API_URL2 = "https://apis.skplanetx.com/tmap/";
     //http://192.168.1.11:8181/
@@ -39,6 +41,9 @@ public interface ApiService {
     Call<ResponseBody> getPo(@FieldMap Map<String, String> poi,@Query("version") int version,@Query("appKey") String key);
     @GET("pois")
     Call<ResponseBody>getPoi(@Query("resCoordType") String req,@Query("appKey") String key,@Query("searchKeyword") String search,@Query("version") int version);
+
+    @GET("geo/fullAddrGeo")
+    Call<ResponseBody>getPosition(@Query("coordType") String req,@Query("appKey") String key,@Query("fullAddr") String search,@Query("version") int version);
 
     @POST("sfa/m/check2")
     Call<ResponseBody> getPostComment(@Query("id") int postId);
@@ -128,9 +133,26 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("sfa/m/customer/select")
     Call<ResponseBody> getPostCustomerSelect(@FieldMap Map<String, String> report);
+    @FormUrlEncoded
+    @POST("sfa/m/customer/insert")
+    Call<ResponseBody> getPostCustomerInsert(@FieldMap Map<String, String> report);
+    @FormUrlEncoded
+    @POST("sfa/m/customer/delete")
+    Call<ResponseBody> getPostCustomerDelete(@FieldMap Map<String, String> report);
+    @FormUrlEncoded
+    @POST("sfa/m/customer/update")
+    Call<ResponseBody> getPostCustomerUpdate(@FieldMap Map<String, String> report);
+
+    @FormUrlEncoded
+    @POST("sfa/m/list")
+    Call<ResponseBody> getPostMemberSelect(@FieldMap Map<String, String> report);
 
    @FormUrlEncoded
    @POST("sfa/m/checkEmail")
    Call<ResponseBody> getPostEmailCheck(@FieldMap Map<String, String> join);
+
+    @FormUrlEncoded
+    @POST("sfa/m/team/select/1")
+    Call<ResponseBody> getWeekPlan(@FieldMap Map<String, String> plan);
 
 }

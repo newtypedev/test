@@ -143,7 +143,7 @@ public class ConsultFragment extends Fragment{
             consultmemo.Render(consult.getContent());
             customerName.setText(consult.getName());
             customerCode.setText(consult.getCode());
-            chiefName.setText(consult.getManager_name());
+            chiefName.setText(consult.getManager());
             consultTitle.setText(consult.getTitle());
 
         }

@@ -26,6 +26,7 @@
 
         <EditText
             android:id="@+id/joinId"
+            android:maxLength="20"
             android:layout_width="0dip"
             android:layout_height="30dp"
             android:layout_marginLeft="16dp"
@@ -399,6 +400,7 @@
 
 
     <com.jx372.test.font.RobotoTextView
+        android:visibility="gone"
         android:layout_gravity="right"
         android:id="@+id/joinSubmit"
         android:layout_width="wrap_content"

@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string-array name="leader_array">
+        <item>팀원관리</item>
+        <item>업체관리</item>
+        <item>업무승인</item>
+        <item>주간계획조회</item>
+        <item>일일계획조회</item>
+        <item>업무보고조회</item>
+        <item>통계</item>
+
+    </string-array>
+
+
     <string name="rationale_title">Permission required</string>
     <string name="rationale_message">we need permission for read <b>contact</b> and find your <b>location</b></string>
     <string name="kakao_app_key">8338b6a7ca17e2e3ac9ce610aea67421</string>

@@ -113,6 +113,9 @@ public class HttpConnector {
         else if(url.equals("reportselect")){
             comment2 = apiService.getPostReportSelect(map);
         }
+        else if(url.equals("reportdelete")){
+            comment2 = apiService.getPostReportDelete(map);
+        }
         else if(url.equals("reportinsert")){
             comment2 = apiService.getPostReportInsert(map);
         }
@@ -141,7 +144,21 @@ public class HttpConnector {
         else if(url.equals("customerselect")){
             comment2 = apiService.getPostCustomerSelect(map);
         }
-
+        else if(url.equals("customerinsert")){
+            comment2 = apiService.getPostCustomerInsert(map);
+        }
+        else if(url.equals("customerupdate")){
+            comment2 = apiService.getPostCustomerUpdate(map);
+        }
+        else if(url.equals("customerdelete")){
+            comment2 = apiService.getPostCustomerDelete(map);
+        }
+        else if(url.equals("memberselect")){
+            comment2 = apiService.getPostMemberSelect(map);
+        }
+        else if(url.equals("teamweekselect")){
+            comment2 = apiService.getWeekPlan(map);
+        }
 
 
 
@@ -180,6 +197,7 @@ public class HttpConnector {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                //callback.callback(t.getMessage()+"");
                 callback.callback("ConnectFail");
                 Log.v("insfinef","fail");
 
@@ -248,6 +266,68 @@ public class HttpConnector {
         }
         return resultJson;
     }
+
+
+
+    public String accessTmap(String address,final Callback2 callback) {
+
+        retrofit = new Retrofit.Builder().baseUrl(ApiService.API_URL2).build();
+        apiService = retrofit.create(ApiService.class);
+
+       // =&page=&addressFlag=&fullAddr=서울특별시%20동작구%20보라매로가길%209&callback=&coordType=WGS84GEO&format=&version=1&appKey=0964bcd8-f1f6-325c-9903-0210ac72ef61
+
+       // (@Query("coordType") String req,@Query("appKey") String key,@Query("fullAddr") String search,@Query("version") int version);
+
+        Call<ResponseBody> comment2 = apiService.getPosition("WGS84GEO","0964bcd8-f1f6-325c-9903-0210ac72ef61",address,1);
+
+        comment2.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                Log.v("callcall",call.request().body().toString());
+            //    Log.v("callcall2",call.request().headers().toString());
+                try {
+
+
+                  //  Log.v("callcall",response.message());
+
+                    String json = response.body().string();
+                    Log.v("jontest",json);
+                    resultJson = json;
+                    callback.callback(json);
+
+
+
+
+
+
+                } catch (IOException e) {
+
+                    e.printStackTrace();
+
+
+                }
+                catch(NullPointerException e){
+                    callback.callback("JsonException");
+                    e.printStackTrace();
+                    Log.v("NNNNNUUUULLLL",e.getMessage()+"");
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callback.callback("ConnectFail");
+                Log.v("insfinef","fail");
+
+            }
+        });
+        if(resultJson.equals("")){
+            Log.v("result","null");
+        }
+        return resultJson;
+    }
+
 
 
 }

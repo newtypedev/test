@@ -14,7 +14,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -31,8 +30,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 import retrofit2.Retrofit;
 
 /**
@@ -283,10 +280,39 @@ public class WeekPlanActivity extends AppCompatActivity {
                 else if(jsonbody.getString("result").equals("fail")){
 
 
+//
+//                    JSONObject datajson = jsonbody.getJSONObject("data");
+//                    mWeekItems.setFirstDate(datajson.getString("first_date"));
+//                    weektext.setText(getFirstDay());
 
-                    JSONObject datajson = jsonbody.getJSONObject("data");
-                    mWeekItems.setFirstDate(datajson.getString("first_date"));
-                    weektext.setText(getFirstDay());
+                    String date = jsonbody.getString("data");
+                    String date2 = date.charAt(0)+"월 "+date.charAt(2)+"주차";
+                    String weekdata ="";
+                    if(date.length() ==7){
+                        Log.v("leng7777","ok");
+                        date2 = date.charAt(4)+"월 "+date.charAt(6)+"주차";
+                        weekdata = date2+" ("+firstdayofweek.get(Calendar.YEAR)+")";
+                    }
+                    else if(date.length()==8){
+                        Log.v("leng8888","ok");
+
+                        String temp = date.charAt(4)+"";
+
+                        if(temp.equals("0")){
+
+                            date2 = date.charAt(5) + "월 " + date.charAt(7) + "주차";
+                        }
+                        else {
+                            date2 = date.charAt(4) + "" + date.charAt(5) + "월 " + date.charAt(7) + "주차";
+                        }
+                        weekdata = date2+" ("+firstdayofweek.get(Calendar.YEAR)+")";
+                    }
+
+                    weektext.setText(weekdata);
+
+
+
+
                     createDay(firstdayofweek.get(firstdayofweek.DAY_OF_MONTH));
                     mWeekItems.initData();
                     showFigure();
@@ -556,8 +582,9 @@ public class WeekPlanActivity extends AppCompatActivity {
 
             httpcon.accessServerMap("weekselect",map,mCallback);
             mFlip.showPrevious();
-            mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewup));
+
             mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewdown));
+            mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewup));
 
             return true;
         }
@@ -572,8 +599,9 @@ public class WeekPlanActivity extends AppCompatActivity {
 
             httpcon.accessServerMap("weekselect",map,mCallback);
             mFlip.showNext();
-            mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewup));
+
             mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewdown));
+            mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewup));
 
             return true;
         }

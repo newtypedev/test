@@ -27,14 +27,14 @@ import android.widget.Toast;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+import com.jx372.test.customermanagement.CustomerAdminFragment;
 import com.jx372.test.fragment.TabMediaFragment;
-import com.jx372.test.fragment.TabShopFragment;
 import com.jx372.test.fragment.TabSocialFragment;
-import com.jx372.test.fragment.TabTravelFragment;
 import com.jx372.test.fragment.TabUniversalFragment;
 import com.jx372.test.tmap.TmapActivity;
 import com.jx372.test.util.ImageUtil;
 import com.jx372.test.view.PagerSlidingTabStrip;
+import com.jx372.test.workapproval.ApprovalFragment;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
@@ -44,7 +44,7 @@ import java.util.List;
 import static com.jx372.test.R.id.activity_tab_universal_pager;
 
 public class MainActivity extends AppCompatActivity {
-
+    private CustomerAdminFragment nowCustomerAdmin;
 
     public static final String LEFT_MENU_OPTION = "com.csform.android.uiapptemplate.LeftMenusActivity";
 
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private PagerSlidingTabStrip tabs;
     private ViewPager pager;
-
+    private boolean menuState=true;
     @Override
     protected void onResume() {
         super.onResume();
@@ -141,6 +141,36 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 3) {
+                    menuState = false;
+                    nowCustomerAdmin.updateUI();
+                    invalidateOptionsMenu();
+                }
+                else {
+                    menuState = true;
+
+
+                    invalidateOptionsMenu();
+
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+
+
 
 
 
@@ -176,6 +206,10 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             mDrawerLayout.openDrawer(mDrawerList);
         }
+
+
+
+
     }
 
 
@@ -260,10 +294,28 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        getMenuInflater().inflate(R.menu.menu_main,menu);
+
+        super.onCreateOptionsMenu(menu);
+
+        if(menuState){
+
+            getMenuInflater().inflate(R.menu.menu_report, menu);
+        }
+        else{
+
+            getMenuInflater().inflate(R.menu.menu_consult, menu);
+        }
 
         return true;
+
+
+
+//
+//
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        getMenuInflater().inflate(R.menu.menu_main,menu);
+//
+//        return true;
     }
 
     @Override
@@ -398,7 +450,7 @@ else if(position==5){
 
         private final ArrayList<String> tabNames = new ArrayList<String>() {{
             add("공지사항");
-            add("주간계획");
+            add("업무승인");
             add("업무보고");
             add("업체관리");
             add("마이페이지");
@@ -425,13 +477,16 @@ else if(position==5){
                 return TabMediaFragment.newInstance(position);
             }
             else if(position == 1) {
-                return TabShopFragment.newInstance(position);
+                //return TabShopFragment.newInstance(position);
+                return ApprovalFragment.newInstance(position);
             }
             else if(position == 2) {
                 return TabSocialFragment.newInstance(position);
             }
             else if(position == 3) {
-                return TabTravelFragment.newInstance(position);
+                nowCustomerAdmin =  CustomerAdminFragment.newInstance(position);
+                return nowCustomerAdmin;
+                //return TabTravelFragment.newInstance(position);
             }
             else{
                 return TabUniversalFragment.newInstance(position);

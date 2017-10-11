@@ -24,7 +24,6 @@ public class WorkReportList {
     }
     public void cleanList(){
 
-        count =0;
         reports.clear();
     }
 

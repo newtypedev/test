@@ -61,7 +61,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:gravity="center"
-                    android:text="동작슈퍼"
                     android:textColor="#000000"
                     android:textSize="15sp" />
 
@@ -126,8 +125,7 @@
                     android:layout_weight="1"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="A_001"/>
+                    android:gravity="center" />
                 <TextView
                     android:layout_width="10dp"
                     android:layout_height="10dp"
@@ -155,8 +153,7 @@
                     android:layout_weight="1"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="최경호"/>
+                    android:gravity="center" />
                 <TextView
                     android:layout_weight="0.5"
                     android:layout_width="0dip"
@@ -197,8 +194,7 @@
                     android:layout_weight="3"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="서울특별시 동작구 사당동"/>
+                    android:gravity="center" />
             </LinearLayout>
 
             <LinearLayout

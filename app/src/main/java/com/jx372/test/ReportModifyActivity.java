@@ -318,7 +318,15 @@ public class ReportModifyActivity extends AppCompatActivity {
         HttpConnector httpcon = new HttpConnector();
 
 
-        if (item.getItemId() == R.id.reportfinish) {
+        if (item.getItemId() == R.id.reportfinish || item.getItemId() == R.id.reportsend) {
+            Map map = new HashMap();
+            if(item.getItemId() == R.id.reportfinish){
+                map.put("approval", "0");
+            }
+            else
+                {
+                    map.put("approval", "1");
+            }
 
             if(state.equals("insert")) {
                 Editor editor = new Editor(this, null);
@@ -331,12 +339,12 @@ public class ReportModifyActivity extends AppCompatActivity {
                 Log.v("underunderlin", b);
 
 
-                Map map = new HashMap();
+
                 map.put("id", User.get().getId());
                 map.put("title", "업무보고");
                 map.put("date", User.get().getTempDate());
                 map.put("content", b);
-                map.put("approval", "0");
+
                 map.put("report_sale", salesAccount.getText() + "");
                 httpcon.accessServerMap("reportinsert", map, mCallback2);
                 //itemUpdate();
@@ -355,13 +363,12 @@ public class ReportModifyActivity extends AppCompatActivity {
                 Log.v("underunderlin", b);
 
 
-                Map map = new HashMap();
                 map.put("report_no",reportItems.getReportNo());
                 map.put("id", User.get().getId());
                 map.put("title", "업무보고");
                 map.put("date",User.get().getTempDate());
                 map.put("content", b);
-                map.put("approval", "0");
+
                 map.put("report_sale", salesAccount.getText() + "");
                 httpcon.accessServerMap("reportupdate", map, mCallback2);
                 //itemUpdate();
@@ -378,6 +385,10 @@ public class ReportModifyActivity extends AppCompatActivity {
             map.put("date", User.get().getTempDate());
             map.put("report_no",reportItems.getReportNo());
             httpcon.accessServerMap("reportdelete", map, mCallback4);
+        }
+
+        else if (item.getItemId() == R.id.reportback){
+            onBackPressed();
         }
 //            itemUpdate();
 //            //    NavUtils.navigateUpFromSameTask(this);
@@ -415,7 +426,7 @@ public class ReportModifyActivity extends AppCompatActivity {
             Log.v("크라임", reportId + "");
             reportItems = WorkReportList.get(this).getReports(reportId);
             reportmemo.Render(reportItems.getContent());
-            Log.v("크라임", reportItems.getContent() + "");
+            salesAccount.setText(reportItems.getSalesAccount());
         }
         else{
             state = "insert";

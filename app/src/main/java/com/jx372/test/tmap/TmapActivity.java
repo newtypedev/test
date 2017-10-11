@@ -81,7 +81,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
     String pos = "";
     TextView posText;
     TextView disText;
-    double dd = 0.0;
+    int dd = 0;
     int posCount = 0;
     TextView posNow;
     LocationManager lm;
@@ -217,7 +217,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
 
             // posNow.setText("위치정보 : " + provider + "위도 : " + latitude + " 경도 : " + longitude);
             posNow.setText("위도 : " + latitude + " 경도 : " + longitude);
-            lm.removeUpdates(mLocationListener);
+         //   lm.removeUpdates(mLocationListener);
             nowLatitude = latitude;
             nowLongitude = longitude;
             if (!(nowLongitude == 0.0)) {
@@ -228,6 +228,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
                 mMapView.setIconVisibility(true);
             }
 
+            lm.removeUpdates(mLocationListener);
         }
 
         public void onProviderDisabled(String provider) {
@@ -557,11 +558,11 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
         mArrayMarkerID = new ArrayList<String>();
         mMarkerID = 0;
 
-        gps = new TMapGpsManager(TmapActivity.this);
-        gps.setMinTime(1000);
-        gps.setMinDistance(5);
-        gps.setProvider(gps.GPS_PROVIDER);
-        gps.OpenGps();
+//        gps = new TMapGpsManager(TmapActivity.this);
+//        gps.setMinTime(1000);
+//        gps.setMinDistance(5);
+//        gps.setProvider(gps.GPS_PROVIDER);
+//        gps.OpenGps();
         // TMapPoint po = gps.getLocation();
         // Log.v("sisisisisisiblablabal",po.getLatitude()+"");
         // mMapView.setLocationPoint(po.getLatitude(),po.getLongitude());
@@ -702,10 +703,11 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        gps.CloseGps();
+      //  gps.CloseGps();
         if (mOverlayList != null) {
             mOverlayList.clear();
         }
+        lm.removeUpdates(mLocationListener);
         SpeechRecognizerManager.getInstance().finalizeLibrary();
     }
 
@@ -1494,7 +1496,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
 
                     double dis = polyLine.getDistance();
 
-                    dd = dis / 1000;
+                    dd = (int)dis / 1000;
 
 //                try {
 //
@@ -1545,7 +1547,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
 
                     double dis = polyLine.getDistance();
 
-                    dd = dis / 1000;
+                    dd = (int)dis / 1000;
 
 //                try {
 //

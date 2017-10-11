@@ -18,17 +18,13 @@ package com.jx372.test.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jx372.test.R;
-import com.jx372.test.util.ImageUtil;
 
 public class TabShopFragment extends Fragment implements OnClickListener {
 
@@ -39,6 +35,7 @@ public class TabShopFragment extends Fragment implements OnClickListener {
 	private TextView mShare;
 
 	private int position;
+
 
 	public static TabShopFragment newInstance(int position) {
 		TabShopFragment f = new TabShopFragment();

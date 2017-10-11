@@ -54,6 +54,13 @@ public class WorkReportActivity extends AppCompatActivity {
     private WorkReportList wr;
     private TextView countReport;
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        wr.cleanList();
+        cl.cleanList();
+    }
+
     public void replaceFragment()
     {
         WorkReportListFragment fragment = new WorkReportListFragment();
@@ -102,7 +109,7 @@ public class WorkReportActivity extends AppCompatActivity {
                                 datas.getJSONObject(i).getString("title"),
                                 datas.getJSONObject(i).getString("content"),
                                 datas.getJSONObject(i).getString("manager_name"),
-                                datas.getJSONObject(i).getString("code"),
+                                datas.getJSONObject(i).getString("customer_code"),
                                 datas.getJSONObject(i).getString("name")
                                 );
                         cl.addConsult(c);
@@ -358,7 +365,7 @@ public class WorkReportActivity extends AppCompatActivity {
             // wr = WorkReportList.get(WorkReportActivity.this);
             wr.cleanList();
             Map map = new HashMap();
-            map.put("id","test01");
+            map.put("id",User.get().getId());
             Log.v("dayday",getDay());
             map.put("date",User.get().getTempDate());
             map.put("no","2");
@@ -377,7 +384,7 @@ public class WorkReportActivity extends AppCompatActivity {
              //wr = WorkReportList.get(WorkReportActivity.this);
             wr.cleanList();
             Map map = new HashMap();
-            map.put("id","test01");
+            map.put("id",User.get().getId());
             Log.v("dayday",getDay());
             map.put("date",User.get().getTempDate());
             map.put("no","2");
@@ -433,6 +440,7 @@ public class WorkReportActivity extends AppCompatActivity {
 //        getSupportActionBar().setTitle("업무보고");
         wr = WorkReportList.get(this);
         cl = ConsultList.get(this);
+
         nowConsulFragment = new ConsultFragment();
         cal = new GregorianCalendar();
         reportDate.setText(getDay());
@@ -443,7 +451,7 @@ public class WorkReportActivity extends AppCompatActivity {
 //        mDay = cal.get(Calendar.DAY_OF_MONTH);
 
         Map map = new HashMap();
-        map.put("id","test01");
+        map.put("id",User.get().getId());
         Log.v("dayday",getDay());
         User.get().setTempDate(getDay());
         map.put("date",getDay());
@@ -536,7 +544,7 @@ public class WorkReportActivity extends AppCompatActivity {
         private final ArrayList<String> tabNames = new ArrayList<String>() {{
             add("업무보고");
             add("상담일지");
-            add("첨부파일");
+            //add("첨부파일");
 
         }};
 

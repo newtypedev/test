@@ -278,7 +278,7 @@ public class MileageActivity extends AppCompatActivity implements View.OnClickLi
         intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
         // 특정기기에서 사진을 저장못하는 문제가 있어 다음을 주석처리 합니다.
         //intent.putExtra("return-data", true);
-        if(android.os.Build.VERSION.SDK_INT < 23){
+        if(android.os.Build.VERSION.SDK_INT < 24){
             startActivityForResult(intent, PICK_FROM_CAMERA);
 
         }

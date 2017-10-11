@@ -99,8 +99,20 @@ public class LoginActivity extends AppCompatActivity {
                                 User user = User.get();
                                 user.setId(mid.getText()+"");
 
-                                Intent i = new Intent(LoginActivity.this,MainActivity.class);
+                                JSONObject data = jsonbody.getJSONObject("data");
+                                user.setDept(data.getString("dept"));
+                                String level = data.getString("level");
+
+                                if(level.equals("팀원")){
+
+                                    Intent i = new Intent(LoginActivity.this,MainActivity.class);
                                 startActivity(i);
+                                }
+
+                                else if(level.equals("팀장")){
+                                    Intent i = new Intent(LoginActivity.this,LeaderMainActivity.class);
+                                    startActivity(i);
+                                }
 
                             }
                             else{

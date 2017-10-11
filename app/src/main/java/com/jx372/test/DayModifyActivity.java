@@ -160,6 +160,7 @@ public class DayModifyActivity extends AppCompatActivity{
         //daymemo = (EditText) findViewById(R.id.daymemo);
         daycontent = (Editor)findViewById(R.id.editorday);
         setUpEditor();
+        daycontent.Render();
         goalsale = (EditText) findViewById(R.id.goalsale);
         daycontent.Render(mDayItem.getContent());
         //String b = "<p><strong>글자진하게</strong></p><p>평범하게</p><p><em>기울게</em></p><p><br></p><h1>h1이다</h1><p><br></p><p><br></p><h2>h2다</h2><p><br></p><p><br></p><h3>h3다</h3><p><br></p>";
@@ -234,7 +235,7 @@ public class DayModifyActivity extends AppCompatActivity{
     @Override
     protected void onResume() {
         visitPos.setText(mDayItem.getVisitPoint());
-        shortDis.setText(mDayItem.getShortDistance());
+        shortDis.setText(mDayItem.getShortDistance()+"km");
         super.onResume();
     }
 }

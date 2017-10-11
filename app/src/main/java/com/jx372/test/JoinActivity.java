@@ -4,6 +4,8 @@ package com.jx372.test;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,6 +19,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import retrofit2.Retrofit;
 
@@ -33,6 +37,68 @@ public class JoinActivity extends AppCompatActivity {
     String joinId="";
     String jsonTest="";
     EditText email;
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_member_add, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+
+
+        if(item.getItemId() == R.id.finish){
+
+           // item.setIcon(R.drawable.ic_action_offmic);
+           // mItem.setIcon(R.drawable.ic_action_offmic);
+            if(checkState==true){
+
+
+                // String id =((EditText) findViewById(R.id.joinId)).getText().toString();
+                String passwd = ((EditText) findViewById(R.id.joinPasswd)).getText().toString();
+                String name =((EditText) findViewById(R.id.joinName)).getText().toString();
+                String email = ((EditText)findViewById(R.id.emailedit)).getText().toString();
+                Map map = new HashMap();
+                map.put("id",joinId);
+                map.put("passwd",passwd);
+                map.put("name",name);
+                map.put("dept",dept);
+                map.put("grade",grade);
+                map.put("email",email);
+
+                HttpConnector httpcon = new HttpConnector();
+                String result = httpcon.accessServerMap("join",map,mCallback2);}
+
+            else{
+                Toast.makeText(JoinActivity.this,"아이디 중복 체크를 해주세요", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        if(item.getItemId()==R.id.back){
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+    public boolean checkEmail(String email){
+
+        String regex = "^[_a-zA-Z0-9-\\.]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z]+$";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(email);
+        boolean isNormal = m.matches();
+        return isNormal;
+
+    }
+
+
     public class HttpMessage{
          String temp;
         public void HttpMessage(String msg){
@@ -94,6 +160,7 @@ Callback2 mCallback = new Callback2() {
                 JSONObject jsonbody = new JSONObject(msg);
                 if(jsonbody.getString("result").equals("success")){
                     textId.setFocusable(false);
+                    onBackPressed();
                     Toast.makeText(JoinActivity.this,"등록 성공", Toast.LENGTH_SHORT).show();
                 }
                 else if(jsonbody.getString("result").equals("fail")){
@@ -127,7 +194,6 @@ Callback2 mCallback = new Callback2() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("팀원등록");
 
 email = (EditText) findViewById(R.id.emailedit);
@@ -183,17 +249,18 @@ email = (EditText) findViewById(R.id.emailedit);
 
 
 
-
-
-
-                Map map = new HashMap();
-                map.put("id",textId.getText().toString());
+                    Map map = new HashMap();
+                    map.put("id",textId.getText().toString());
 
 
 
 
-                HttpConnector httpcon = new HttpConnector();
-                httpcon.accessServerMap("check",map,mCallback);
+                    HttpConnector httpcon = new HttpConnector();
+                    httpcon.accessServerMap("check",map,mCallback);
+
+
+
+
 
 
 
@@ -276,18 +343,36 @@ email = (EditText) findViewById(R.id.emailedit);
 
 
 
-                Map map = new HashMap();
-                map.put("email",email.getText().toString());
+//                Map map = new HashMap();
+//                map.put("email",email.getText().toString());
+//
+//
+//
+//
+//                HttpConnector httpcon = new HttpConnector();
+//                httpcon.accessServerMap("checkemail",map,mCallback);
 
 
 
 
-                HttpConnector httpcon = new HttpConnector();
-                httpcon.accessServerMap("checkemail",map,mCallback);
+
+                if(checkEmail(email.getText().toString())){
+
+                    Map map = new HashMap();
+                    map.put("email",email.getText().toString());
 
 
 
 
+                    HttpConnector httpcon = new HttpConnector();
+                    httpcon.accessServerMap("checkemail",map,mCallback);
+
+                }
+                else{
+
+                    Toast.makeText(JoinActivity.this,"이메일 형식이 올바르지 않습니다",Toast.LENGTH_LONG).show();
+
+                }
 
 
 
@@ -367,34 +452,34 @@ email = (EditText) findViewById(R.id.emailedit);
 
 
 
-        findViewById(R.id.joinSubmit).setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-
-                if(checkState==true){
-
-               // String id =((EditText) findViewById(R.id.joinId)).getText().toString();
-               String passwd = ((EditText) findViewById(R.id.joinPasswd)).getText().toString();
-                String name =((EditText) findViewById(R.id.joinName)).getText().toString();
-                    String email = ((EditText)findViewById(R.id.emailedit)).getText().toString();
-                Map map = new HashMap();
-                map.put("id",joinId);
-                map.put("passwd",passwd);
-                map.put("name",name);
-                map.put("dept",dept);
-                map.put("grade",grade);
-                    map.put("email",email);
-
-                HttpConnector httpcon = new HttpConnector();
-                String result = httpcon.accessServerMap("join",map,mCallback2);}
-
-                else{
-                    Toast.makeText(JoinActivity.this,"아이디 중복 체크를 해주세요", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
+//        findViewById(R.id.joinSubmit).setOnClickListener(new View.OnClickListener(){
+//
+//            @Override
+//            public void onClick(View v) {
+//
+//                if(checkState==true){
+//
+//               // String id =((EditText) findViewById(R.id.joinId)).getText().toString();
+//               String passwd = ((EditText) findViewById(R.id.joinPasswd)).getText().toString();
+//                String name =((EditText) findViewById(R.id.joinName)).getText().toString();
+//                    String email = ((EditText)findViewById(R.id.emailedit)).getText().toString();
+//                Map map = new HashMap();
+//                map.put("id",joinId);
+//                map.put("passwd",passwd);
+//                map.put("name",name);
+//                map.put("dept",dept);
+//                map.put("grade",grade);
+//                    map.put("email",email);
+//
+//                HttpConnector httpcon = new HttpConnector();
+//                String result = httpcon.accessServerMap("join",map,mCallback2);}
+//
+//                else{
+//                    Toast.makeText(JoinActivity.this,"아이디 중복 체크를 해주세요", Toast.LENGTH_SHORT).show();
+//                }
+//
+//            }
+//        });
 
 
 

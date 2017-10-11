@@ -16,7 +16,7 @@ public class Consult {
     private Date date;
 
     private String content;
-    private String manager_name;
+    private String manager;
     private String code;
     private String name;
 
@@ -31,7 +31,7 @@ public class Consult {
         this.title = title;
         this.content = content;
         this.name = name;
-        this.manager_name = manager_name;
+        this.manager = manager_name;
         this.code = code;
 
     }
@@ -52,12 +52,12 @@ public class Consult {
         this.name = name;
     }
 
-    public String getManager_name() {
-        return manager_name;
+    public String getManager() {
+        return manager;
     }
 
-    public void setManager_name(String manager_name) {
-        this.manager_name = manager_name;
+    public void setManager(String manager) {
+        this.manager = manager;
     }
 
     public String getCode() {
@@ -105,4 +105,6 @@ public class Consult {
     public void setTitle(String title) {
         this.title = title;
     }
+
+
 }

@@ -55,11 +55,21 @@ public class DayActivity extends AppCompatActivity {
         dayMemo.Render(mdayItems.getContent());
         //dayContent.setText(mdayItems.getContent());
         dayGoalsale.setText(mdayItems.getGoalsale()+"");
-        distance.setText(mdayItems.getShortDistance());
+        distance.setText(mdayItems.getShortDistance()+"km");
         visitPoint.setText(mdayItems.getVisitPoint());
         dayChallenge.setText(mdayItems.getChallenge());
 
 
+    }
+    private void refreshUI(){
+        HttpConnector httpcon = new HttpConnector();
+        Map map = new HashMap();
+        map.put("id",User.get().getId());
+        map.put("date",getDay());
+        httpcon.accessServerMap("dayselect",map,mCallback);
+
+        mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewdown));
+        mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewup));
     }
 
     public void createDayItem(JSONObject datajson) throws JSONException{
@@ -133,7 +143,7 @@ public class DayActivity extends AppCompatActivity {
 
             };
 
-
+//일일계획 삭제 콜백
     Callback2 mCallback2 = new Callback2() {
         @Override
         public void callback(String msg) {
@@ -151,7 +161,9 @@ public class DayActivity extends AppCompatActivity {
                 JSONObject jsonbody = new JSONObject(msg);
                 if(jsonbody.getString("result").equals("success")){
 
-                    Toast.makeText(DayActivity.this,"Success", Toast.LENGTH_SHORT).show();
+                    refreshUI();
+                    //Toast.makeText(DayActivity.this,"Success", Toast.LENGTH_SHORT).show();
+
 
                 }
                 else if(jsonbody.getString("result").equals("fail")){
@@ -314,11 +326,10 @@ public class DayActivity extends AppCompatActivity {
 
         mDay = cal.get(Calendar.DAY_OF_MONTH);
         User user = User.get();
-        user.setId("test01");
-        user.setDept("영업 1팀");
+
         userId = user.getId();
         Map map = new HashMap();
-        map.put("id",userId);
+        map.put("id",user.getId());
         Log.v("dayday",getDay());
         map.put("date",getDay());
 
