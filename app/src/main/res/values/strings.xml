@@ -4,10 +4,9 @@
     <string-array name="leader_array">
         <item>팀원관리</item>
         <item>업체관리</item>
-        <item>업무승인</item>
+        <item>업무보고조회</item>
         <item>주간계획조회</item>
         <item>일일계획조회</item>
-        <item>업무보고조회</item>
         <item>통계</item>
 
     </string-array>

@@ -1,4 +1,12 @@
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentStart="true"
+    android:fillViewport="true"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
 <LinearLayout
+    android:id="@+id/reportLinear"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -6,6 +14,7 @@
     android:orientation="horizontal"
     android:layout_height="wrap_content">
     <android.support.v7.widget.CardView
+        android:id="@+id/cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="10dp"
@@ -16,7 +25,6 @@
         android:layout_alignParentStart="true"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/tools">
-
         <LinearLayout
             android:paddingTop="10dp"
             android:layout_width="match_parent"
@@ -27,46 +35,14 @@
             android:id="@+id/linearLayout0">
 
             <LinearLayout
-                android:background="#ffffff"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:paddingTop="5dp"
-                    android:background="#ffffff"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_marginLeft="10dp"
-                        android:id="@+id/memberid"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="6"
-                        android:gravity="left"
-                        android:text="testid"
-                        android:textColor="@color/app_blue"
-                        android:textSize="20dp" />
-                    <TextView
-                        android:id="@+id/approvalText"
-                        android:background="@drawable/shape_accept"
-                        android:layout_height="wrap_content"
-                        android:layout_width="0dip"
-                        android:layout_weight="1"
-                        android:text=""
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:textColor="@color/material_green_900"
-                        android:textSize="15dp" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:paddingTop="10dp"
-                    android:background="#ffffff"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -79,17 +55,15 @@
                         android:background="@color/material_light_blue_300"
                         android:gravity="right"
                         />
-
                     <TextView
-                        android:id="@+id/textView17"
+                        android:textColor="#000000"
+                        android:textSize="14dp"
+                        android:paddingLeft="5dp"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
                         android:gravity="left"
-                        android:paddingLeft="5dp"
-                        android:text="매출목표"
-                        android:textColor="#000000"
-                        android:textSize="14dp" />
+                        android:layout_weight="2"
+                        android:text="매출목표"/>
 
                     <TextView
                         android:id="@+id/reporttarget"
@@ -132,9 +106,16 @@
                         android:gravity="left"
                         android:text=""/>
                     <TextView
-                        android:layout_width="0dp"
+                        android:id="@+id/approvalText"
+                        android:background="@drawable/shape_accept"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dip"
                         android:layout_weight="2"
-                        android:layout_height="2dp" />
+                        android:text=""
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textColor="@color/material_green_900"
+                        android:textSize="15dp" />
 
                 </LinearLayout>
                 <LinearLayout
@@ -188,14 +169,14 @@
 
 
             <LinearLayout
-                android:background="#ffffff"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:paddingTop="5dp"
-                    android:background="#ffffff"
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -268,7 +249,6 @@
                 </LinearLayout>
                 <LinearLayout
                     android:paddingTop="2dp"
-                    android:paddingBottom="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
@@ -312,9 +292,103 @@
 
 
 
+            <LinearLayout
+                android:paddingTop="5dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="업무사항"
+                    android:textColor="@color/material_grey_600"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="20dp">
+
+                <com.github.irshulx.Editor
+                    android:layout_width="match_parent"
+                    android:id="@+id/replistmemo"
+                    app:render_type="Renderer"
+                    android:minHeight="300dp"
+                    android:textColor="#000000"
+                    android:textSize="15dp"
+                    android:layout_height="wrap_content"
+
+                    />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+                <TextView
+                    android:layout_weight="3"
+                    android:layout_width="0dp"
+                    android:layout_height="2dp"
+                    android:layout_gravity="center"
+                    android:background="@color/material_light_blue_300"
+                    android:gravity="right"
+                    />
+
+                <TextView
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="Comment"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:visibility="visible" />
+                <TextView
+                    android:layout_weight="3"
+                    android:layout_width="0dp"
+                    android:layout_height="2dp"
+                    android:layout_gravity="center"
+                    android:background="@color/material_light_blue_300"
+                    android:gravity="right"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="20dp">
+
+
+                <TextView
+
+                    android:id="@+id/reportopinion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
+                    android:textColor="#000000"
+                    android:textSize="15dp"
+                    android:visibility="visible" />
+
+            </LinearLayout>
+
+
+
 
         </LinearLayout>
 
-</android.support.v7.widget.CardView>
-    </LinearLayout>
-
+    </android.support.v7.widget.CardView>
+</LinearLayout>
+</ScrollView>

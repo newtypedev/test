@@ -24,10 +24,12 @@ public class ReportItems {
     private String startGauge="";
     private String endGauge = "";
     private String mileleage="";
+    private String userid="";
+    private String date="";
     private  UUID id;
 
     public ReportItems(String reportNo,String title,String reportSale,String content,String achiveRank,String approval,String opinion,String goalSale
-    ,String startGauge,String endGauge,String mile){
+    ,String startGauge,String endGauge,String mile,String userid,String date){
         this.reportNo = reportNo;
         this.id = UUID.randomUUID();
         this.title = title;
@@ -40,9 +42,51 @@ public class ReportItems {
         this.startGauge = startGauge;
         this.endGauge = endGauge;
         this.mileleage = mile;
-
+        this.userid = userid;
+        this.date = date;
 
     }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getStartGauge() {
+        return startGauge;
+    }
+
+    public void setStartGauge(String startGauge) {
+        this.startGauge = startGauge;
+    }
+
+    public String getEndGauge() {
+        return endGauge;
+    }
+
+    public void setEndGauge(String endGauge) {
+        this.endGauge = endGauge;
+    }
+
+    public String getMileleage() {
+        return mileleage;
+    }
+
+    public void setMileleage(String mileleage) {
+        this.mileleage = mileleage;
+    }
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
     public ReportItems(){
         id = UUID.randomUUID();
         // date = new Date();

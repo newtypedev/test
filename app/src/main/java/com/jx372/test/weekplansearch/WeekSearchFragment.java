@@ -33,14 +33,14 @@ public class WeekSearchFragment extends Fragment {
 
     public void updateUI(List data){
 
-        if(adapter == null) {
+        //if(adapter == null) {
 
             adapter =  new ExpandableListAdapter(data);
             recyclerView.setAdapter(adapter);
-        }
-        else{
-            adapter.notifyDataSetChanged();
-        }
+        //}
+//        else{
+//            adapter.notifyDataSetChanged();
+//        }
     }
 
 

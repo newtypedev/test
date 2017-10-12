@@ -25,7 +25,7 @@ public interface ApiService {
  //http://192.168.1.121:8080/116
     //http://192.168.0.17:8080/
 
-    public static final String API_URL = "http://192.168.1.121:8080/";
+    public static final String API_URL = "http://192.168.1.116:8080/";
     public static final String API_URL2 = "https://apis.skplanetx.com/tmap/";
     //http://192.168.1.11:8181/
 
@@ -154,5 +154,8 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("sfa/m/team/select/1")
     Call<ResponseBody> getWeekPlan(@FieldMap Map<String, String> plan);
+    @FormUrlEncoded
+    @POST("sfa/m/team/select/3")
+    Call<ResponseBody> getApproval(@FieldMap Map<String, String> plan);
 
 }

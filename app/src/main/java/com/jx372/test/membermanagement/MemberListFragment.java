@@ -80,6 +80,8 @@ public class MemberListFragment extends Fragment {
         private TextView memberId;
         private TextView memberName;
         private TextView memberGrade;
+        private TextView memberEmail;
+        private TextView memberDept;
         private Member member;
 
         public MemberHolder(View itemView) {
@@ -87,6 +89,8 @@ public class MemberListFragment extends Fragment {
             memberId = (TextView)itemView.findViewById(R.id.memberid);
             memberName = (TextView)itemView.findViewById(R.id.membername);
             memberGrade = (TextView)itemView.findViewById(R.id.membergrade);
+            memberEmail = (TextView)itemView.findViewById(R.id.memberemail);
+            memberDept = (TextView)itemView.findViewById(R.id.memberdept);
 
 
             itemView.setOnClickListener(this);
@@ -98,6 +102,8 @@ public class MemberListFragment extends Fragment {
          memberId.setText(member.getUserId().toString());
             memberName.setText(member.getName().toString());
             memberGrade.setText(member.getGrade().toString());
+            memberEmail.setText(member.getEmail().toString());
+            memberDept.setText(member.getDept().toString());
 
         }
 

@@ -173,6 +173,7 @@ public class WorkReportActivity extends AppCompatActivity {
                     JSONArray datas = jsonbody.getJSONArray("data");
                     int size = datas.length();
                     Log.v("size", String.valueOf(size));
+                    wr.cleanList();
 
 
                    // WorkReportList wr = WorkReportList.get(WorkReportActivity.this);
@@ -190,7 +191,9 @@ public class WorkReportActivity extends AppCompatActivity {
                             datas.getJSONObject(i).getString("goal_sale"),
                             datas.getJSONObject(i).getString("start_gauge"),
                             datas.getJSONObject(i).getString("end_gauge"),
-                            datas.getJSONObject(i).getString("mile"));
+                            datas.getJSONObject(i).getString("mile"),
+                            datas.getJSONObject(i).getString("id"),
+                            datas.getJSONObject(i).getString("date"));
                         wr.addReport(r);
                     }
                    now.updateUI();
@@ -503,7 +506,7 @@ public class WorkReportActivity extends AppCompatActivity {
                     wr.cleanList();
                     menuState = true;
                     Map map = new HashMap();
-                    map.put("id","test01");
+                    map.put("id",User.get().getId());
                     Log.v("dayday",getDay());
                     User.get().setTempDate(getDay());
                     map.put("date",getDay());

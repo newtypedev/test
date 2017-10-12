@@ -69,6 +69,8 @@
 
 
         <EditText
+            android:maxLines="1"
+            android:inputType="text"
             android:id="@+id/newitem"
             android:layout_width="0px"
             android:layout_weight="4"

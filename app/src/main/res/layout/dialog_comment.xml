@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center" >
+
+    <RelativeLayout
+        android:id="@+id/dialog_social_layout"
+        android:layout_width="300dp"
+        android:layout_height="260dp"
+        android:background="@color/main_color_grey_700"
+        android:orientation="vertical"
+        android:layout_marginBottom="138dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/material_green_100"
+            android:gravity="center_vertical"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:id="@+id/linearLayout5">
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="vertical" >
+
+                <com.jx372.test.font.RobotoTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="Review by"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    app:typeface="robotoLight" />
+
+                <com.jx372.test.font.RobotoTextView
+                    android:id="@+id/dialog_media_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="team leader"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"
+                    app:typeface="robotoLight" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@+id/linearLayout5"
+            android:layout_alignParentStart="true"
+            android:id="@+id/linearLayout6">
+
+
+
+
+            <com.jx372.test.font.RobotoTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:gravity="left"
+                android:minWidth="64dp"
+                android:padding="8dp"
+                android:text="Comment"
+                android:textColor="@color/material_red_500"
+                android:textSize="16sp"
+                app:typeface="robotoLight" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/edit_text_border"
+                android:orientation="vertical" >
+
+                <EditText
+                    android:id="@+id/dialog_media_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:backgroundTint="@android:color/transparent"
+                    android:backgroundTintMode="@android:color/transparent"
+                    android:cursorVisible="true"
+                    android:drawableBottom="@android:color/transparent"
+                    android:ems="10"
+                    android:inputType="textMultiLine"
+                    android:padding="16dp"
+                    android:singleLine="false"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white"
+                    android:textSize="13dp" >
+
+                    <requestFocus />
+                </EditText>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_below="@+id/linearLayout6"
+            android:layout_alignParentStart="true">
+
+            <com.jx372.test.font.RobotoTextView
+                android:id="@+id/dialog_media_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/selector_dialog_comment"
+                android:gravity="center"
+                android:minWidth="64dp"
+                android:padding="8dp"
+                android:text="@string/cancel"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                app:typeface="robotoMedium" />
+
+            <com.jx372.test.font.RobotoTextView
+                android:id="@+id/dialog_media_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/selector_dialog_comment"
+                android:gravity="center"
+                android:minWidth="64dp"
+                android:padding="8dp"
+                android:text="@string/ok"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                app:typeface="robotoMedium" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

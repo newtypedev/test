@@ -6,8 +6,11 @@ package com.jx372.test;
 
 public class User {
     private static User user;
-    private String id="test01";
-    private String dept="영업 1팀";
+    private String id;
+    private String dept;
+    private String grade;
+    private String email;
+    private String name;
     private String tempDate="";
 
 
@@ -19,6 +22,30 @@ public class User {
         }
 
         return user;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getTempDate() {

@@ -72,6 +72,12 @@
         </activity>
         <activity
             android:theme="@style/AppTheme3"
+            android:name="com.jx372.test.workapproval.ApprovalActivity">
+
+        </activity>
+
+        <activity
+            android:theme="@style/AppTheme3"
             android:name=".MileageActivity">
 
 

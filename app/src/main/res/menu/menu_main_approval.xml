@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+    <item android:id="@+id/approvalpre"
+        android:title="이전"
+        app:showAsAction="always|withText"/>
+
+    <item android:id="@+id/approvalnext"
+        android:title="다음"
+        app:showAsAction="always|withText"/>
+    <item
+        android:id="@+id/logout"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="로그아웃" />
+
+</menu>

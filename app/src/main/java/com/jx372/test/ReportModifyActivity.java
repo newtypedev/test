@@ -119,7 +119,9 @@ public class ReportModifyActivity extends AppCompatActivity {
                                 datas.getJSONObject(i).getString("goal_sale"),
                                 datas.getJSONObject(i).getString("start_gauge"),
                                 datas.getJSONObject(i).getString("end_gauge"),
-                                datas.getJSONObject(i).getString("mile"));
+                                datas.getJSONObject(i).getString("mile"),
+                                datas.getJSONObject(i).getString("id"),
+                                datas.getJSONObject(i).getString("date"));
                         WorkReportList.get(ReportModifyActivity.this).addReport(r);
                     }
 
@@ -161,7 +163,7 @@ public class ReportModifyActivity extends AppCompatActivity {
 
         WorkReportList.get(this).cleanList();
         Map map = new HashMap();
-        map.put("id", "test01");
+        map.put("id", User.get().getId());
         Log.v("dayday",  User.get().getTempDate());
         map.put("date", User.get().getTempDate());
         map.put("no", "2");

@@ -36,9 +36,24 @@ public class CustomerModifyActivity extends AppCompatActivity {
     private EditText contact;
     private TextView latitude;
     private TextView longitude;
+    private EditText managername;
+    private EditText managercontact;
+    private EditText manageremail;
     private UUID customerId;
     private String state="";
     private Customer customer;
+    private CustomerList customerList;
+
+    public void refreshUI() {
+
+        HttpConnector httpcon = new HttpConnector();
+        Map map = new HashMap();
+        map.put("id", User.get().getId());
+        httpcon.accessServerMap("customerselect", map, selectCustomer);
+
+    }
+
+
 
 
     public static Intent newIntent(Context packageContext, UUID customerId) {
@@ -49,6 +64,110 @@ public class CustomerModifyActivity extends AppCompatActivity {
 
 
     }
+
+    // 고객 리스트 콜백
+    Callback2 selectCustomer = new Callback2() {
+        @Override
+        public void callback(String msg) {
+            if (msg.equals("JsonException")) {
+                // Toast.makeText(TmapActivity.this, msg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (msg.equals("ConnectFail")) {
+                //Toast.makeText(TmapActivity.this, msg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                JSONObject jsonbody = new JSONObject(msg);
+                Log.v("dayjson", msg);
+                if (jsonbody.getString("result").equals("success")) {
+
+
+                    JSONArray datas = jsonbody.getJSONArray("data");
+                    int size = datas.length();
+                    Log.v("size", String.valueOf(size));
+                    Log.v("sizecontent", datas+"");
+                    customerList = CustomerList.get(CustomerModifyActivity.this);
+                    customerList.cleanList();
+
+                    for (int i = 0; i < size; i++) {
+
+                        Customer c = new Customer(datas.getJSONObject(i).getString("customer_code"),
+                                datas.getJSONObject(i).getString("name"),
+                                datas.getJSONObject(i).getString("manager_name"),
+                                datas.getJSONObject(i).getString("address"));
+
+                        customerList.addCustomer(c);
+
+                        // Log.v("customer들어오니",datas.getJSONObject(i).getString("name"));
+                    }
+               onBackPressed();
+
+                } else if (jsonbody.getString("result").equals("fail")) {
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+    };
+
+
+    //고객검색 콜백
+    Callback2 custoemrSearchCallback = new Callback2() {
+        @Override
+        public void callback(String msg) {
+            if (msg.equals("JsonException")) {
+                Toast.makeText(CustomerModifyActivity.this, msg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (msg.equals("ConnectFail")) {
+                Toast.makeText(CustomerModifyActivity.this, msg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+
+                JSONObject jsonbody = new JSONObject(msg);
+                //     String jsonbody2 = jsonbody.getString("pois");
+                // JSONArray datas = jsonbody.getJSONArray("pois");
+                JSONArray json = jsonbody.getJSONObject("searchPoiInfo").getJSONObject("pois").getJSONArray("poi");
+                    contact.setText(json.getJSONObject(0).getString("telNo"));
+                address.setText( json.getJSONObject(0).getString("upperAddrName") + "  " + json.getJSONObject(0).getString("middleAddrName") + "  "
+                        + json.getJSONObject(0).getString("lowerAddrName") );
+                latitude.setText(Double.parseDouble(json.getJSONObject(0).getString("frontLat"))+"");
+                longitude.setText(Double.parseDouble(json.getJSONObject(0).getString("frontLon"))+"");
+//                String s = "name : " + json.getJSONObject(0).getString("name") +
+//                        "\n" + "telNo : " + json.getJSONObject(0).getString("telNo") +
+//                        "\n" + "address : " + json.getJSONObject(0).getString("upperAddrName") + "  " + json.getJSONObject(0).getString("middleAddrName") + "  "
+//                        + json.getJSONObject(0).getString("lowerAddrName") +
+//                        "\n" + "classification : " + json.getJSONObject(0).getString("lowerBizName") +
+//                        "\n" + "explain : " + json.getJSONObject(0).getString("desc");
+//                Log.v("결과", json.get(0) + "");
+//                nowLatitude = Double.parseDouble(json.getJSONObject(0).getString("frontLat"));
+//                nowLongitude = Double.parseDouble(json.getJSONObject(0).getString("frontLon"));
+//                if (!(nowLongitude == 0.0)) {
+//                    mMapView.setLocationPoint(nowLongitude, nowLatitude);
+//                    mMapView.setCenterPoint(nowLongitude, nowLatitude, true);
+//                    Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.end);
+//                    mMapView.setIcon(bitmap);
+//                    mMapView.setIconVisibility(true);
+//                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(CustomerModifyActivity.this,"검색 실패", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    };
+
 
     // 고객 삭제 콜백
     Callback2 deleteCallback = new Callback2() {
@@ -111,8 +230,10 @@ public class CustomerModifyActivity extends AppCompatActivity {
                 if(jsonbody.getString("result").equals("success")){
 
                     // updateData(jsonbody.getString("data"));
-                  //  refreshUI();
-                    //  Toast.makeText(ReportModifyActivity.this,jsonbody.getString("data"), Toast.LENGTH_SHORT).show();
+                    refreshUI();
+
+
+                    Toast.makeText(CustomerModifyActivity.this,"Success", Toast.LENGTH_SHORT).show();
 
                 }
                 else if(jsonbody.getString("result").equals("fail")){
@@ -120,7 +241,7 @@ public class CustomerModifyActivity extends AppCompatActivity {
 
 
 
-                   // Toast.makeText(ReportModifyActivity.this,"Fail", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CustomerModifyActivity.this,"Fail", Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -155,14 +276,21 @@ public class CustomerModifyActivity extends AppCompatActivity {
 
                 JSONObject jsonbody = new JSONObject(msg);
                 JSONArray json = jsonbody.getJSONObject("coordinateInfo").getJSONArray("coordinate");
-                String s = json.getJSONObject(0).getString("newLat")+"";
+                String s = json.getJSONObject(0).getString("lat")+"";
                 latitude.setText(s);
-                s =  json.getJSONObject(0).getString("newLon")+"";
+                s =  json.getJSONObject(0).getString("lon")+"";
                 longitude.setText(s);
+
+                if(s.equals("")){
+                    Toast.makeText(CustomerModifyActivity.this,"좌표 검색 실패", Toast.LENGTH_SHORT).show();
+                    latitude.setText("0");
+                    longitude.setText("0");
+                }
 
 
 
             } catch (JSONException e) {
+                Toast.makeText(CustomerModifyActivity.this,"좌표 검색 실패", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
 
@@ -194,6 +322,10 @@ public class CustomerModifyActivity extends AppCompatActivity {
                 map.put("address", address.getText().toString());
                 map.put("positionX", latitude.getText().toString());
                 map.put("positionY", longitude.getText().toString());
+
+                map.put("manager_name", managername.getText().toString());
+                map.put("manager_contact", managercontact.getText().toString());
+                map.put("manager_email", manageremail.getText().toString());
                 httpcon.accessServerMap("customerinsert", map, insertCallback);
             }
             else if(state.equals("update")){
@@ -238,12 +370,18 @@ public class CustomerModifyActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("업체관리");
 
 
+        managername = (EditText) findViewById(R.id.managername);
+        managercontact = (EditText) findViewById(R.id.managercontact);
+        manageremail = (EditText) findViewById(R.id.manageremail);
+
+
         name = (EditText) findViewById(R.id.name);
         address = (EditText) findViewById(R.id.address);
         contact = (EditText) findViewById(R.id.contact);
         latitude = (TextView) findViewById(R.id.latitude);
         longitude = (TextView) findViewById(R.id.longitude);
-
+        latitude.setText("0");
+        longitude.setText("0");
         customerId = (UUID)getIntent().getSerializableExtra(CustomerModifyActivity.CUSTOMER_ID);
 
         if(!(customerId==null)) {
@@ -270,11 +408,19 @@ public class CustomerModifyActivity extends AppCompatActivity {
     public void btnSearch(View view) {
         String temp = "";
 
-          //  temp = address.getText().toString();
-            temp="서울 동작구 보라매로가길 9";
+            temp = address.getText().toString();
+            //temp="서울 동작구 보라매로가길 9";
             HttpConnector httpcon = new HttpConnector();
             httpcon.accessTmap(temp,searchCallback);
 
 
         }
+
+    public void btnCustomer(View view) {
+        String temp = "";
+
+        temp = name.getText().toString();
+        HttpConnector httpcon = new HttpConnector();
+        httpcon.accessServerGet("WGS84GEO", "0964bcd8-f1f6-325c-9903-0210ac72ef61", temp, 1, custoemrSearchCallback);
+    }
 }

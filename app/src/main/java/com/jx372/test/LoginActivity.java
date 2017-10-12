@@ -71,6 +71,14 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(i);
 
                 }
+                if(mid.getText().toString().equals("demo2")){
+                    User user = User.get();
+                    user.setId(mid.getText()+"");
+
+                    Intent i = new Intent(LoginActivity.this,LeaderMainActivity.class);
+                    startActivity(i);
+
+                }
                 if(mid.getText().toString().equals("") || passwd.getText().toString().equals("")){
 
                     messageResId = R.string.null_message;
@@ -102,6 +110,9 @@ public class LoginActivity extends AppCompatActivity {
                                 JSONObject data = jsonbody.getJSONObject("data");
                                 user.setDept(data.getString("dept"));
                                 String level = data.getString("level");
+                                user.setGrade(data.getString("grade"));
+                                user.setEmail(data.getString("email"));
+                                user.setName(data.getString("name"));
 
                                 if(level.equals("팀원")){
 

@@ -27,6 +27,11 @@ public class CustomerAdminFragment extends Fragment {
     private static final String ARG_POSITION = "position";
     private int position;
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
     public static CustomerAdminFragment newInstance(int position) {
         CustomerAdminFragment f = new CustomerAdminFragment();
         Bundle b = new Bundle();

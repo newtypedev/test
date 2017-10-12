@@ -159,6 +159,9 @@ public class HttpConnector {
         else if(url.equals("teamweekselect")){
             comment2 = apiService.getWeekPlan(map);
         }
+        else if(url.equals("approvalselect")){
+            comment2 = apiService.getApproval(map);
+        }
 
 
 

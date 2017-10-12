@@ -13,19 +13,38 @@ public class Member {
     private String name;
     private String grade;
     private String title;
+    private String email;
+    private String dept;
 
     public Member(){
         id = UUID.randomUUID();
     }
 
-    public Member(String userid,String name,String grade){
+    public Member(String userid,String name,String grade,String email,String dept){
         this.id = UUID.randomUUID();
         this.userId = userid;
         this.name = name;
         this.grade = grade;
+        this.email = email;
+        this.dept = dept;
 
     }
 
+    public String getDept() {
+        return dept;
+    }
+
+    public void setDept(String dept) {
+        this.dept = dept;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getUserId() {
         return userId;

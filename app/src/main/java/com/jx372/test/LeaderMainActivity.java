@@ -34,6 +34,7 @@ import com.jx372.test.membermanagement.MemberListFragment;
 import com.jx372.test.statistic.TeamStatisticFragment;
 import com.jx372.test.weekplansearch.ExpandableListAdapter;
 import com.jx372.test.weekplansearch.WeekSearchFragment;
+import com.jx372.test.workapproval.WorkApprovalFragment;
 import com.kakao.sdk.newtoneapi.SpeechRecognizeListener;
 import com.kakao.sdk.newtoneapi.SpeechRecognizerClient;
 import com.kakao.sdk.newtoneapi.SpeechRecognizerManager;
@@ -45,6 +46,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,14 +65,17 @@ public class LeaderMainActivity extends AppCompatActivity implements SpeechRecog
     private CharSequence mTitle;
     private String[] mPlanetTitles;
     private WeekSearchFragment nowWeekSearchFragment;
+    private WorkApprovalFragment nowWorkApprovalFragment;
     private CustomerAdminFragment nowCustomerFragment;
     private TeamStatisticFragment nowTeamStatisticFragment;
     private MemberListFragment nowMemberFragment;
     private MemberList memberList;
+    private WorkReportList workReportList;
     private boolean micToggle;
     private SpeechRecognizerClient client;
     private MenuItem micItem;
     private Calendar firstdayofweek;
+    private Calendar approvalCalendar;
 
     public String getFirstDay(){
         String year = firstdayofweek.get(firstdayofweek.YEAR)+"";
@@ -88,6 +93,90 @@ public class LeaderMainActivity extends AppCompatActivity implements SpeechRecog
         return firstDay;
     }
 
+
+
+    //업무승인조회 콜백
+    Callback2 approvalselect = new Callback2() {
+        @Override
+        public void callback(String msg) {
+            if(msg.equals("JsonException")){
+                Toast.makeText(LeaderMainActivity.this,msg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if(msg.equals("ConnectFail")){
+                Toast.makeText(LeaderMainActivity.this,msg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                JSONObject jsonbody = new JSONObject(msg);
+                Log.v("dayjson",msg);
+                if(jsonbody.getString("result").equals("success")){
+
+
+                    JSONArray datas = jsonbody.getJSONArray("data");
+                    int size = datas.length();
+                    Log.v("size", String.valueOf(size));
+                    if(size==0){
+                        Toast.makeText(LeaderMainActivity.this,"데이터가 없습니다", Toast.LENGTH_SHORT).show();
+                    }
+                    workReportList = WorkReportList.get(LeaderMainActivity.this);
+                    workReportList.cleanList();
+
+                    // WorkReportList wr = WorkReportList.get(WorkReportActivity.this);
+                    //JSONObject datajson = jsonbody.getJSONObject("data");
+                   // Toast.makeText(LeaderMainActivity.this,"데이터 있음", Toast.LENGTH_SHORT).show();
+                    //createReportItem(datajson);
+
+                    for(int i=0;i<size;i++){
+                        ReportItems r = new ReportItems(datas.getJSONObject(i).getString("report_no"),
+                                datas.getJSONObject(i).getString("title"),
+                                datas.getJSONObject(i).getString("report_sale"),
+                                datas.getJSONObject(i).getString("content"),
+                                datas.getJSONObject(i).getString("achive_rank"),
+                                datas.getJSONObject(i).getString("approval"),
+                                datas.getJSONObject(i).getString("opinion"),
+                                datas.getJSONObject(i).getString("goal_sale"),
+                                datas.getJSONObject(i).getString("start_gauge"),
+                                datas.getJSONObject(i).getString("end_gauge"),
+                                datas.getJSONObject(i).getString("mile"),
+                                datas.getJSONObject(i).getString("id"),
+                                datas.getJSONObject(i).getString("date"));
+                        Log.v("randtest",datas.getJSONObject(i).getString("achive_rank")+"");
+                        Log.v("randtest",r.getAchiveRate()+"");
+                        WorkReportList.get(LeaderMainActivity.this).addReport(r);
+                    }
+
+                    nowWorkApprovalFragment.updateUI();
+                    // replaceFragment();
+//                    Handler mHandler = new Handler(Looper.getMainLooper());
+//                    mHandler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//
+//
+//                        }
+//                    }, 2000);
+
+
+
+                }
+                else if(jsonbody.getString("result").equals("fail")){
+//
+//                    mdayItems.initData();
+//                    showData();
+//                    state = "insert";
+                    Toast.makeText(LeaderMainActivity.this,"데이터가 없습니다", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+    };
 
 
     // 주간계획 조회 콜백
@@ -410,7 +499,11 @@ public class LeaderMainActivity extends AppCompatActivity implements SpeechRecog
 
                         Member m = new Member(datas.getJSONObject(i).getString("id"),
                                 datas.getJSONObject(i).getString("name"),
-                                datas.getJSONObject(i).getString("grade"));
+                                datas.getJSONObject(i).getString("grade"),
+                                datas.getJSONObject(i).getString("email"),
+                                datas.getJSONObject(i).getString("dept")
+
+                        );
 
                         memberList.addMember(m);
 
@@ -480,7 +573,22 @@ customerList.cleanList();
         }
     };
 
+    public String getDay(){
+        String year =  approvalCalendar.get(Calendar.YEAR)+"";
+        String month = (approvalCalendar.get(Calendar.MONTH)+1)+"";
+        String day = approvalCalendar.get(Calendar.DAY_OF_MONTH)+"";
 
+        if(month.length()==1){
+            month ="0"+month;
+        }
+
+        if(day.length()==1){
+            day ="0"+day;
+        }
+
+        String firstDay = year+"-"+month+"-"+day;
+        return firstDay;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -488,6 +596,9 @@ customerList.cleanList();
         customerList.get(LeaderMainActivity.this);
         micToggle = true;
         firstdayofweek = Calendar.getInstance();
+        approvalCalendar = new GregorianCalendar();
+
+
         mTitle = mDrawerTitle = getTitle();
         mPlanetTitles = getResources().getStringArray(R.array.leader_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout_leader);
@@ -548,6 +659,9 @@ customerList.cleanList();
         else if(menuState.equals("weekplan")){
             getMenuInflater().inflate(R.menu.menu_main_week, menu);
         }
+        else if(menuState.equals("approval")){
+            getMenuInflater().inflate(R.menu.menu_main_approval, menu);
+        }
         else{
 
             getMenuInflater().inflate(R.menu.menu_member, menu);
@@ -587,6 +701,22 @@ customerList.cleanList();
             Intent i = new Intent(this,CustomerModifyActivity.class);
             startActivity(i);
         }
+        else if(item.getItemId()==R.id.approvalpre){
+            Map map = new HashMap();
+            approvalCalendar.add(approvalCalendar.DAY_OF_MONTH,-1);
+            getSupportActionBar().setTitle(getDay());
+            map.put("id", User.get().getId());
+            map.put("date",getDay());
+            httpcon.accessServerMap("approvalselect", map, approvalselect);
+        }
+        else if(item.getItemId()==R.id.approvalnext){
+            Map map = new HashMap();
+            approvalCalendar.add(approvalCalendar.DAY_OF_MONTH,+1);
+            getSupportActionBar().setTitle(getDay());
+            map.put("id", User.get().getId());
+            map.put("date",getDay());
+            httpcon.accessServerMap("approvalselect", map, approvalselect);
+        }
 
         else if (item.getItemId() == R.id.weekprevious) {
             firstdayofweek.add(firstdayofweek.DAY_OF_MONTH,-7);
@@ -594,11 +724,11 @@ customerList.cleanList();
             map.put("id", User.get().getId());
             map.put("date", getFirstDay());
             httpcon.accessServerMap("teamweekselect", map, selectWeekPlan);
-
+            getSupportActionBar().setTitle("이전");
             return true;
         }
         else if (item.getItemId() == R.id.weeknext) {
-
+            getSupportActionBar().setTitle("다음");
 
             firstdayofweek.add(firstdayofweek.DAY_OF_MONTH,+7);
             Map map = new HashMap();
@@ -676,7 +806,7 @@ customerList.cleanList();
             Map map = new HashMap();
             map.put("id", User.get().getId());
             map.put("grade","전체");
-            map.put("dept","영업 1팀");
+            map.put("dept",User.get().getDept());
             httpcon.accessServerMap("memberselect", map, selectMember);
 
             Fragment fragment =  MemberListFragment.newInstance(position);
@@ -700,9 +830,15 @@ customerList.cleanList();
             fragmentManager.beginTransaction().replace(R.id.content_frame_leader, fragment).commit();
         }
         else if(position==2){
-
-            Fragment fragment =  TeamStatisticFragment.newInstance(position);
-            nowTeamStatisticFragment = (TeamStatisticFragment) fragment;
+            menuState = "approval";
+            invalidateOptionsMenu();
+            HttpConnector httpcon = new HttpConnector();
+            Map map = new HashMap();
+            map.put("id", User.get().getId());
+            map.put("date",getDay());
+            httpcon.accessServerMap("approvalselect", map, approvalselect);
+            Fragment fragment =   WorkApprovalFragment.newInstance(position);
+            nowWorkApprovalFragment = (WorkApprovalFragment) fragment;
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame_leader, fragment).commit();
         }

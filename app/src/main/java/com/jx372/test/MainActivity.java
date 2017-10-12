@@ -28,13 +28,13 @@ import android.widget.Toast;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.jx372.test.customermanagement.CustomerAdminFragment;
+import com.jx372.test.fragment.MypageFragment;
 import com.jx372.test.fragment.TabMediaFragment;
 import com.jx372.test.fragment.TabSocialFragment;
-import com.jx372.test.fragment.TabUniversalFragment;
+import com.jx372.test.statistic.TeamStatisticFragment;
 import com.jx372.test.tmap.TmapActivity;
 import com.jx372.test.util.ImageUtil;
 import com.jx372.test.view.PagerSlidingTabStrip;
-import com.jx372.test.workapproval.ApprovalFragment;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
@@ -450,8 +450,8 @@ else if(position==5){
 
         private final ArrayList<String> tabNames = new ArrayList<String>() {{
             add("공지사항");
-            add("업무승인");
-            add("업무보고");
+            add("통계");
+            add("통계2");
             add("업체관리");
             add("마이페이지");
         }};
@@ -478,7 +478,7 @@ else if(position==5){
             }
             else if(position == 1) {
                 //return TabShopFragment.newInstance(position);
-                return ApprovalFragment.newInstance(position);
+                return TeamStatisticFragment.newInstance(position);
             }
             else if(position == 2) {
                 return TabSocialFragment.newInstance(position);
@@ -489,7 +489,7 @@ else if(position==5){
                 //return TabTravelFragment.newInstance(position);
             }
             else{
-                return TabUniversalFragment.newInstance(position);
+                return MypageFragment.newInstance(position);
             }
         }
     }

@@ -33,7 +33,11 @@ public class ApprovalFragment extends Fragment {
         f.setArguments(b);
         return f;
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
     public void updateUI(){
 
 
@@ -97,8 +101,8 @@ public class ApprovalFragment extends Fragment {
 
             //   Toast.makeText(getActivity(),crime.getTitle()+"",Toast.LENGTH_LONG).show();
 
-            //Intent intent = ConsultModifyActivity.newIntent(getActivity(),consult.getId());
-            //startActivity(intent);
+           // Intent intent = ApprovalActivity.newIntent(getActivity(),approval.getId());
+           // startActivity(intent);
         }
     }
 
