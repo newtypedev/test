@@ -16,6 +16,7 @@ import com.jx372.test.Callback2;
 import com.jx372.test.HttpConnector;
 import com.jx372.test.R;
 import com.jx372.test.User;
+import com.jx372.test.tmap.TmapSearchActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,6 +41,8 @@ public class CustomerModifyActivity extends AppCompatActivity {
     private EditText managercontact;
     private EditText manageremail;
     private UUID customerId;
+    private TextView posx;
+    private TextView posy;
     private String state="";
     private Customer customer;
     private CustomerList customerList;
@@ -97,7 +100,14 @@ public class CustomerModifyActivity extends AppCompatActivity {
                         Customer c = new Customer(datas.getJSONObject(i).getString("customer_code"),
                                 datas.getJSONObject(i).getString("name"),
                                 datas.getJSONObject(i).getString("manager_name"),
-                                datas.getJSONObject(i).getString("address"));
+                                datas.getJSONObject(i).getString("address"),
+                                datas.getJSONObject(i).getString("contact"),
+                                datas.getJSONObject(i).getString("manager_contact"),
+                                datas.getJSONObject(i).getString("manager_email"),
+                                datas.getJSONObject(i).getString("time"),
+                                datas.getJSONObject(i).getString("positionX"),
+                                datas.getJSONObject(i).getString("positionY")
+                        );
 
                         customerList.addCustomer(c);
 
@@ -190,14 +200,17 @@ public class CustomerModifyActivity extends AppCompatActivity {
                     // updateData(jsonbody.getString("data"));
                  //   refreshUI();
                   //  Toast.makeText(ConsultModifyActivity.this,"Success", Toast.LENGTH_SHORT).show();
+                    refreshUI();
 
+
+                    Toast.makeText(CustomerModifyActivity.this,"Success", Toast.LENGTH_SHORT).show();
                 }
                 else if(jsonbody.getString("result").equals("fail")){
 
 
 
 
-                    //Toast.makeText(ConsultModifyActivity.this,"Fail", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CustomerModifyActivity.this,"Fail", Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -340,6 +353,9 @@ public class CustomerModifyActivity extends AppCompatActivity {
                 map.put("address", address.getText().toString());
                 map.put("positionX", latitude.getText().toString());
                 map.put("positionY", longitude.getText().toString());
+                map.put("manager_name", managername.getText().toString());
+                map.put("manager_contact", managercontact.getText().toString());
+                map.put("manager_email", manageremail.getText().toString());
                 httpcon.accessServerMap("customerupdate", map, insertCallback);
             }
 
@@ -350,11 +366,21 @@ public class CustomerModifyActivity extends AppCompatActivity {
 
         }
         else if(item.getItemId()==R.id.delete){
-            if(state.equals("update")){
-                Map map = new HashMap();
+
+            Map map = new HashMap();
                 map.put("customer_code",customer.getCode());
-                httpcon.accessServerMap("customerinsert", map, deleteCallback);
-            }
+                httpcon.accessServerMap("customerdelete", map, deleteCallback);
+
+
+
+//            if(state.equals("update")){
+//                Map map = new HashMap();
+//                map.put("customer_code",customer.getCode());
+//                httpcon.accessServerMap("customerinsert", map, deleteCallback);
+//            }
+
+
+
         }
 
 
@@ -389,6 +415,11 @@ public class CustomerModifyActivity extends AppCompatActivity {
             customer = CustomerList.get(this).getCustomers(customerId);
             name.setText(customer.getName().toString());
             address.setText(customer.getAddress().toString());
+            latitude.setText(customer.getPosX().toString());
+            longitude.setText(customer.getPosY().toString());
+            managername.setText(customer.getManager().toString());
+            managercontact.setText(customer.getManagercontact().toString());
+            manageremail.setText(customer.getManageremail().toString());
 
 //            reportItems = WorkReportList.get(this).getReports(reportId);
 //            reportmemo.Render(reportItems.getContent());
@@ -422,5 +453,16 @@ public class CustomerModifyActivity extends AppCompatActivity {
         temp = name.getText().toString();
         HttpConnector httpcon = new HttpConnector();
         httpcon.accessServerGet("WGS84GEO", "0964bcd8-f1f6-325c-9903-0210ac72ef61", temp, 1, custoemrSearchCallback);
+    }
+
+    public void btnPosCheck(View view) {
+
+        Intent intent = new Intent(this, TmapSearchActivity.class);
+
+        intent.putExtra("x", Double.parseDouble(latitude.getText()+""));
+        intent.putExtra("y", Double.parseDouble(longitude.getText()+""));
+        startActivity(intent);
+
+
     }
 }

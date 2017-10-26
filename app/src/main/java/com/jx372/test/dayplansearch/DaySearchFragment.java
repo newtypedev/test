@@ -8,8 +8,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.irshulx.Editor;
 import com.jx372.test.R;
 
 import java.util.List;
@@ -38,8 +40,6 @@ public class DaySearchFragment extends Fragment {
 
         DaySearchList daySearchList = DaySearchList.get(getActivity());
         List<DaySearch> daysearchs = daySearchList.getDaysearchs();
-
-
         if(adapter == null) {
             adapter = new DaySearchFragment.Adapter(daysearchs);
             recyclerView.setAdapter(adapter);
@@ -78,20 +78,42 @@ public class DaySearchFragment extends Fragment {
 
         private TextView customerCode;
         private TextView customerName;
+        private LinearLayout dayLayout;
+        private Editor dayContent;
+        private TextView dayGoalsale;
+        private TextView dayChallenge;
+        private String state="";
+        private TextView visitPoint;
+        private TextView distance;
+        private TextView daycomment;
+        private TextView memberid;
         private DaySearch daySearch;
 
         public Holder(View itemView) {
             super(itemView);
-            customerCode = (TextView)itemView.findViewById(R.id.customerCode);
-            customerName = (TextView)itemView.findViewById(R.id.customerName);
+            memberid = (TextView)itemView.findViewById(R.id.memberid);
+            dayGoalsale = (TextView)itemView.findViewById(R.id.dayGoalsale);
+            dayChallenge = (TextView)itemView.findViewById(R.id.daychallenge);
+            dayContent = (Editor) itemView.findViewById(R.id.daycontent);
+            visitPoint = (TextView)itemView.findViewById(R.id.visitPoint);
+            distance = (TextView)itemView.findViewById(R.id.distance);
+            daycomment = (TextView)itemView.findViewById(R.id.daycomment);
+            dayContent.clearAllContents();
+            dayContent.Render();
             itemView.setOnClickListener(this);
 
         }
 
         public void bind(DaySearch daySearch){
+            dayContent.clearAllContents();
             this.daySearch = daySearch;
-           // customerCode.setText(daySearch.getCode());
-            //customerName.setText(customer.getName());
+            memberid.setText(daySearch.getUserId());
+            dayGoalsale.setText(daySearch.getGoalsale());
+            dayChallenge.setText(daySearch.getChallenge());
+            dayContent.Render(daySearch.getContent());
+            visitPoint.setText(daySearch.getVisitPoint());
+            distance.setText(daySearch.getShortDistance());
+            daycomment.setText(daySearch.getOpinion());
 
         }
 

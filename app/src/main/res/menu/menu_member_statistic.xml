@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/statisticPre"
+        android:title="이전"
+        app:showAsAction="always|withText"/>
+
+    <item android:id="@+id/statisticNext"
+        android:title="다음"
+        app:showAsAction="always|withText"/>
+
+</menu>

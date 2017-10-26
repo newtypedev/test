@@ -17,12 +17,16 @@
 
 
     <application
+
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+
+
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -51,7 +55,9 @@
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
-        <activity android:name=".tmap.TmapActivity"
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".tmap.TmapActivity"
             android:theme="@style/AppTheme3"
             android:configChanges="keyboardHidden|orientation"
             >
@@ -61,28 +67,43 @@
 
         </activity>
 
-        <activity android:name=".EditActivity">
+        <activity
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme3"
+            android:name=".tmap.TmapSearchActivity">
 
         </activity>
 
         <activity
+            android:screenOrientation="portrait"
+            android:name=".EditActivity">
+
+        </activity>
+
+        <activity
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme3"
             android:name=".ConsultModifyActivity">
 
         </activity>
         <activity
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme3"
             android:name="com.jx372.test.workapproval.ApprovalActivity">
 
         </activity>
 
         <activity
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme3"
             android:name=".MileageActivity">
-
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"></meta-data>
 
         </activity>
         <activity
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme3"
             android:name=".GcmTest">
 
@@ -90,6 +111,7 @@
         </activity>
 
         <activity
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme3"
             android:name=".CustomerActivity">
 
@@ -97,16 +119,22 @@
         </activity>
 
 
-        <activity android:name=".ConsultActivity"
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".ConsultActivity"
             android:theme="@style/AppTheme"></activity>
 
-        <activity android:name=".DayModifyActivity"
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".DayModifyActivity"
         android:theme="@style/AppTheme3">
 
 
     </activity>
 
-        <activity android:name=".DayActivity"
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".DayActivity"
             android:theme="@style/AppTheme3"
             >
 
@@ -118,57 +146,84 @@
         </activity>
 
 
-        <activity android:name=".WorkReportActivity"
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".WorkReportActivity"
             android:theme="@style/AppTheme3">
-
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"></meta-data>
         </activity>
 
-        <activity android:name=".LoginActivity"
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".LoginActivity"
                   android:theme="@style/LoginActivityTheme">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-
         </activity>
-        <activity android:name=".ReportListActivity"
+
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".ReportListActivity"
             android:theme="@style/AppTheme3">
 
 
         </activity>
 
         <activity
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme3"
             android:name=".LeaderMainActivity">
-
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LoginActivity"></meta-data>
 
         </activity>
 
 <activity
+    android:screenOrientation="portrait"
     android:theme="@style/AppTheme3"
     android:name=".customermanagement.CustomerModifyActivity">
 
 
 
 </activity>
-        <activity android:name=".MainActivity">
+        <activity
+
+            android:screenOrientation="portrait"
+            android:name=".MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LoginActivity"></meta-data>
+
 
         </activity>
-        <activity android:name=".JoinActivity"
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".JoinActivity"
                   android:theme="@style/AppTheme3">
 
 
 
         </activity>
-        <activity android:name=".SplashScreensActivity"></activity>
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".SplashScreensActivity"></activity>
 
         <activity
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:name="com.jx372.test.SplashActivity"/>
 
         <activity
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:name=".WeekActivity">
             <meta-data
@@ -178,7 +233,9 @@
 
 
 
-        <activity android:name=".WeekModifyActivity"
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".WeekModifyActivity"
                   android:theme="@style/AppTheme3">
 
 
@@ -186,7 +243,9 @@
 
         </activity>
 
-        <activity android:name=".ReportModifyActivity"
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".ReportModifyActivity"
             android:theme="@style/AppTheme3">
 
 
@@ -196,6 +255,7 @@
 
 
         <activity
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme3"
             android:name=".WeekPlanActivity">
 

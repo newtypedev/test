@@ -4,11 +4,25 @@
 
 
     <item android:id="@+id/back"
-        android:title="취소"
+        android:title="뒤로"
         app:showAsAction="always|withText"
         android:gravity="left">
-
     </item>
+    <item
+        android:id="@+id/reportplay"
+        android:title="플레이"
+        android:icon="@drawable/ic_action_play"
+        app:showAsAction="always|withText"/>
+    <item
+        android:id="@+id/reportfast"
+        android:title="빠르게"
+        android:icon="@drawable/ic_action_fast"
+        app:showAsAction="always|withText"/>
+    <item
+        android:id="@+id/reportstop"
+        android:title="멈춤"
+        android:icon="@drawable/ic_action_stop"
+        app:showAsAction="always|withText"/>
     <item android:id="@+id/approval"
         android:title="승인"
         app:showAsAction="always|withText">

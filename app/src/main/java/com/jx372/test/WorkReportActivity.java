@@ -1,5 +1,6 @@
 package com.jx372.test;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -355,7 +357,43 @@ public class WorkReportActivity extends AppCompatActivity {
 
         return true;
     }
+    DatePickerDialog.OnDateSetListener mDateSetListener =
+            new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                      int dayOfMonth) {
+                    //사용자가 입력한 값을 가져온뒤
 
+                    String year2 = year+"";
+                    String month =(monthOfYear+1)+"";
+                    String day =dayOfMonth+"";
+
+                    if(month.length()==1){
+                        month ="0"+month;
+                    }
+
+                    if(day.length()==1){
+                        day ="0"+day;
+                    }
+
+                    String firstDay = year2+"-"+month+"-"+day;
+                    reportDate.setText(firstDay);
+
+                    cal.set(Integer.parseInt(year2),Integer.parseInt(month)-1,Integer.parseInt(day));
+                    Map map = new HashMap();
+                    map.put("date",firstDay);
+                    map.put("no","2");
+                    map.put("id",User.get().getId());
+                    HttpConnector httpcon = new HttpConnector();
+
+                    httpcon.accessServerMap("reportselect",map,mCallback2);
+
+                    //텍스트뷰의 값을 업데이트함
+
+
+                }
+
+            };
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -401,6 +439,18 @@ public class WorkReportActivity extends AppCompatActivity {
 
 
             return true;
+        }
+
+        else if(id == R.id.reportsearch){
+
+            mYear = cal.get(Calendar.YEAR);
+
+            mMonth = cal.get(Calendar.MONTH);
+
+            mDay = cal.get(Calendar.DAY_OF_MONTH);
+            new DatePickerDialog(WorkReportActivity.this, mDateSetListener, mYear,
+
+                    mMonth, mDay).show();
         }
         else if(id == R.id.writeconsult){
             Intent i = new Intent(this,ConsultModifyActivity.class);
@@ -475,6 +525,8 @@ public class WorkReportActivity extends AppCompatActivity {
 //        setSupportActionBar(toolbar);
         tabs = (PagerSlidingTabStrip) findViewById(R.id.activity_tab_universal_tabs2);
         //tabs.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+
         pager = (ViewPager) findViewById(activity_tab_universal_pager2);
 
         adapter = new MyPagerAdapter(getSupportFragmentManager());

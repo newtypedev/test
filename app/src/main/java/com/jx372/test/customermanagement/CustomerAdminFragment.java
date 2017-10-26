@@ -3,6 +3,7 @@ package com.jx372.test.customermanagement;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -40,6 +41,10 @@ public class CustomerAdminFragment extends Fragment {
         return f;
     }
 
+ public void refreshUI(){
+     FragmentTransaction ft = getFragmentManager().beginTransaction();
+     ft.detach(this).attach(this).commit();
+ }
     public void updateUI(){
 
 
@@ -55,6 +60,8 @@ public class CustomerAdminFragment extends Fragment {
         else{
             adapter.notifyDataSetChanged();
         }
+
+
     }
 
 
@@ -85,12 +92,24 @@ public class CustomerAdminFragment extends Fragment {
 
         private TextView customerCode;
         private TextView customerName;
+        private TextView manageremail;
+        private TextView managercontact;
+        private TextView managername;
+        private TextView customerAddress;
+        private TextView customercontact;
         private Customer customer;
 
         public CustomerHolder(View itemView) {
             super(itemView);
             customerCode = (TextView)itemView.findViewById(R.id.customerCode);
             customerName = (TextView)itemView.findViewById(R.id.customerName);
+            manageremail = (TextView)itemView.findViewById(R.id.manageremail);
+            managercontact = (TextView)itemView.findViewById(R.id.managercontact);
+            managername = (TextView)itemView.findViewById(R.id.managername);
+            customerAddress = (TextView)itemView.findViewById(R.id.customerAddress);
+            customercontact = (TextView)itemView.findViewById(R.id.customercontact);
+
+
             itemView.setOnClickListener(this);
 
         }
@@ -99,6 +118,11 @@ public class CustomerAdminFragment extends Fragment {
             this.customer = customer;
             customerCode.setText(customer.getCode());
             customerName.setText(customer.getName());
+            manageremail.setText(customer.getManageremail());
+            managercontact.setText(customer.getManagercontact());
+            managername.setText(customer.getManagername());
+            customerAddress.setText(customer.getAddress());
+            customercontact.setText(customer.getContact());
 
         }
 

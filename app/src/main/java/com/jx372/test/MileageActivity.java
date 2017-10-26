@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -57,6 +58,7 @@ public class MileageActivity extends AppCompatActivity implements View.OnClickLi
     private Button mButton;
     private static boolean state;
     Bitmap photo;
+    private EditText ocrEdit;
 
 
 
@@ -134,11 +136,27 @@ public class MileageActivity extends AppCompatActivity implements View.OnClickLi
                 RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "file");
 
 
-                HttpConnector httpcon = new HttpConnector();
-                httpcon.accessPhoto("postimage", body, name, mCallback2);
-                //    NavUtils.navigateUpFromSameTask(this);
-                //   onBackPressed();
-            } else {
+                    String temp = ocrEdit.getText().toString();
+                temp = temp.trim();
+
+                if(android.os.Build.VERSION.SDK_INT < 23) {
+                    int start = Integer.parseInt(temp);
+                    HttpConnector httpcon = new HttpConnector();
+                    httpcon.accessPhoto("postimage", body, name, User.get().getId(), start, 0, 0, mCallback2);
+                   User.get().setStart(start+"");
+
+                        NavUtils.navigateUpFromSameTask(this);
+                    Toast.makeText(MileageActivity.this,"Success", Toast.LENGTH_SHORT).show();
+                    //   onBackPressed();
+                }
+                else{
+                    int start = Integer.parseInt(temp);
+                    HttpConnector httpcon = new HttpConnector();
+                    httpcon.accessPhoto("postimage", null, name, User.get().getId(), start, 0, 0, mCallback2);
+                }
+
+
+                } else {
                 File file = new File(uploadPath);
                 Log.v("파일 이름", file.getName());
                 String st = "end";
@@ -147,9 +165,12 @@ public class MileageActivity extends AppCompatActivity implements View.OnClickLi
                 MultipartBody.Part body = MultipartBody.Part.createFormData("files[0]", "end.jpg", reqFile);
                 RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "file");
 
+                String temp = ocrEdit.getText().toString();
+                temp = temp.trim();
+                int end =Integer.parseInt(temp);
 
                 HttpConnector httpcon = new HttpConnector();
-                httpcon.accessPhoto("postimage", body, name, mCallback2);
+                httpcon.accessPhoto("postimage", body, name,User.get().getId(),0,end,0, mCallback2);
 
 
             }
@@ -171,7 +192,7 @@ public class MileageActivity extends AppCompatActivity implements View.OnClickLi
         getSupportActionBar().setTitle("주행거리");
         mButton = (Button) findViewById(R.id.button);
         mPhotoImageView = (ImageView) findViewById(R.id.image);
-
+        ocrEdit = (EditText)findViewById(R.id.ocrTextedit);
         //언어파일 경로
         datapath = getFilesDir()+ "/tesseract/";
 
@@ -207,6 +228,9 @@ public class MileageActivity extends AppCompatActivity implements View.OnClickLi
         if(android.os.Build.VERSION.SDK_INT < 23){
             mTess.setImage(photo);
             OCRresult = mTess.getUTF8Text();
+           OCRresult= OCRresult.replaceAll("[^0-9]+", " ");
+
+            OCRresult =  OCRresult.replaceAll("\\p{Z}", "");
             EditText ocrEdit = (EditText) findViewById(R.id.ocrTextedit);
             ocrEdit.setText(OCRresult);
 

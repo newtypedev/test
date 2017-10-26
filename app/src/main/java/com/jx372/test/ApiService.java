@@ -13,6 +13,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -24,14 +25,21 @@ public interface ApiService {
  //localhost:8080/sfa/
  //http://192.168.1.121:8080/116
     //http://192.168.0.17:8080/
-
-    public static final String API_URL = "http://192.168.1.116:8080/";
+    //http://52.78.199.76:8080/
+   // http://10.0.2.2:8888
+    public static final String API_URL = "http://192.168.1.89:8080/";
     public static final String API_URL2 = "https://apis.skplanetx.com/tmap/";
+    public static final String API_URL3 = "http://openapi.seoul.go.kr:8088/756543787173687234324f53656a72/json/GetParkInfo/1/";
     //http://192.168.1.11:8181/
+
+    @GET("5/{name}")
+    Call<ResponseBody>getParking(@Path("name") String name);
+
 
     @Multipart
     @POST("sfa/m/upload/insert")
-    Call<ResponseBody> postImage(@Part MultipartBody.Part image, @Part("file") RequestBody file, @Query("start_gauge") int start,@Query("id") String id);
+    Call<ResponseBody> postImage(@Part MultipartBody.Part image, @Part("file") RequestBody file, @Query("start_gauge") int start,@Query("end_gauge") int end
+            ,@Query("mile") int mile,@Query("id") String id,@Query("date") String date);
 
  @FormUrlEncoded
  @POST("sfa/m/upload/insert")
@@ -157,5 +165,26 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("sfa/m/team/select/3")
     Call<ResponseBody> getApproval(@FieldMap Map<String, String> plan);
+    @FormUrlEncoded
+    @POST("sfa/m/team/select/2")
+    Call<ResponseBody> getDayPlan(@FieldMap Map<String, String> plan);
+
+
+    @FormUrlEncoded
+    @POST("sfa/m/search/id")
+    Call<ResponseBody> getSearchId(@FieldMap Map<String, String> plan);
+
+    @FormUrlEncoded
+    @POST("sfa/m/search/pw")
+    Call<ResponseBody> getSearchPw(@FieldMap Map<String, String> plan);
+
+    @FormUrlEncoded
+    @POST("sfa/m/chart/sale")
+    Call<ResponseBody> getChartSale(@FieldMap Map<String, String> plan);
+
+    @FormUrlEncoded
+    @POST("sfa/m/mypage")
+    Call<ResponseBody> getMypage(@FieldMap Map<String, String> mypage);
+
 
 }

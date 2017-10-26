@@ -10,14 +10,15 @@
     <com.jx372.test.view.PagerSlidingTabStrip
         android:id="@+id/activity_tab_universal_tabs"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/material_blue_900"
-        app:pstsDividerColor="@android:color/white"
+        android:layout_height="50dp"
+        android:background="@color/material_light_blue_500"
+        app:pstsDividerColor="@color/white"
         app:pstsDividerWidth="0dp"
         app:pstsDividerPadding="16dp"
         app:pstsIndicatorHeight="2dp"
-        app:pstsIndicatorColor="@color/material_yellow_500"
-        app:pstsTabTextColor="@android:color/white" />
+        app:pstsTabTextSize="15dp"
+        app:pstsIndicatorColor="@color/white"
+        app:pstsTabTextColor="@color/white" />
 
     <android.support.v4.widget.DrawerLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

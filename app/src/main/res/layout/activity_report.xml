@@ -16,7 +16,7 @@
     <TextView
         android:layout_width="0dip"
         android:layout_weight="2"
-        android:text="2017-08-23"
+        android:text=""
         android:id="@+id/reportDate"
         android:gravity="center"
         android:textColor="@color/white"

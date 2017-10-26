@@ -227,7 +227,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:paddingTop="5dp"
+                android:paddingTop="10dp"
                 android:background="#ffffff"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -265,10 +265,21 @@
                     android:textSize="15sp" />
 
 
-                <TextView
-                    android:layout_weight="1"
+                <com.jx372.test.font.RobotoTextView
+                    android:onClick="btnPosCheck"
+                    android:layout_gravity="right"
                     android:layout_width="0dip"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/material_light_blue_300"
+                    android:gravity="center"
+                    android:minHeight="20dp"
+                    android:minWidth="30dp"
+                    android:text="위치확인"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    app:typeface="robotoMedium"/>
 
             </LinearLayout>
 

@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -14,8 +15,6 @@ import android.widget.TextView;
 
 import com.jx372.test.font.MaterialDesignIconsTextView;
 import com.jx372.test.kbv.KenBurnsView;
-
-import static android.R.attr.bitmap;
 
 public class SplashScreensActivity extends AppCompatActivity {
 
@@ -31,6 +30,9 @@ public class SplashScreensActivity extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		//풀 스크린
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		super.onCreate(savedInstanceState);
 		getWindow().requestFeature(Window.FEATURE_NO_TITLE); //Removing ActionBar
 		//getSupportActionBar().hide();

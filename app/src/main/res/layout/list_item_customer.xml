@@ -10,54 +10,56 @@
         android:id="@+id/cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardCornerRadius="10dp"
-        card_view:cardBackgroundColor="@color/main_color_grey_300"
-        card_view:cardElevation="@dimen/cardview_compat_inset_shadow"
-        android:layout_margin="10dp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
-        <LinearLayout
-            android:minHeight="100dp"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout
-                android:paddingTop="10dp"
+        android:layout_margin="10dp"
+        card_view:cardBackgroundColor="@color/main_color_grey_300"
+        card_view:cardCornerRadius="10dp"
+        card_view:cardElevation="@dimen/cardview_compat_inset_shadow">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
+            android:orientation="vertical">
+
+            <LinearLayout
                 android:layout_width="match_parent"
+
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingTop="10dp">
 
                 <TextView
-                    android:layout_marginLeft="30dp"
                     android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="30dp"
                     android:background="@color/material_light_blue_300"
-                    android:gravity="right"
-                    />
+                    android:gravity="right" />
+
                 <TextView
 
-                    android:textColor="@color/main_color_grey_800"
-                    android:textSize="14dp"
-                    android:paddingLeft="5dp"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
                     android:layout_weight="2"
-                    android:text="고객코드"/>
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:text="고객코드"
+                    android:textColor="@color/main_color_grey_800"
+                    android:textSize="14dp" />
 
                 <TextView
 
                     android:id="@+id/customerCode"
-                    android:textColor="@color/main_color_grey_800"
-                    android:textSize="14dp"
-
-                    android:layout_weight="2"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
+
+                    android:layout_weight="2"
                     android:gravity="left"
-                    android:text="11021"/>
+                    android:text="11021"
+                    android:textColor="@color/main_color_grey_800"
+                    android:textSize="14dp" />
 
 
                 <TextView
@@ -65,280 +67,253 @@
                     android:layout_height="10dp"
                     android:layout_gravity="center"
                     android:background="@color/material_light_blue_300"
-                    android:gravity="left"
-                    />
+                    android:gravity="left" />
 
                 <TextView
                     android:id="@+id/endclick"
-                    android:textColor="@color/main_color_grey_800"
-                    android:textSize="14dp"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
                     android:gravity="left"
-                    android:layout_weight="2"
                     android:paddingLeft="5dp"
-                    android:text="고객명"/>
+                    android:text="고객명"
+                    android:textColor="@color/main_color_grey_800"
+                    android:textSize="14dp" />
 
                 <TextView
                     android:id="@+id/customerName"
-                    android:textColor="@color/main_color_grey_800"
-                    android:textSize="14dp"
-                    android:layout_weight="2"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
+                    android:layout_weight="3"
                     android:gravity="left"
-                    android:text="동작슈퍼"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="2dp" />
+                    android:text="동작슈퍼"
+                    android:textColor="@color/main_color_grey_800"
+                    android:textSize="14dp" />
+
 
             </LinearLayout>
+
             <LinearLayout
-                android:paddingTop="10dp"
-
                 android:layout_width="match_parent"
+
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingTop="10dp">
 
                 <TextView
-                    android:visibility="invisible"
+
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_gravity="center"
                     android:layout_marginLeft="30dp"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_gravity="center"
                     android:background="@color/material_light_blue_300"
-                    android:gravity="right"
-                    />
+                    android:gravity="right" />
+
                 <TextView
-                    android:visibility="invisible"
-                    android:textColor="@color/main_color_grey_800"
-                    android:textSize="14dp"
+
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="left"
                     android:paddingLeft="5dp"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:layout_weight="2"
-                    android:text="고객코드"/>
-
-                <TextView
-                    android:visibility="invisible"
+                    android:text="업체번호"
                     android:textColor="@color/main_color_grey_800"
-                    android:textSize="14dp"
+                    android:textSize="14dp" />
 
-                    android:layout_weight="2"
+                <TextView
+
+                    android:id="@+id/customercontact"
                     android:layout_width="0dip"
+
                     android:layout_height="wrap_content"
+                    android:layout_weight="5"
                     android:gravity="left"
-                    android:text="동작슈퍼"/>
-
-
-                <TextView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_gravity="center"
-                    android:background="@color/material_light_blue_300"
-                    android:gravity="left"
-                    />
-
-                <TextView
-
                     android:textColor="@color/main_color_grey_800"
-                    android:textSize="14dp"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:layout_weight="2"
-                    android:paddingLeft="5dp"
-                    android:text="대표자"/>
+                    android:textSize="14dp" />
 
                 <TextView
-                    android:id="@+id/chiefName"
-                    android:textColor="@color/main_color_grey_800"
-                    android:textSize="14dp"
-                    android:layout_weight="2"
+
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
+
+                    android:layout_weight="1.5"
                     android:gravity="left"
-                    android:text="최경호"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="2dp" />
+                    android:textColor="@color/main_color_grey_800"
+                    android:textSize="14dp" />
+
 
             </LinearLayout>
-            <LinearLayout
-                android:paddingTop="10dp"
 
+            <LinearLayout
                 android:layout_width="match_parent"
+
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingTop="10dp">
 
                 <TextView
-                    android:layout_marginLeft="30dp"
                     android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="30dp"
                     android:background="@color/material_light_blue_300"
-                    android:gravity="right"
-                    />
+                    android:gravity="right" />
+
                 <TextView
 
-                    android:textColor="@color/main_color_grey_800"
-                    android:textSize="14dp"
-                    android:paddingLeft="5dp"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
                     android:layout_weight="1"
-                    android:text="주소"/>
+                    android:gravity="left"
+                    android:paddingLeft="5dp"
+                    android:text="주소"
+                    android:textColor="@color/main_color_grey_800"
+                    android:textSize="14dp" />
 
                 <TextView
                     android:id="@+id/customerAddress"
-                    android:textColor="@color/main_color_grey_800"
-                    android:textSize="14dp"
-
-                    android:layout_weight="3.5"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="서울특별시 동작구 사당동"/>
 
+                    android:layout_weight="3.5"
+                    android:gravity="left"
+                    android:text=""
+                    android:textColor="@color/main_color_grey_800"
+                    android:textSize="14dp" />
 
 
             </LinearLayout>
 
-        <LinearLayout
-            android:background="@color/white"
-            android:layout_margin="30dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-        <LinearLayout
-                android:background="@color/white"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_marginLeft="30dp"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_gravity="center"
-                    android:background="@color/material_light_blue_300"
-                    android:gravity="right"
-                    />
-                <TextView
-
-                    android:textColor="@color/main_color_grey_800"
-                    android:textSize="14dp"
-                    android:paddingLeft="5dp"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:layout_weight="1"
-                    android:text="담당자"/>
-
-                <TextView
-
-                    android:textColor="@color/main_color_grey_800"
-                    android:textSize="14dp"
-
-                    android:layout_weight="3.5"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="서울특별시 동작구 사당동"/>
-
-
-
-            </LinearLayout>
             <LinearLayout
-                android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_margin="30dp"
+                android:background="@color/white"
+                android:orientation="vertical">
 
-                <TextView
-                    android:layout_marginLeft="30dp"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_gravity="center"
-                    android:background="@color/material_light_blue_300"
-                    android:gravity="right"
-                    />
-                <TextView
-
-                    android:textColor="@color/main_color_grey_800"
-                    android:textSize="14dp"
-                    android:paddingLeft="5dp"
-                    android:layout_width="0dip"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:layout_weight="1"
-                    android:text="연락처"/>
+                    android:background="@color/white"
+                    android:orientation="horizontal">
 
-                <TextView
+                    <TextView
+                        android:id="@+id/textView21"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="30dp"
+                        android:background="@color/app_blue"
+                        android:gravity="right" />
 
-                    android:textColor="@color/main_color_grey_800"
-                    android:textSize="14dp"
+                    <TextView
 
-                    android:layout_weight="3.5"
-                    android:layout_width="0dip"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:paddingLeft="5dp"
+                        android:text="담당자"
+                        android:textColor="@color/main_color_grey_800"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/managername"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+
+                        android:layout_weight="3.5"
+                        android:gravity="left"
+                        android:text=""
+                        android:textColor="@color/main_color_grey_800"
+                        android:textSize="14dp" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="서울특별시 동작구 사당동"/>
+                    android:background="@color/white"
+                    android:orientation="horizontal">
 
+                    <TextView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="30dp"
+                        android:background="@color/app_blue"
+                        android:gravity="right" />
+
+                    <TextView
+
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:paddingLeft="5dp"
+                        android:text="연락처"
+                        android:textColor="@color/main_color_grey_800"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/managercontact"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+
+                        android:layout_weight="3.5"
+                        android:gravity="left"
+                        android:text=""
+                        android:textColor="@color/main_color_grey_800"
+                        android:textSize="14dp" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="30dp"
+                        android:background="@color/app_blue"
+                        android:gravity="right" />
+
+                    <TextView
+
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:paddingLeft="5dp"
+                        android:text="이메일"
+                        android:textColor="@color/main_color_grey_800"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/manageremail"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+
+                        android:layout_weight="3.5"
+                        android:gravity="left"
+                        android:text=""
+                        android:textColor="@color/main_color_grey_800"
+                        android:textSize="14dp" />
+
+
+                </LinearLayout>
 
 
             </LinearLayout>
-            <LinearLayout
-                android:background="@color/white"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_marginLeft="30dp"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_gravity="center"
-                    android:background="@color/material_light_blue_300"
-                    android:gravity="right"
-                    />
-                <TextView
-
-                    android:textColor="@color/main_color_grey_800"
-                    android:textSize="14dp"
-                    android:paddingLeft="5dp"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:layout_weight="1"
-                    android:text="이메일"/>
-
-                <TextView
-
-                    android:textColor="@color/main_color_grey_800"
-                    android:textSize="14dp"
-
-                    android:layout_weight="3.5"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="서울특별시 동작구 사당동"/>
-
-
-
-            </LinearLayout>
-
-
-</LinearLayout>
 
 
         </LinearLayout>
-
 
 
     </android.support.v7.widget.CardView>

@@ -12,18 +12,24 @@ public class DayItems {
     private static ArrayList<String> spinnerItem;
     private static DayItems sDayItems;
     private static String goalsale="0";
-    private static String content="<p>content</p>";
-    private static String challenge="도전 과제 없음";
+
     private static String shortDistance="0";
     private static String visitPoint="";
-    private static String title="일일계획";
+//    private static String title="일일계획";
+//    private static String content="<p>content</p>";
+//    private static String challenge="도전 과제 없음";
+    private static String title="";
+    private static String content="";
+    private static String challenge="";
     private static String opinion="";
 
 
     public static void initData(){
         goalsale="0";
-        content="<p>content</p>";
-        challenge="도전 과제 없음";
+       // content="<p>content</p>";
+       // challenge="도전 과제 없음";
+        challenge="";
+        content="";
         shortDistance="0";
         visitPoint="";
         //title="";

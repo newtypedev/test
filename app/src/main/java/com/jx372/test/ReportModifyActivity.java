@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -30,13 +31,14 @@ public class ReportModifyActivity extends AppCompatActivity {
 
     public static final String REPORT_ID="";
     private  UUID reportId;
-    Editor reportmemo;
-    EditText startdis;
-    EditText enddis;
-    EditText salesAccount;
-    String tempContent="";
+    private Editor reportmemo;
+    private EditText startdis;
+    private EditText enddis;
+    private EditText salesAccount;
+    private String tempContent="";
     private ReportItems reportItems;
     private String state="";
+    private boolean menuState;
 
 // 업무보고 삭제 콜백
     Callback2 mCallback4 = new Callback2() {
@@ -106,7 +108,7 @@ public class ReportModifyActivity extends AppCompatActivity {
 
                     // WorkReportList wr = WorkReportList.get(WorkReportActivity.this);
                     //JSONObject datajson = jsonbody.getJSONObject("data");
-                    Toast.makeText(ReportModifyActivity.this,"데이터 있음", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(ReportModifyActivity.this,"데이터 있음", Toast.LENGTH_SHORT).show();
                     //createReportItem(datajson);
 
                     for(int i=0;i<size;i++){
@@ -310,7 +312,20 @@ public class ReportModifyActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_report_modify, menu);
+
+//        getMenuInflater().inflate(R.menu.menu_report_modify, menu);
+//        return true;
+
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        if(state.equals("insert")){
+
+            inflater.inflate(R.menu.menu_report_modify, menu);
+        }
+        else{
+
+            inflater.inflate(R.menu.menu_report_modify_update, menu);
+        }
         return true;
     }
 
@@ -345,7 +360,7 @@ public class ReportModifyActivity extends AppCompatActivity {
                 map.put("id", User.get().getId());
                 map.put("title", "업무보고");
                 map.put("date", User.get().getTempDate());
-                map.put("content", b);
+                map.put("content", tempContent);
 
                 map.put("report_sale", salesAccount.getText() + "");
                 httpcon.accessServerMap("reportinsert", map, mCallback2);
@@ -367,9 +382,9 @@ public class ReportModifyActivity extends AppCompatActivity {
 
                 map.put("report_no",reportItems.getReportNo());
                 map.put("id", User.get().getId());
-                map.put("title", "업무보고");
+                map.put("title",reportItems.getTitle());
                 map.put("date",User.get().getTempDate());
-                map.put("content", b);
+                map.put("content", tempContent);
 
                 map.put("report_sale", salesAccount.getText() + "");
                 httpcon.accessServerMap("reportupdate", map, mCallback2);

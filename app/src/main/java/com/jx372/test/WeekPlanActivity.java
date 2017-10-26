@@ -175,8 +175,21 @@ public class WeekPlanActivity extends AppCompatActivity {
         String result = (String)Commas.format(value);
         return result;
     }
+    private void refreshUI(){
 
-    // 삭제 시 받는 콜백
+        mWeekItems.initData();
+        Map map = new HashMap();
+        map.put("id",User.get().getId());
+        map.put("first_date",getFirstDay());
+        HttpConnector httpcon = new HttpConnector();
+        httpcon.accessServerMap("weekselect",map,mCallback);
+
+        mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewdown));
+        mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewup));
+    }
+
+
+    // 삭제 시 받는 콜백, 인설트 업데이트도 받음
     Callback2 mCallback2 = new Callback2() {
         @Override
         public void callback(String msg) {
@@ -195,14 +208,15 @@ public class WeekPlanActivity extends AppCompatActivity {
                 if(jsonbody.getString("result").equals("success")){
 
                     Toast.makeText(WeekPlanActivity.this,"Success", Toast.LENGTH_SHORT).show();
-
+                        refreshUI();
                 }
                 else if(jsonbody.getString("result").equals("fail")){
 
 
 
 
-                    Toast.makeText(WeekPlanActivity.this,"Fail", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WeekPlanActivity.this,"Success", Toast.LENGTH_SHORT).show();
+                    refreshUI();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -274,7 +288,7 @@ public class WeekPlanActivity extends AppCompatActivity {
 
                     weektext.setText(weekdata);
 
-                    Toast.makeText(WeekPlanActivity.this,date2, Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(WeekPlanActivity.this,date2, Toast.LENGTH_SHORT).show();
 
                 }
                 else if(jsonbody.getString("result").equals("fail")){

@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.irshulx.Editor;
 import com.github.irshulx.models.EditorTextStyle;
@@ -31,7 +30,6 @@ public class DayModifyActivity extends AppCompatActivity{
     String nowItem="";
     Editor daycontent;
     int itemPos=0;
-
     private void setUpEditor() {
         findViewById(R.id.action_h1).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +91,7 @@ public class DayModifyActivity extends AppCompatActivity{
 
     public void itemUpdate(){
         Editor editor=new Editor(this ,null);
+
         String b= daycontent.getContentAsSerialized();
         Log.v("jsonjson",b);
         b = editor.getContentAsHTML(b);
@@ -104,6 +103,27 @@ public class DayModifyActivity extends AppCompatActivity{
         mDayItem.setGoalsale(goalsale.getText()+"");
         mDayItem.setChallenge(nowItem);
 
+//
+//        String test = b;
+//        test =test.replaceAll("<h1 data-tag=\"input\" >","");
+//        test = test.replaceAll("</h1>","");
+//
+//        test =test.replaceAll("<h2 data-tag=\"input\" >","");
+//        test = test.replaceAll("</h2>","");
+//
+//        test =test.replaceAll("<h3 data-tag=\"input\" >","");
+//        test = test.replaceAll("</h3>","");
+//
+//
+//        test =test.replaceAll("<p data-tag=\"input\" >","");
+//        test = test.replaceAll("</p>","");
+//
+//        test = test.replaceAll("<b>","");
+//        test = test.replaceAll("</b>","");
+//        test = test.replaceAll("<i>","");
+//        test = test.replaceAll("</i>","");
+//        test = test.replaceAll("<p data-tag=\"input\">","");
+//        Log.v("내용이다",test+"");
 
     }
 
@@ -150,6 +170,8 @@ public class DayModifyActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_modify);
 
+
+
         mDayItem = DayItems.get();
 
         getSupportActionBar().setTitle("수정");
@@ -160,9 +182,12 @@ public class DayModifyActivity extends AppCompatActivity{
         //daymemo = (EditText) findViewById(R.id.daymemo);
         daycontent = (Editor)findViewById(R.id.editorday);
         setUpEditor();
-        daycontent.Render();
+       // daycontent.Render();
         goalsale = (EditText) findViewById(R.id.goalsale);
-        daycontent.Render(mDayItem.getContent());
+        if(mDayItem.getContent().equals("")){
+            daycontent.Render();
+        }else{
+        daycontent.Render(mDayItem.getContent());}
         //String b = "<p><strong>글자진하게</strong></p><p>평범하게</p><p><em>기울게</em></p><p><br></p><h1>h1이다</h1><p><br></p><p><br></p><h2>h2다</h2><p><br></p><p><br></p><h3>h3다</h3><p><br></p>";
         //daycontent.Render(b);
       //  daymemo.setText(mDayItem.getContent());
@@ -183,7 +208,7 @@ public class DayModifyActivity extends AppCompatActivity{
      //   String[] entries = {"","List Item A", "List Item B"};
 
         if(mDayItem.getSpinnerItem()==null){
-            String[] entries = {"도전과제 없음"};
+            String[] entries = {"도전 과제 없음"};
             ArrayAdapter<String> arrAdapt =
                     new ArrayAdapter<String>(this, R.layout.spinner_item, entries);
             spin.setAdapter(arrAdapt);
@@ -217,7 +242,7 @@ public class DayModifyActivity extends AppCompatActivity{
 				nowItem = spin.getItemAtPosition(position)+"";
 				//itemPos = position+1;
                 //Toast.makeText(DayModifyActivity.this,spin.getItemAtPosition(position)+"", Toast.LENGTH_SHORT).show();
-                  Toast.makeText(DayModifyActivity.this,position+"", Toast.LENGTH_SHORT).show();
+                 // Toast.makeText(DayModifyActivity.this,position+"", Toast.LENGTH_SHORT).show();
             }
             public void onNothingSelected(AdapterView<?> parent) {
             }

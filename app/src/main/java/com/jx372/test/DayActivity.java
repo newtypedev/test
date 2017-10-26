@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -50,11 +51,17 @@ public class DayActivity extends AppCompatActivity {
     ViewFlipper mFlip;
     private Toolbar toolbar;
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        NavUtils.navigateUpFromSameTask(this);
+    }
+
     public void showData() {
         dayMemo.clearAllContents();
         dayMemo.Render(mdayItems.getContent());
         //dayContent.setText(mdayItems.getContent());
-        dayGoalsale.setText(mdayItems.getGoalsale()+"");
+        dayGoalsale.setText(createComma(mdayItems.getGoalsale()+""));
         distance.setText(mdayItems.getShortDistance()+"km");
         visitPoint.setText(mdayItems.getVisitPoint());
         dayChallenge.setText(mdayItems.getChallenge());
@@ -162,7 +169,7 @@ public class DayActivity extends AppCompatActivity {
                 if(jsonbody.getString("result").equals("success")){
 
                     refreshUI();
-                    //Toast.makeText(DayActivity.this,"Success", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DayActivity.this,"Success", Toast.LENGTH_SHORT).show();
 
 
                 }
@@ -204,7 +211,7 @@ public class DayActivity extends AppCompatActivity {
 
 
                     JSONObject datajson = jsonbody.getJSONObject("data");
-                    Toast.makeText(DayActivity.this,"데이터 있음", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(DayActivity.this,"데이터 있음", Toast.LENGTH_SHORT).show();
                     createDayItem(datajson);
                     showData();
                     state = "update";
@@ -426,6 +433,7 @@ public class DayActivity extends AppCompatActivity {
             return true;
         }
         else if(id == R.id.daysearch){
+
             new DatePickerDialog(DayActivity.this, mDateSetListener, mYear,
 
                     mMonth, mDay).show();

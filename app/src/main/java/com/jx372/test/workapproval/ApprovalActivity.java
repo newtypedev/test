@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,9 @@ import com.jx372.test.fragment.ConsultFragment;
 import com.jx372.test.fragment.WorkReportListFragment;
 import com.jx372.test.util.DialogMediaUtils;
 import com.jx372.test.view.PagerSlidingTabStrip;
+import com.kakao.sdk.newtoneapi.TextToSpeechClient;
+import com.kakao.sdk.newtoneapi.TextToSpeechListener;
+import com.kakao.sdk.newtoneapi.TextToSpeechManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,8 +51,13 @@ import static com.jx372.test.R.id.activity_tab_universal_pager2;
  * Created by pys on 2017. 10. 12..
  */
 
-public class ApprovalActivity extends AppCompatActivity {
+public class ApprovalActivity extends AppCompatActivity implements TextToSpeechListener {
+    private static final String TAG = "TextToSpeechActivity";
 
+    private TextToSpeechClient ttsClient;
+
+    private TextView mStatus;
+    private Spinner mSpinnerMode;
     public static final String REPORT_ID="";
     private UUID reportId;
     private ReportItems report;
@@ -79,6 +88,82 @@ public class ApprovalActivity extends AppCompatActivity {
 
 
     }
+
+    private void handleError(int errorCode) {
+        String errorText;
+        switch (errorCode) {
+            case TextToSpeechClient.ERROR_NETWORK:
+                errorText = "네트워크 오류";
+                break;
+            case TextToSpeechClient.ERROR_NETWORK_TIMEOUT:
+                errorText = "네트워크 지연";
+                break;
+            case TextToSpeechClient.ERROR_CLIENT_INETRNAL:
+                errorText = "음성합성 클라이언트 내부 오류";
+                break;
+            case TextToSpeechClient.ERROR_SERVER_INTERNAL:
+                errorText = "음성합성 서버 내부 오류";
+                break;
+            case TextToSpeechClient.ERROR_SERVER_TIMEOUT:
+                errorText = "음성합성 서버 최대 접속시간 초과";
+                break;
+            case TextToSpeechClient.ERROR_SERVER_AUTHENTICATION:
+                errorText = "음성합성 인증 실패";
+                break;
+            case TextToSpeechClient.ERROR_SERVER_SPEECH_TEXT_BAD:
+                errorText = "음성합성 텍스트 오류";
+                break;
+            case TextToSpeechClient.ERROR_SERVER_SPEECH_TEXT_EXCESS:
+                errorText = "음성합성 텍스트 허용 길이 초과";
+                break;
+            case TextToSpeechClient.ERROR_SERVER_UNSUPPORTED_SERVICE:
+                errorText = "음성합성 서비스 모드 오류";
+                break;
+            case TextToSpeechClient.ERROR_SERVER_ALLOWED_REQUESTS_EXCESS:
+                errorText = "허용 횟수 초과";
+                break;
+            default:
+                errorText = "정의하지 않은 오류";
+                break;
+        }
+
+        final String statusMessage = errorText + " (" + errorCode + ")";
+
+        Log.i(TAG, statusMessage);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+              //  mStatus.setText(statusMessage);
+                Toast.makeText(ApprovalActivity.this,statusMessage+"",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    @Override
+    public void onError(int code, String message) {
+        handleError(code);
+
+        ttsClient = null;
+    }
+
+    @Override
+    public void onFinished() {
+        int intSentSize = ttsClient.getSentDataSize();
+        int intRecvSize = ttsClient.getReceivedDataSize();
+
+        final String strInacctiveText = "onFinished() SentSize : " + intSentSize + " RecvSize : " + intRecvSize;
+
+        Log.i(TAG, strInacctiveText);
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//               mStatus.setText(strInacctiveText);
+//            }
+//        });
+
+        ttsClient = null;
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -349,6 +434,39 @@ public class ApprovalActivity extends AppCompatActivity {
         }
     }
 
+    private void speechStart(String str,double speed){
+
+
+        if (ttsClient != null && ttsClient.isPlaying()) {
+            ttsClient.stop();
+            return;
+        }
+
+        String strText =str;
+
+        String speechMode =TextToSpeechClient.NEWTONE_TALK_1;
+
+
+        String voiceType = TextToSpeechClient.VOICE_WOMAN_READ_CALM;
+
+       // speechSpeed = 1.0D;
+        double speechSpeed = speed;
+
+
+        ttsClient = new TextToSpeechClient.Builder()
+                .setSpeechMode(speechMode)
+                .setSpeechSpeed(speechSpeed)
+                .setSpeechVoice(voiceType)
+                .setListener(ApprovalActivity.this)
+                .build();
+
+        ttsClient.play(strText);
+
+
+
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -381,17 +499,29 @@ public class ApprovalActivity extends AppCompatActivity {
             return true;
         }
         else if(id == R.id.approval){
-            approvalToggle = true;
 
-            DialogMediaUtils dialog = new DialogMediaUtils(this);
-            dialog.showDialog(this);
+            if(report.getApproval().equals("1")) {
+                approvalToggle = true;
 
+                DialogMediaUtils dialog = new DialogMediaUtils(this);
+                dialog.showDialog(this);
+            }
+            else{
+                Toast.makeText(this,"수정 불가",Toast.LENGTH_LONG).show();
+            }
         }
 
         else if(id == R.id.deny){
+
+            if(report.getApproval().equals("1")) {
             approvalToggle = false;
             DialogMediaUtils dialog = new DialogMediaUtils(this);
-            dialog.showDialog(this);
+            dialog.showDialog(this);}
+            else{
+                Toast.makeText(this,"수정 불가",Toast.LENGTH_LONG).show();
+            }
+
+
 //            Map map = new HashMap();
 //            map.put("report_no",report.getReportNo());
 //            map.put("id", report.getUserid());
@@ -401,6 +531,77 @@ public class ApprovalActivity extends AppCompatActivity {
 //            map.put("approval","3");
 //            map.put("report_sale", report.getSalesAccount()+ "");
 //            httpcon.accessServerMap("reportupdate", map, approvalCallback);
+        }
+        else if(id == R.id.reportplay){
+
+
+            String b= report.getContent();
+            Log.v("jsonjson",b);
+            b =b.replaceAll("<u>","");
+            b = b.replaceAll("</u>","");
+            Log.v("underunderlin",b);
+
+        String test = b;
+
+            test =test.replaceAll("&nbsp;"," ");
+
+
+        test =test.replaceAll("<h1 data-tag=\"input\" >"," ");
+        test = test.replaceAll("</h1>"," ");
+
+        test =test.replaceAll("<h2 data-tag=\"input\" >"," ");
+        test = test.replaceAll("</h2>"," ");
+
+        test =test.replaceAll("<h3 data-tag=\"input\" >"," ");
+        test = test.replaceAll("</h3>"," ");
+
+
+        test =test.replaceAll("<p data-tag=\"input\" >","");
+        test = test.replaceAll("</p>"," ");
+
+        test = test.replaceAll("<b>","");
+        test = test.replaceAll("</b>"," ");
+        test = test.replaceAll("<i>","");
+        test = test.replaceAll("</i>"," ");
+        test = test.replaceAll("<p data-tag=\"input\">"," ");
+        Log.v("내용이다",test+"");
+         speechStart(test,1.0D);
+        }
+        else if(id == R.id.reportfast){
+            String b= report.getContent();
+            Log.v("jsonjson",b);
+            b =b.replaceAll("<u>","");
+            b = b.replaceAll("</u>","");
+            Log.v("underunderlin",b);
+
+            String test = b;
+
+            test =test.replaceAll("&nbsp;"," ");
+
+
+            test =test.replaceAll("<h1 data-tag=\"input\" >"," ");
+            test = test.replaceAll("</h1>"," ");
+
+            test =test.replaceAll("<h2 data-tag=\"input\" >"," ");
+            test = test.replaceAll("</h2>"," ");
+
+            test =test.replaceAll("<h3 data-tag=\"input\" >"," ");
+            test = test.replaceAll("</h3>"," ");
+
+
+            test =test.replaceAll("<p data-tag=\"input\" >","");
+            test = test.replaceAll("</p>"," ");
+
+            test = test.replaceAll("<b>","");
+            test = test.replaceAll("</b>"," ");
+            test = test.replaceAll("<i>","");
+            test = test.replaceAll("</i>"," ");
+            test = test.replaceAll("<p data-tag=\"input\">"," ");
+            Log.v("내용이다",test+"");
+            speechStart(test,2.0D);
+        }
+        else if(id == R.id.reportstop){
+            speechStart(" ",0D);
         }
 
 
@@ -426,6 +627,7 @@ public class ApprovalActivity extends AppCompatActivity {
         reportDate = (TextView)findViewById(R.id.reportDate);
         countReport = (TextView)findViewById(R.id.reportcount);
 
+        TextToSpeechManager.getInstance().initializeLibrary(getApplicationContext());
         cl = ConsultList.get(this);
         cl.cleanList();
         Map map = new HashMap();
@@ -446,7 +648,7 @@ public class ApprovalActivity extends AppCompatActivity {
 
 
 
-        getSupportActionBar().setTitle("업무승인");
+        getSupportActionBar().setTitle("");
 //        toolbar = (Toolbar) findViewById(R.id.toolbar2);
 //        toolbar.setTitle("업무보고");
 //        setSupportActionBar(toolbar);

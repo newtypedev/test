@@ -5,15 +5,21 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jx372.test.util.DialogLoginUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,14 +33,42 @@ public class LoginActivity extends AppCompatActivity {
     EditText mid;
     EditText passwd;
     Button loginBtn;
+    Button idpwBtn;
     TextView tv;
     Retrofit retrofit;
     ApiService apiService;
     int messageResId = 0;
     int messageResId2 = 0;
     MyFirebaseInstanceIDService service;
+
+    public String getDay(){
+        Calendar cal = new GregorianCalendar();
+        String year =  cal.get(Calendar.YEAR)+"";
+        String month = (cal.get(Calendar.MONTH)+1)+"";
+        String day = cal.get(Calendar.DAY_OF_MONTH)+"";
+
+        if(month.length()==1){
+            month ="0"+month;
+        }
+
+        if(day.length()==1){
+            day ="0"+day;
+        }
+
+        String firstDay = year+"-"+month+"-"+day;
+        return firstDay;
+    }
+
+    public void getDialog(){
+        DialogLoginUtils dialog = new DialogLoginUtils(this);
+        dialog.showDialog(this);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //풀 스크린
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         super.onCreate(savedInstanceState);
          service = new MyFirebaseInstanceIDService(LoginActivity.this);
 
@@ -57,7 +91,17 @@ public class LoginActivity extends AppCompatActivity {
         passwd = (EditText)findViewById(R.id.editTextPassword);
         loginBtn = (Button)findViewById(R.id.buttonLogin);
         tv = (TextView)findViewById(R.id.tv);
+        idpwBtn = (Button)findViewById(R.id.btnIdPw);
 
+
+        idpwBtn.setOnClickListener(new View.OnClickListener(){
+                                       @Override
+                                       public void onClick(View v) {
+                                          getDialog();
+                                       }
+                                   });
+
+       
         loginBtn.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -113,6 +157,8 @@ public class LoginActivity extends AppCompatActivity {
                                 user.setGrade(data.getString("grade"));
                                 user.setEmail(data.getString("email"));
                                 user.setName(data.getString("name"));
+                                user.setToday(getDay());
+                                user.setCurrentPager(0);
 
                                 if(level.equals("팀원")){
 

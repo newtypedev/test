@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,20 +19,31 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 import com.jx372.test.customermanagement.Customer;
 import com.jx372.test.customermanagement.CustomerAdminFragment;
 import com.jx372.test.customermanagement.CustomerList;
 import com.jx372.test.customermanagement.CustomerModifyActivity;
+import com.jx372.test.dayplansearch.DaySearch;
+import com.jx372.test.dayplansearch.DaySearchFragment;
+import com.jx372.test.dayplansearch.DaySearchList;
+import com.jx372.test.fragment.MypageFragment;
 import com.jx372.test.membermanagement.Member;
 import com.jx372.test.membermanagement.MemberList;
 import com.jx372.test.membermanagement.MemberListFragment;
+import com.jx372.test.parking.ParkingFragment;
+import com.jx372.test.statistic.TeamStaFragment;
 import com.jx372.test.statistic.TeamStatisticFragment;
+import com.jx372.test.tmap.TmapSearchActivity;
 import com.jx372.test.weekplansearch.ExpandableListAdapter;
 import com.jx372.test.weekplansearch.WeekSearchFragment;
 import com.jx372.test.workapproval.WorkApprovalFragment;
@@ -65,17 +77,35 @@ public class LeaderMainActivity extends AppCompatActivity implements SpeechRecog
     private CharSequence mTitle;
     private String[] mPlanetTitles;
     private WeekSearchFragment nowWeekSearchFragment;
+    private DaySearchFragment nowDaySearchFragment;
     private WorkApprovalFragment nowWorkApprovalFragment;
     private CustomerAdminFragment nowCustomerFragment;
     private TeamStatisticFragment nowTeamStatisticFragment;
     private MemberListFragment nowMemberFragment;
     private MemberList memberList;
     private WorkReportList workReportList;
+    private List<Customer> customers;
     private boolean micToggle;
     private SpeechRecognizerClient client;
     private MenuItem micItem;
     private Calendar firstdayofweek;
     private Calendar approvalCalendar;
+    private Calendar dayCalendar;
+    private ViewFlipper mFlip;
+    private String approvalstate;
+    private CharSequence customerNameList[];
+    private String[] customersList;
+    private DaySearchList daySearchList;
+    private Double posX[];
+    private Double posY[];
+    private MypageFragment nowMypageFragment;
+    private TeamStaFragment nowSta;
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        NavUtils.navigateUpFromSameTask(this);
+    }
 
     public String getFirstDay(){
         String year = firstdayofweek.get(firstdayofweek.YEAR)+"";
@@ -92,6 +122,95 @@ public class LeaderMainActivity extends AppCompatActivity implements SpeechRecog
         String firstDay = year+"-"+month+"-"+day;
         return firstDay;
     }
+
+
+
+    //일일계획조회 콜백
+    Callback2 dayselect = new Callback2() {
+        @Override
+        public void callback(String msg) {
+            if(msg.equals("JsonException")){
+                Toast.makeText(LeaderMainActivity.this,msg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if(msg.equals("ConnectFail")){
+                Toast.makeText(LeaderMainActivity.this,msg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                JSONObject jsonbody = new JSONObject(msg);
+                Log.v("dayjson",msg);
+                if(jsonbody.getString("result").equals("success")){
+
+                    DaySearchList.get(LeaderMainActivity.this).cleanList();
+                    JSONArray datas = jsonbody.getJSONArray("data");
+                    int size = datas.length();
+
+
+                    Log.v("size", String.valueOf(size));
+                    if(size==0){
+
+
+                        Toast.makeText(LeaderMainActivity.this,"데이터가 없습니다", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    daySearchList = DaySearchList.get(LeaderMainActivity.this);
+
+
+                    // WorkReportList wr = WorkReportList.get(WorkReportActivity.this);
+                    //JSONObject datajson = jsonbody.getJSONObject("data");
+                    // Toast.makeText(LeaderMainActivity.this,"데이터 있음", Toast.LENGTH_SHORT).show();
+                    //createReportItem(datajson);
+                 //   DaySearch(String userId,String date,String challenge,String content,String goalsale,String visitPoint,String shortDistance,String opinion){
+                    for(int i=0;i<size;i++){
+
+                        DaySearch r = new DaySearch(datas.getJSONObject(i).getString("id"),
+                                    datas.getJSONObject(i).getString("date"),
+                                    datas.getJSONObject(i).getString("challenge_content"),
+                                    datas.getJSONObject(i).getString("content"),
+                                    datas.getJSONObject(i).getString("goal_sale"),
+                                    datas.getJSONObject(i).getString("estimate_course"),
+                                    datas.getJSONObject(i).getString("estimate_distance"),
+                                    datas.getJSONObject(i).getString("opinion"));
+
+                        //    Log.v("randtest", datas.getJSONObject(i).getString("achive_rank") + "");
+                            //Log.v("randtest", r.getAchiveRate() + "");
+                        daySearchList.addDaysearch(r);
+
+                    }
+
+                    nowDaySearchFragment.updateUI();
+                    // replaceFragment();
+//                    Handler mHandler = new Handler(Looper.getMainLooper());
+//                    mHandler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//
+//
+//                        }
+//                    }, 2000);
+
+
+
+                }
+                else if(jsonbody.getString("result").equals("fail")){
+
+
+//                    mdayItems.initData();
+//                    showData();
+//                    state = "insert";
+                    Toast.makeText(LeaderMainActivity.this,"데이터가 없습니다", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+    };
 
 
 
@@ -117,6 +236,8 @@ public class LeaderMainActivity extends AppCompatActivity implements SpeechRecog
 
                     JSONArray datas = jsonbody.getJSONArray("data");
                     int size = datas.length();
+
+
                     Log.v("size", String.valueOf(size));
                     if(size==0){
                         Toast.makeText(LeaderMainActivity.this,"데이터가 없습니다", Toast.LENGTH_SHORT).show();
@@ -130,22 +251,25 @@ public class LeaderMainActivity extends AppCompatActivity implements SpeechRecog
                     //createReportItem(datajson);
 
                     for(int i=0;i<size;i++){
-                        ReportItems r = new ReportItems(datas.getJSONObject(i).getString("report_no"),
-                                datas.getJSONObject(i).getString("title"),
-                                datas.getJSONObject(i).getString("report_sale"),
-                                datas.getJSONObject(i).getString("content"),
-                                datas.getJSONObject(i).getString("achive_rank"),
-                                datas.getJSONObject(i).getString("approval"),
-                                datas.getJSONObject(i).getString("opinion"),
-                                datas.getJSONObject(i).getString("goal_sale"),
-                                datas.getJSONObject(i).getString("start_gauge"),
-                                datas.getJSONObject(i).getString("end_gauge"),
-                                datas.getJSONObject(i).getString("mile"),
-                                datas.getJSONObject(i).getString("id"),
-                                datas.getJSONObject(i).getString("date"));
-                        Log.v("randtest",datas.getJSONObject(i).getString("achive_rank")+"");
-                        Log.v("randtest",r.getAchiveRate()+"");
-                        WorkReportList.get(LeaderMainActivity.this).addReport(r);
+                        if(approvalstate.equals(datas.getJSONObject(i).getString("approval"))||approvalstate.equals("5")) {
+                            ReportItems r = new ReportItems(datas.getJSONObject(i).getString("report_no"),
+                                    datas.getJSONObject(i).getString("title"),
+                                    datas.getJSONObject(i).getString("report_sale"),
+                                    datas.getJSONObject(i).getString("content"),
+                                    datas.getJSONObject(i).getString("achive_rank"),
+                                    datas.getJSONObject(i).getString("approval"),
+                                    datas.getJSONObject(i).getString("opinion"),
+                                    datas.getJSONObject(i).getString("goal_sale"),
+                                    datas.getJSONObject(i).getString("start_gauge"),
+                                    datas.getJSONObject(i).getString("end_gauge"),
+                                    datas.getJSONObject(i).getString("mile"),
+                                    datas.getJSONObject(i).getString("id"),
+                                    datas.getJSONObject(i).getString("date"));
+
+                            Log.v("randtest", datas.getJSONObject(i).getString("achive_rank") + "");
+                            Log.v("randtest", r.getAchiveRate() + "");
+                            WorkReportList.get(LeaderMainActivity.this).addReport(r);
+                        }
                     }
 
                     nowWorkApprovalFragment.updateUI();
@@ -321,21 +445,35 @@ public class LeaderMainActivity extends AppCompatActivity implements SpeechRecog
         final String temp = texts.get(0).trim().replace(" ","");
         Log.v("첫번째", temp);
 
-        String arr[] = {"동작대리점","강남대리점","gs25사당점","gs25사당드림점"};
+
+
+
+
+
+
+
+        //String arr[] = {"동작대리점","강남대리점","gs25사당점","gs25사당드림점"};
+
 
         // Toast.makeText(SpeechSampleActivity.this,temp, Toast.LENGTH_LONG).show();
 
 
+
+
+
         if(  temp.substring(temp.length()-2,temp.length()).equals("연결")) {
-            for (int i = 0; i < arr.length; i++) {
-                if (temp.contains(arr[i]) /*temp.equals("동작대리점연결")*/) {
+
+            for (int i = 0; i < customersList.length; i++) {
+
+                if (temp.contains(customersList[i]) /*temp.equals("동작대리점연결")*/) {
+                    Log.v("pospos",i+"");
 
 
-
-                    Log.v("연결", "성공성공");
+                    Log.v("연결성공",customersList[i]);
                     Uri number;
                     Intent intent;
-                    number = Uri.parse("tel:" + 114);
+
+                    number = Uri.parse("tel:" + customers.get(i).getContact().toString());
                     intent = new Intent(Intent.ACTION_CALL, number);
                     if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
 
@@ -343,68 +481,73 @@ public class LeaderMainActivity extends AppCompatActivity implements SpeechRecog
                     }
                     startActivity(intent);
 
-
-//                    nowLatitude = 37.541642248630524;
-//                    nowLongitude = 126.99599611759186;
-//                    if (!(nowLongitude == 0.0)) {
-//                        mMapView.setLocationPoint(nowLongitude, nowLatitude);
-//                        mMapView.setCenterPoint(nowLongitude, nowLatitude, true);
-//                        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.end);
-//                        mMapView.setIcon(bitmap);
-//                        mMapView.setIconVisibility(true);
-//                        mMapView.setZoom(19);
-//                    }
-
-
                     if (client != null) {
                         client.cancelRecording();
+                        micToggle = true;
+                        micItem.setIcon(R.drawable.ic_action_offmic);
+                        return;
                     }
 
-                    micItem.setIcon(R.drawable.ic_action_micon);
+
                 }
             }
-
-        }
-        if(  temp.substring(temp.length()-2,temp.length()).equals("검색")) {
-            for (int i = 0; i < arr.length; i++) {
-                if (temp.contains(arr[i]) /*temp.equals("동작대리점연결")*/) {
-
-
-
-
-
-//                    nowLatitude = 37.541642248630524;
-//                    no0wLongitude = 126.99599611759186;
-//                    if (!(nowLongitude == 0.0)) {
-//                        mMapView.setLocationPoint(nowLongitude, nowLatitude);
-//                        mMapView.setCenterPoint(nowLongitude, nowLatitude, true);
-//                        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.end);
-//                        mMapView.setIcon(bitmap);
-//                        mMapView.setIconVisibility(true);
-  //                  }
-
-
-                    if (client != null) {
-                        client.cancelRecording();
-                    }
-
-                    micItem.setIcon(R.drawable.ic_action_micon);
-                }
+            Toast.makeText(this,"인식 실패", Toast.LENGTH_LONG).show();
+            if (client != null) {
+                client.cancelRecording();
+                micToggle = true;
+                micItem.setIcon(R.drawable.ic_action_offmic);
+                return;
             }
 
         }
 
-        // Toast.makeText(this,"인식 실패", Toast.LENGTH_LONG).show();
-        if (client != null) {
-            client.cancelRecording();
+
+        else if(  temp.substring(temp.length()-2,temp.length()).equals("검색")) {
+
+            for (int i = 0; i < customersList.length; i++) {
+
+                if (temp.contains(customersList[i]) /*temp.equals("동작대리점연결")*/) {
+                    Log.v("pospos",i+"");
+
+
+                    Log.v("연결성공",customersList[i]);
+                    Intent intent = new Intent(this, TmapSearchActivity.class);
+                    intent.putExtra("x", posX[i]);
+                    intent.putExtra("y", posY[i]);
+                    startActivity(intent);
+
+                    if (client != null) {
+                        client.cancelRecording();
+                        micToggle = true;
+                        micItem.setIcon(R.drawable.ic_action_offmic);
+                        return;
+                    }
+
+
+                }
+            }
+            Toast.makeText(this,"인식 실패", Toast.LENGTH_LONG).show();
+            if (client != null) {
+                client.cancelRecording();
+                micToggle = true;
+                micItem.setIcon(R.drawable.ic_action_offmic);
+                return;
+            }
+
         }
+        else {
 
-        micItem.setIcon(R.drawable.ic_action_micon);
+            Toast.makeText(this, "인식 실패", Toast.LENGTH_LONG).show();
+            if (client != null) {
+                client.cancelRecording();
+            }
+
+            micToggle = true;
+            micItem.setIcon(R.drawable.ic_action_offmic);
 
 
-
-        client = null;
-
+            client = null;
+        }
     }
 
     @Override
@@ -544,23 +687,40 @@ public class LeaderMainActivity extends AppCompatActivity implements SpeechRecog
 
                     JSONArray datas = jsonbody.getJSONArray("data");
                     int size = datas.length();
+                    customersList = new String[size];
+                    posX = new Double[size];
+                    posY = new Double[size];
                     Log.v("size", String.valueOf(size));
                     Log.v("sizecontent", datas+"");
                     customerList = CustomerList.get(LeaderMainActivity.this);
-customerList.cleanList();
+                    customerNameList = new CharSequence[size];
+                    customerList.cleanList();
+
+
 
                     for (int i = 0; i < size; i++) {
 
                         Customer c = new Customer(datas.getJSONObject(i).getString("customer_code"),
                                 datas.getJSONObject(i).getString("name"),
                                 datas.getJSONObject(i).getString("manager_name"),
-                                datas.getJSONObject(i).getString("address"));
+                                datas.getJSONObject(i).getString("address"),
+                                datas.getJSONObject(i).getString("contact"),
+                                datas.getJSONObject(i).getString("manager_contact"),
+                                datas.getJSONObject(i).getString("manager_email"),
+                                datas.getJSONObject(i).getString("time"),
+                                datas.getJSONObject(i).getString("positionX"),
+                                datas.getJSONObject(i).getString("positionY")
+                        );
 
                         customerList.addCustomer(c);
-
+                        customerNameList[i] = datas.getJSONObject(i).getString("name").trim().replace(" ","");
+                        customersList[i] = datas.getJSONObject(i).getString("name").trim().replace(" ","");
+                        posX[i] = datas.getJSONObject(i).getDouble("positionX");
+                        posY[i] = datas.getJSONObject(i).getDouble("positionY");
                        // Log.v("customer들어오니",datas.getJSONObject(i).getString("name"));
                     }
                     nowCustomerFragment.updateUI();
+                    customers = customerList.getCustomers();
 
                 } else if (jsonbody.getString("result").equals("fail")) {
 
@@ -593,11 +753,39 @@ customerList.cleanList();
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leader);
+
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                //   Toast.makeText(MainActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                // Toast.makeText(MainActivity.this, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+            }
+
+
+        };
+
+
+        TedPermission.with(this)
+                .setPermissionListener(permissionlistener)
+                .setRationaleTitle(R.string.rationale_title)
+                .setRationaleMessage(R.string.rationale_message)
+                .setDeniedTitle("Permission denied")
+                .setDeniedMessage(
+                        "If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                .setGotoSettingButtonText("bla bla")
+                .setPermissions(android.Manifest.permission.CALL_PHONE, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA, android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .check();
+
+
         customerList.get(LeaderMainActivity.this);
         micToggle = true;
         firstdayofweek = Calendar.getInstance();
         approvalCalendar = new GregorianCalendar();
-
+        mFlip = (ViewFlipper)findViewById(R.id.leaderflip);
 
         mTitle = mDrawerTitle = getTitle();
         mPlanetTitles = getResources().getStringArray(R.array.leader_array);
@@ -662,15 +850,20 @@ customerList.cleanList();
         else if(menuState.equals("approval")){
             getMenuInflater().inflate(R.menu.menu_main_approval, menu);
         }
+        else if(menuState.equals("dayplan")){
+            getMenuInflater().inflate(R.menu.menu_main_day, menu);
+        }
         else{
 
-            getMenuInflater().inflate(R.menu.menu_member, menu);
+            getMenuInflater().inflate(R.menu.menu_leader_logout, menu);
         }
 
         return true;
 
 
     }
+
+
 
     /* Called whenever we call invalidateOptionsMenu() */
     @Override
@@ -717,6 +910,38 @@ customerList.cleanList();
             map.put("date",getDay());
             httpcon.accessServerMap("approvalselect", map, approvalselect);
         }
+        else if(item.getItemId()==R.id.approval1){
+            approvalstate = "1";
+            Map map = new HashMap();
+            getSupportActionBar().setTitle(getDay());
+            map.put("id", User.get().getId());
+            map.put("date",getDay());
+            httpcon.accessServerMap("approvalselect", map, approvalselect);
+        }
+        else if(item.getItemId()==R.id.approval2){
+            approvalstate = "2";
+            Map map = new HashMap();
+            getSupportActionBar().setTitle(getDay());
+            map.put("id", User.get().getId());
+            map.put("date",getDay());
+            httpcon.accessServerMap("approvalselect", map, approvalselect);
+        }
+        else if(item.getItemId()==R.id.approval3){
+            approvalstate = "3";
+            Map map = new HashMap();
+            getSupportActionBar().setTitle(getDay());
+            map.put("id", User.get().getId());
+            map.put("date",getDay());
+            httpcon.accessServerMap("approvalselect", map, approvalselect);
+        }
+        else if(item.getItemId()==R.id.approval5){
+            approvalstate = "5";
+            Map map = new HashMap();
+            getSupportActionBar().setTitle(getDay());
+            map.put("id", User.get().getId());
+            map.put("date",getDay());
+            httpcon.accessServerMap("approvalselect", map, approvalselect);
+        }
 
         else if (item.getItemId() == R.id.weekprevious) {
             firstdayofweek.add(firstdayofweek.DAY_OF_MONTH,-7);
@@ -724,11 +949,11 @@ customerList.cleanList();
             map.put("id", User.get().getId());
             map.put("date", getFirstDay());
             httpcon.accessServerMap("teamweekselect", map, selectWeekPlan);
-            getSupportActionBar().setTitle("이전");
+            getSupportActionBar().setTitle(getFirstDay());
             return true;
         }
         else if (item.getItemId() == R.id.weeknext) {
-            getSupportActionBar().setTitle("다음");
+            getSupportActionBar().setTitle(getFirstDay());
 
             firstdayofweek.add(firstdayofweek.DAY_OF_MONTH,+7);
             Map map = new HashMap();
@@ -739,11 +964,39 @@ customerList.cleanList();
             return true;
         }
 
+        else if (item.getItemId() == R.id.daypre) {
+            approvalCalendar.add(approvalCalendar.DAY_OF_MONTH,-1);
+            Map map = new HashMap();
+            map.put("id", User.get().getId());
+            map.put("date", getDay());
+            httpcon.accessServerMap("teamdayselect", map, dayselect);
+            getSupportActionBar().setTitle(getDay());
+            return true;
+        }
+        else if (item.getItemId() == R.id.daynext) {
+            getSupportActionBar().setTitle(getDay());
+
+            approvalCalendar.add(approvalCalendar.DAY_OF_MONTH,+1);
+            Map map = new HashMap();
+            map.put("id", User.get().getId());
+            map.put("date", getDay());
+            httpcon.accessServerMap("teamdayselect", map, dayselect);
+
+            return true;
+        }
         else if(item.getItemId() == R.id.logout) {
 
             Intent intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+
+
+
+
+
+
+
+
         }
         else if(item.getItemId()==R.id.addmember){
             Intent i = new Intent(this,JoinActivity.class);
@@ -755,6 +1008,8 @@ customerList.cleanList();
                 startSpeech();
                 item.setIcon(R.drawable.ic_action_micon);
                 Toast.makeText(LeaderMainActivity.this, "음식 인식 시작", Toast.LENGTH_SHORT).show();
+
+
 
                 micToggle = false;
             }
@@ -799,6 +1054,9 @@ customerList.cleanList();
     private void selectItem(int position) {
 
         if(position==0) {
+            mFlip.showPrevious();
+            mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewdown));
+            mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewup));
             menuState = "member";
 
             invalidateOptionsMenu();
@@ -816,6 +1074,10 @@ customerList.cleanList();
 
         }
         else if(position==1){
+            mFlip.showPrevious();
+            mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewdown));
+            mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewup));
+
 //            customerList.cleanList();
             menuState = "customer";
             invalidateOptionsMenu();
@@ -830,6 +1092,10 @@ customerList.cleanList();
             fragmentManager.beginTransaction().replace(R.id.content_frame_leader, fragment).commit();
         }
         else if(position==2){
+            mFlip.showPrevious();
+            mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewdown));
+            mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewup));
+            approvalstate = "5";
             menuState = "approval";
             invalidateOptionsMenu();
             HttpConnector httpcon = new HttpConnector();
@@ -843,6 +1109,10 @@ customerList.cleanList();
             fragmentManager.beginTransaction().replace(R.id.content_frame_leader, fragment).commit();
         }
         else if(position==3){
+            mFlip.showPrevious();
+            mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewdown));
+            mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewup));
+
             menuState = "weekplan";
             invalidateOptionsMenu();
             HttpConnector httpcon = new HttpConnector();
@@ -857,6 +1127,66 @@ customerList.cleanList();
             fragmentManager.beginTransaction().replace(R.id.content_frame_leader, fragment).commit();
         }
 
+        else if(position==4){
+            mFlip.showPrevious();
+            mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewdown));
+            mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewup));
+
+            menuState = "dayplan";
+            invalidateOptionsMenu();
+            HttpConnector httpcon = new HttpConnector();
+            Map map = new HashMap();
+            map.put("id", User.get().getId());
+            map.put("date", getDay());
+            httpcon.accessServerMap("teamdayselect", map, dayselect);
+
+            Fragment fragment =  DaySearchFragment.newInstance(position);
+            nowDaySearchFragment = (DaySearchFragment) fragment;
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame_leader, fragment).commit();
+        }
+
+        else if(position==5){
+            mFlip.showPrevious();
+            mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewdown));
+            mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewup));
+
+            menuState = "teamstatistic";
+            invalidateOptionsMenu();
+
+
+            Fragment fragment =  TeamStaFragment.newInstance(position);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame_leader, fragment).commit();
+        }
+
+        else if(position==6){
+            mFlip.showPrevious();
+            mFlip.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.viewdown));
+            mFlip.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.viewup));
+
+            menuState = "mypage";
+            invalidateOptionsMenu();
+            HttpConnector httpcon = new HttpConnector();
+
+            Fragment fragment =  MypageFragment.newInstance(position);
+            nowMypageFragment = (MypageFragment) fragment;
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame_leader, fragment).commit();
+        }
+        else if(position==7){
+            Intent intent = this.getPackageManager().getLaunchIntentForPackage("com.playrtc.sample");
+
+            startActivity(intent);
+
+        }
+        else if(position==8){
+
+            Fragment fragment =  ParkingFragment.newInstance(position);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame_leader, fragment).commit();
+
+        }
         else {
             menuState = "";
             invalidateOptionsMenu();

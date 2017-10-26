@@ -138,8 +138,10 @@ public class WorkApprovalFragment extends Fragment {
 
             //   Toast.makeText(getActivity(),crime.getTitle()+"",Toast.LENGTH_LONG).show();
 
+
             Intent intent = ApprovalActivity.newIntent(getActivity(),report.getId());
             startActivity(intent);
+
         }
     }
 

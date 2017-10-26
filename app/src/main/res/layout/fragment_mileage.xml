@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/main_color_grey_400"
+    android:background="@color/material_indigo_50"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -27,7 +27,7 @@
                 android:gravity="center"
                 android:layout_marginBottom="5dp"
                 android:layout_gravity="center"
-                android:text="긍정의 한줄"
+                android:text="건강한 육체 건강한 정신\n몸을 건강하게 지키는 것은 의무다"
                 android:textColor="@color/material_blue_900"
                 android:textSize="15dp" />
 

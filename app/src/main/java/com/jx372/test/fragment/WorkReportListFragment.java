@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.irshulx.Editor;
 import com.jx372.test.R;
@@ -178,8 +179,13 @@ public class WorkReportListFragment extends Fragment {
         @Override
         public void onClick(View view) {
 
+            if(report.getApproval().equals("0")){
             Intent intent = ReportModifyActivity.newIntent(getActivity(),report.getId());
-            startActivity(intent);
+            startActivity(intent);}
+            else{
+                Toast.makeText(getActivity(),"수정 불가",Toast.LENGTH_LONG).show();
+            }
+
         }
     }
 

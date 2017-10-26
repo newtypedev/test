@@ -24,15 +24,15 @@ public class HttpConnector {
     ApiService apiService;
      String resultJson="";
 
-    public String accessPhoto(String url, MultipartBody.Part body,RequestBody name, final Callback2 callback) {
+    public String accessPhoto(String url, MultipartBody.Part body,RequestBody name,String id,int start,int end,int mile, final Callback2 callback) {
 
 
         retrofit = new Retrofit.Builder().baseUrl(ApiService.API_URL).build();
         apiService = retrofit.create(ApiService.class);
 
         Map map = new HashMap();
-        map.put("date","20130514");
-        retrofit2.Call<okhttp3.ResponseBody> req = apiService.postImage(body, name,90302,"test01");
+        //map.put("date","2017-10-14");
+        retrofit2.Call<okhttp3.ResponseBody> req = apiService.postImage(body, name,start,end,mile,id,/*User.get().getToday()*/"2017-10-16");
         req.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -162,6 +162,22 @@ public class HttpConnector {
         else if(url.equals("approvalselect")){
             comment2 = apiService.getApproval(map);
         }
+        else if(url.equals("teamdayselect")){
+            comment2 = apiService.getDayPlan(map);
+        }
+        else if(url.equals("idsearch")){
+            comment2 = apiService.getSearchId(map);
+        }
+        else if(url.equals("pwsearch")){
+            comment2 = apiService.getSearchPw(map);
+        }
+        else if(url.equals("chartsales")){
+            comment2 = apiService.getChartSale(map);
+        }
+        else if(url.equals("mypage")){
+
+            comment2 = apiService.getMypage(map);
+        }
 
 
 
@@ -202,7 +218,7 @@ public class HttpConnector {
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 //callback.callback(t.getMessage()+"");
                 callback.callback("ConnectFail");
-                Log.v("insfinef","fail");
+                Log.v("failmessage",t.getMessage()+"");
 
             }
         });
@@ -331,6 +347,68 @@ public class HttpConnector {
         return resultJson;
     }
 
+
+
+
+    public String accessParking(String name,final Callback2 callback) {
+
+
+        retrofit = new Retrofit.Builder().baseUrl(ApiService.API_URL3).build();
+        apiService = retrofit.create(ApiService.class);
+
+        // =&page=&addressFlag=&fullAddr=서울특별시%20동작구%20보라매로가길%209&callback=&coordType=WGS84GEO&format=&version=1&appKey=0964bcd8-f1f6-325c-9903-0210ac72ef61
+
+        // (@Query("coordType") String req,@Query("appKey") String key,@Query("fullAddr") String search,@Query("version") int version);
+
+        Call<ResponseBody> comment2 = apiService.getParking(name);
+
+        comment2.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                Log.v("callcall",call.request().body().toString());
+                //    Log.v("callcall2",call.request().headers().toString());
+                try {
+
+
+                    //  Log.v("callcall",response.message());
+
+                    String json = response.body().string();
+                    Log.v("jontest",json);
+                    resultJson = json;
+                    callback.callback(json);
+
+
+
+
+
+
+                } catch (IOException e) {
+
+                    e.printStackTrace();
+
+
+                }
+                catch(NullPointerException e){
+                    callback.callback("JsonException");
+                    e.printStackTrace();
+                    Log.v("NNNNNUUUULLLL",e.getMessage()+"");
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callback.callback("ConnectFail");
+                Log.v("insfinef","fail");
+
+            }
+        });
+        if(resultJson.equals("")){
+            Log.v("result","null");
+        }
+        return resultJson;
+    }
 
 
 }

@@ -76,10 +76,17 @@ public class ConsultModifyActivity extends AppCompatActivity {
 
                     for (int i = 0; i < size; i++) {
 
-                    Customer c = new Customer(datas.getJSONObject(i).getString("customer_code"),
-                            datas.getJSONObject(i).getString("name"),
-                            datas.getJSONObject(i).getString("manager_name"),
-                            datas.getJSONObject(i).getString("address"));
+                        Customer c = new Customer(datas.getJSONObject(i).getString("customer_code"),
+                                datas.getJSONObject(i).getString("name"),
+                                datas.getJSONObject(i).getString("manager_name"),
+                                datas.getJSONObject(i).getString("address"),
+                                datas.getJSONObject(i).getString("contact"),
+                                datas.getJSONObject(i).getString("manager_contact"),
+                                datas.getJSONObject(i).getString("manager_email"),
+                                datas.getJSONObject(i).getString("time"),
+                                datas.getJSONObject(i).getString("positionX"),
+                                datas.getJSONObject(i).getString("positionY")
+                        );
 
                         customerList.add(c);
                        customerNameList[i] = datas.getJSONObject(i).getString("name");

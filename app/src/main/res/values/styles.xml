@@ -113,8 +113,8 @@
         <item name="actionBarStyle">@style/ActionBarStyle</item>
         <item name="windowActionBar">false</item>
 
-        <item name="colorPrimary">@color/main_color_grey_900</item>
-        <item name="colorPrimaryDark">@color/main_color_grey_900</item>
+        <item name="colorPrimary">@color/material_light_blue_700</item>
+        <item name="colorPrimaryDark">@color/material_light_blue_700</item>
     </style>
 
     <style name="ActionBarStyle" parent="@style/Widget.AppCompat.Light.ActionBar">
@@ -131,9 +131,11 @@
 
     <!-- ListView related themes -->
     <style name="ListViewStyle">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:background">@color/main_color_grey_200</item>
+        <item name="android:textSize">17dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_width">240dp</item>
+        <item name="android:layout_height">500dp</item>
+        <item name="android:background">#777</item>
         <item name="android:cacheColorHint">@android:color/transparent</item>
         <item name="android:choiceMode">singleChoice</item>
         <item name="android:divider">@android:color/transparent</item>

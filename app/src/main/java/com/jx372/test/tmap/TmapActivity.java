@@ -247,7 +247,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
         }
     };
 
-
+//고객리스트 조회 콜백
     ArrayList<TMapMarkerItem> mapPosition;
     Callback2 mCallback = new Callback2() {
         @Override
@@ -452,12 +452,19 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         int value = 0;
         setContentView(R.layout.activity_tmap);
+
+
         resultPoi = (TextView) findViewById(R.id.resultPoi);
         poiedit = (EditText) findViewById(R.id.poiedit);
         poisearch = (Button) findViewById(R.id.poisearch);
+        Map map = new HashMap();
+        map.put("id", User.get().getId());
 
+        HttpConnector httpcon = new HttpConnector();
+        httpcon.accessServerMap("customerselect", map, mCallback);
 
         SpeechRecognizerManager.getInstance().initializeLibrary(this);
 
@@ -519,11 +526,7 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
         }
 
 
-        Map map = new HashMap();
-        map.put("id", User.get().getId());
 
-        HttpConnector httpcon = new HttpConnector();
-        httpcon.accessServerMap("selectposition", map, mCallback);
         LinearLayout linearpass = (LinearLayout) findViewById(R.id.linearpass);
         LinearLayout linearsearch = (LinearLayout) findViewById(R.id.linearmapsearch);
         posText = (TextView) findViewById(R.id.postest);
@@ -1510,13 +1513,13 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
                         @Override
                         public void run() {
                              result = dd + "";
-                            result = result.substring(0, 3);
+                           // result = result.substring(0, 3);
 
                             // 내용
                             Toast.makeText(TmapActivity.this, result + "km", Toast.LENGTH_SHORT).show();
 
-                            double value = Double.parseDouble(result);
-                            disText.setText(value + "km");
+                           // double value = Double.parseDouble(result);
+                            disText.setText(result + "km");
                         }
                     }, 1000);
 
@@ -1561,11 +1564,10 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
                         @Override
                         public void run() {
                              result = dd + "";
-                            result = result.substring(0, 3);
-
+                            //result.substring(0, 3)
                             // 내용
                             Toast.makeText(TmapActivity.this, result+ "km", Toast.LENGTH_SHORT).show();
-                            disText.setText(result.substring(0, 3) + "km");
+                            disText.setText(result + "km");
                         }
                     }, 1000);
 
@@ -2039,6 +2041,28 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
 
 
     public void removePath(View view) {
+//        TMapTapi tmaptapi = new TMapTapi(this);
+//        HashMap<String, String> pathInfo = new HashMap<String, String>(); pathInfo.put("rGoName", "신도림");
+//        pathInfo.put("rGolat", "37.50861147");
+//        pathInfo.put("rGolon", "126.8911457");
+//        tmaptapi.invokeRoute(pathInfo);
+//invokeRoute();
+
+      /*  HashMap<String, String> pathInfo = new HashMap<String, String>();
+
+        pathInfo.put("rGoName", "신도림");
+        pathInfo.put("rGoX", "126.8911457");
+        pathInfo.put("rGoY", "37.50861147");
+        pathInfo.put("rV1Name", "신대방");
+        pathInfo.put("rV1X", "126.9816756");
+        pathInfo.put("rV1Y", "37.5680861");
+
+        TMapTapi tmaptapi = new TMapTapi(this);
+        tmaptapi.setSKPMapAuthentication(mApiKey);
+        tmaptapi.invokeRoute(pathInfo);
+*/
+
+
         Log.v("경로검색 들어옴", "ㅇㅇ");
         removeMapPath();
         pos = "->";
@@ -2219,6 +2243,19 @@ public class TmapActivity extends BaseActivity implements TMapGpsManager.onLocat
     public void onFinished() {
         Log.i("SpeechSampleActivity", "onFinished");
 
+    }
+
+    public void searchPosition(){
+
+        nowLatitude = 37.541642248630524;
+        nowLongitude = 126.99599611759186;
+        if (!(nowLongitude == 0.0)) {
+            mMapView.setLocationPoint(nowLongitude, nowLatitude);
+            mMapView.setCenterPoint(nowLongitude, nowLatitude, true);
+            Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.end);
+            mMapView.setIcon(bitmap);
+            mMapView.setIconVisibility(true);
+        }
     }
 }
 

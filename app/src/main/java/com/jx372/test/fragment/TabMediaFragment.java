@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.jx372.test.MileageActivity;
 import com.jx372.test.MileageItem;
 import com.jx372.test.R;
+import com.jx372.test.User;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -137,7 +138,7 @@ public class TabMediaFragment extends Fragment implements OnClickListener {
 
 			}
 		});
-
+textStart.setText(User.get().getStart()+"");
 		textEnd.setOnClickListener(new TextView.OnClickListener(){
 			@Override
 			public void onClick(View v) {
@@ -194,8 +195,16 @@ public class TabMediaFragment extends Fragment implements OnClickListener {
 		btnEnd.setOnClickListener(new Button.OnClickListener(){
 			@Override
 			public void onClick(View v) {
-				Intent i = MileageActivity.newIntent(getActivity(),false);
-				startActivity(i);
+
+				if(mileageItem.getEnddis().equals("0")) {
+
+					Intent i = MileageActivity.newIntent(getActivity(),false);
+					startActivity(i);
+
+				}
+				else {
+					Toast.makeText(getActivity(),"이미 등록하셨습니다",Toast.LENGTH_LONG);
+				}
 
 			}});
 
